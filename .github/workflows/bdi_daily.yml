@@ -2,7 +2,7 @@ name: BDI 干散货日报自动推送
 
 on:
   schedule:
-    - cron: '30 10 * * 1-5'   # 北京时间 18:30，周一至周五
+    - cron: '20 15 * * 1-5'   # 北京时间 23:20，周一至周五
   workflow_dispatch:            # 允许在 GitHub 页面手动触发
 
 jobs:
