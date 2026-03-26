@@ -74,7 +74,7 @@ class Config:
 
     # 邮件推送（可选）
     SMTP_HOST   = os.getenv("SMTP_HOST", "smtp.qq.com")
-    SMTP_PORT   = int(os.getenv("SMTP_PORT", "465"))
+    SMTP_PORT   = int(os.getenv("SMTP_PORT") or "465")
     SMTP_USER   = os.getenv("SMTP_USER", "")
     SMTP_PASS   = os.getenv("SMTP_PASS", "")
     EMAIL_FROM  = os.getenv("EMAIL_FROM", "")
