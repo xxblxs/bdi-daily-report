@@ -240,7 +240,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>干散货市场日报 — {{ date }} | NAVGreen</title>
+<title>干散货市场日报 — {{ date }}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
@@ -322,11 +322,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <div class="report">
   <div class="header">
     <div>
-      <div class="h-date">{{ date }} · 数据来源：NAVGreen Baltic-Index 实时 API</div>
+      <div class="h-date">{{ date }}</div>
       <div class="h-title">干散货市场日报</div>
       <div class="h-sub">BDI {{ indices.BDI.val|int }} &nbsp;·&nbsp; {{ headline }}</div>
     </div>
-    <span class="h-src">NAVGreen 实时数据</span>
+    <span class="h-src">实时数据</span>
   </div>
 
   <div class="indices-row">
@@ -462,7 +462,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   </div>
 
   <div class="footer">
-    <div><span class="nv">NAVGreen</span> &nbsp;数据：miniapi.navgreen.cn · 新闻：Hellenic Shipping News / Splash247</div>
+    <div>新闻来源：Hellenic Shipping News / Splash247</div>
     <span>生成时间：{{ generated_at }}</span>
   </div>
 </div>
@@ -896,7 +896,7 @@ def push_dingtalk(data: dict, report_url: str = "") -> bool:
     c5 = data["routes"].get("C5-TCE", {})
 
     text = (
-        f"【NAVGreen干散货日报 {data['date']}】\n"
+        f"【干散货日报 {data['date']}】\n"
         f"BDI: {int(bdi['val'] or 0)} ({bdi['pct_str']})\n"
         f"BCI: {int(bci['val'] or 0)} ({bci['pct_str']})\n"
         f"C3 巴西→青岛: {fmt(c3.get('val'))} ({c3.get('pct_str','')})\n"
@@ -1034,7 +1034,7 @@ def push_email(html_content: str, date_str: str) -> bool:
     from email.mime.text import MIMEText
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"【NAVGreen】干散货市场日报 {date_str}"
+    msg["Subject"] = f"【干散货市场日报】{date_str}"
     msg["From"]    = Config.EMAIL_FROM
     msg["To"]      = Config.EMAIL_TO
 

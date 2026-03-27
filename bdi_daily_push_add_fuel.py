@@ -471,7 +471,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>干散货市场日报 — {{ date }} | NAVGreen</title>
+<title>干散货市场日报 — {{ date }}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
@@ -553,11 +553,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <div class="report">
   <div class="header">
     <div>
-      <div class="h-date">{{ date }} · 数据来源：NAVGreen Baltic-Index 实时 API</div>
+      <div class="h-date">{{ date }}</div>
       <div class="h-title">干散货市场日报</div>
       <div class="h-sub">BDI {{ indices.BDI.val|int }} &nbsp;·&nbsp; {{ headline }}</div>
     </div>
-    <span class="h-src">NAVGreen 实时数据</span>
+    <span class="h-src">实时数据</span>
   </div>
 
   <div class="indices-row">
@@ -693,7 +693,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   </div>
 
   <div class="footer">
-    <div><span class="nv">NAVGreen</span> &nbsp;数据：miniapi.navgreen.cn · 新闻：Hellenic Shipping News / Splash247</div>
+    <div>新闻来源：Hellenic Shipping News / Splash247</div>
     <span>生成时间：{{ generated_at }}</span>
   </div>
 </div>
@@ -961,7 +961,7 @@ FUEL_HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>燃油价格日报 — {{ date }} | NAVGreen</title>
+<title>燃油价格日报 — {{ date }}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
@@ -1038,7 +1038,7 @@ td:first-child{text-align:left;}
 
 <div class="header">
   <div>
-    <div class="h-date">{{ date }} · 数据来源：NAVGreen Fuel Price API — {{ fresh_count }} 港口实时数据</div>
+    <div class="h-date">{{ date }} · {{ fresh_count }} 港口实时数据</div>
     <div class="h-title">全球船用燃油价格日报</div>
     <div class="h-sub">IFO 380 · VLSFO · LSMGO · 覆盖 {{ total }} 条报价</div>
   </div>
@@ -1196,7 +1196,7 @@ td:first-child{text-align:left;}
 </div>
 
 <div class="footer">
-  <div><span class="nv">NAVGreen</span> &nbsp;数据：miniapi.navgreen.cn/api/vessel/bunkers/prices · 仅供参考</div>
+  <div>燃油价格数据 · 仅供参考</div>
   <span>生成时间：{{ generated_at }}</span>
 </div>
 </div>
@@ -1427,7 +1427,7 @@ def build_fuel_wecom_card(fuel: dict) -> dict:
     lsm_avg  = gs.get("lsmgo",  {}).get("avg", "—")
 
     lines = [
-        f"# ⛽ NAVGreen 燃油日报 · {fuel['date']}",
+        f"# ⛽ 全球燃油日报 · {fuel['date']}",
         f"<font color=\"comment\">覆盖 {fuel['fresh_count']} 港口 · 实时数据</font>",
         "",
         "**全球均价（$/吨）**",
@@ -1466,7 +1466,7 @@ def build_fuel_wecom_card(fuel: dict) -> dict:
         "**Scrubber 经济性**",
         f"> {v_sc.get('text', '')}",
         "",
-        "<font color=\"comment\">数据来源：NAVGreen miniapi · 仅供参考</font>",
+        "<font color=\"comment\">燃油价格数据 · 仅供参考</font>",
     ]
 
     return {"msgtype": "markdown", "markdown": {"content": "\n".join(lines)}}
@@ -1528,7 +1528,7 @@ def push_dingtalk(data: dict, report_url: str = "") -> bool:
     c5 = data["routes"].get("C5-TCE", {})
 
     text = (
-        f"【NAVGreen干散货日报 {data['date']}】\n"
+        f"【干散货日报 {data['date']}】\n"
         f"BDI: {int(bdi['val'] or 0)} ({bdi['pct_str']})\n"
         f"BCI: {int(bci['val'] or 0)} ({bci['pct_str']})\n"
         f"C3 巴西→青岛: {fmt(c3.get('val'))} ({c3.get('pct_str','')})\n"
@@ -1666,7 +1666,7 @@ def push_email(html_content: str, date_str: str) -> bool:
     from email.mime.text import MIMEText
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"【NAVGreen】干散货市场日报 {date_str}"
+    msg["Subject"] = f"【干散货市场日报】{date_str}"
     msg["From"]    = Config.EMAIL_FROM
     msg["To"]      = Config.EMAIL_TO
 
