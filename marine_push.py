@@ -654,7 +654,7 @@ td:first-child{text-align:left;font-weight:500;}
   <div>
     <span class="ft-brand">{{ brand }}</span>
     &nbsp;气象导航服务 &nbsp;·&nbsp;
-    海浪数据：Open-Meteo Marine API（GFS Wave + ECMWF WAM）· 完全免费 · 无需 API Key &nbsp;·&nbsp;
+    海浪数据：Open-Meteo Marine API（GFS Wave + ECMWF WAM）&nbsp;·&nbsp;
     预报时效：5天 · 分辨率 0.25°
   </div>
   <span>生成时间：{{ generated_at }}</span>
