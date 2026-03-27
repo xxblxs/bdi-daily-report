@@ -2,7 +2,7 @@ name: BDI 干散货日报自动推送
 
 on:
   schedule:
-    - cron: '20 15 * * 1-5'   # 北京时间 23:20，周一至周五
+    - cron: '30 10 * * 1-5'   # 北京时间 18:30，周一至周五
   workflow_dispatch:            # 允许在 GitHub 页面手动触发
 
 jobs:
@@ -19,15 +19,15 @@ jobs:
           python-version: '3.11'
 
       - name: 安装 Python 依赖
-        run: |
-          pip install requests feedparser jinja2 python-dotenv deep-translator playwright
+        run: pip install -r requirements.txt
 
       - name: 安装 Playwright Chromium
         run: playwright install chromium --with-deps
 
-      - name: 执行日报脚本
+      - name: 执行日报脚本（BDI + 燃油）
         env:
           WECOM_WEBHOOK:    ${{ secrets.WECOM_WEBHOOK }}
+          NAVGREEN_TOKEN:   ${{ secrets.NAVGREEN_TOKEN }}
           DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
           SLACK_WEBHOOK:    ${{ secrets.SLACK_WEBHOOK }}
           FEISHU_WEBHOOK:   ${{ secrets.FEISHU_WEBHOOK }}
@@ -37,11 +37,11 @@ jobs:
           SMTP_PASS:        ${{ secrets.SMTP_PASS }}
           EMAIL_FROM:       ${{ secrets.EMAIL_FROM }}
           EMAIL_TO:         ${{ secrets.EMAIL_TO }}
-        run: python bdi_daily_push.py
+        run: python bdi_daily_push_add_fuel.py
 
       - name: 保存 HTML 报告为 Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bdi-report-${{ github.run_id }}
+          name: navgreen-reports-${{ github.run_id }}
           path: reports/
           retention-days: 30
