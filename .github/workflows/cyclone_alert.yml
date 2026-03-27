@@ -1,0 +1,93 @@
+name: ISOWAY 热带气旋预警 · 全球监测
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 触发规则：每 6 小时轮询一次（事件驱动）
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  schedule:
+    # 每 6 小时检查一次，覆盖所有时区的气象更新窗口
+    # IBTrACS NRT 每 3-6 小时更新，NHC 每 6 小时发布报文
+    - cron: '0 0 * * *'    # UTC 00:00（北京 08:00）
+    - cron: '0 6 * * *'    # UTC 06:00（北京 14:00）
+    - cron: '0 12 * * *'   # UTC 12:00（北京 20:00）
+    - cron: '0 18 * * *'   # UTC 18:00（北京 次日02:00）
+
+  # 手动触发（可强制推送）
+  workflow_dispatch:
+    inputs:
+      force_push:
+        description: '强制推送（忽略状态缓存）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # 需要写入 .cyclone_state.json 状态文件
+
+jobs:
+  cyclone-alert:
+    name: 检查并推送气旋预警
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          pip install --upgrade pip
+          pip install requests jinja2 python-dotenv playwright
+          playwright install chromium --with-deps
+
+      # 恢复上次的状态文件（防止重复推送）
+      - name: 恢复状态缓存
+        uses: actions/cache@v4
+        with:
+          path: reports/.cyclone_state.json
+          key: cyclone-state-${{ github.run_id }}
+          restore-keys: |
+            cyclone-state-
+
+      - name: 创建 reports 目录
+        run: mkdir -p reports
+
+      - name: 执行气旋预警脚本
+        run: |
+          FORCE_ARG=""
+          if [ "${{ github.event.inputs.force_push }}" = "true" ]; then
+            FORCE_ARG="--force"
+          fi
+          python cyclone_push.py --output-dir ./reports $FORCE_ARG
+        env:
+          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
+
+      # 保存状态文件（缓存到下次运行）
+      - name: 保存状态文件
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: reports/.cyclone_state.json
+          key: cyclone-state-${{ github.run_id }}
+
+      - name: 上传 HTML 预警报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cyclone-alert-${{ github.run_id }}
+          path: reports/cyclone_alert_*.html
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: 发送失败告警
+        if: failure()
+        run: |
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s -X POST "${{ secrets.WECOM_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"msgtype\":\"markdown\",\"markdown\":{\"content\":\"## ⚠️ ISOWAY 气旋监测脚本异常\\n时间：$(date -u '+%Y-%m-%d %H:%M UTC')\\n\\n[查看日志](${RUN_URL})\"}}"
