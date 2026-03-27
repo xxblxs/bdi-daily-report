@@ -451,7 +451,7 @@ def _analyze_fuel(records: list) -> dict:
     }
 
     return {
-        "date":         datetime.datetime.now().strftime("%Y-%m-%d"),
+        "date":         (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"),
         "total":        len(records),
         "fresh_count":  len(fresh),
         "global_stats": global_stats,
