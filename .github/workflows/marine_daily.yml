@@ -1,0 +1,77 @@
+name: ISOWAY 海况日报 · 全球航线
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 触发规则
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  schedule:
+    # 每周一、周四 UTC 00:30 执行（北京时间 08:30）
+    # Open-Meteo 每日凌晨更新，早上 8 点拿到的是最新预报
+    - cron: '30 0 * * 1'   # 每周一 UTC 00:30（北京 08:30）
+    - cron: '30 0 * * 4'   # 每周四 UTC 00:30（北京 08:30）
+
+  # 支持手动触发（测试用）
+  workflow_dispatch:
+    inputs:
+      output_dir:
+        description: '报告输出目录'
+        type: string
+        default: './reports'
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 权限（最小化）
+# ──────────────────────────────────────────────────────────────────────────────
+permissions:
+  contents: read
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Job
+# ──────────────────────────────────────────────────────────────────────────────
+jobs:
+  marine-report:
+    name: 生成并推送海况日报
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          pip install --upgrade pip
+          pip install requests jinja2 python-dotenv playwright schedule
+          playwright install chromium --with-deps
+
+      - name: 执行海况日报脚本
+        run: |
+          python marine_push.py \
+            --output-dir ${{ github.event.inputs.output_dir || './reports' }}
+        env:
+          # ── 企业微信（必填）─────────────────────────────────────────────────
+          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
+          # ── 报告公开访问地址（选填，留空则微信卡片中无链接）──────────────────
+          REPORT_URL:    ${{ secrets.REPORT_URL }}
+
+      - name: 上传 HTML 报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: marine-report-${{ github.run_id }}
+          path: reports/marine_daily_*.html
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: 发送失败告警到企业微信
+        if: failure() && secrets.WECOM_WEBHOOK != ''
+        run: |
+          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s -X POST "${{ secrets.WECOM_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"msgtype\":\"markdown\",\"markdown\":{\"content\":\"## ⚠️ ISOWAY 海况日报执行失败\\n时间：$(date -u '+%Y-%m-%d %H:%M UTC')\\n\\n<font color=\\\"warning\\\">所有重试均已失败</font>\\n\\n[查看详细日志](${RUN_URL})\"}}"
