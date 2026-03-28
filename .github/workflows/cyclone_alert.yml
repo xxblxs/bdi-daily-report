@@ -88,7 +88,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: 发送失败告警
-        if: failure() && secrets.WECOM_WEBHOOK != ''
+        if: failure()
         run: |
           RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           curl -s -X POST "${{ secrets.WECOM_WEBHOOK }}" \
