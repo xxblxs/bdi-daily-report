@@ -1486,6 +1486,14 @@ def render_html(storms: list, generated_at: str) -> str:
 
     alert_storms = [s for s in storms if s["impact"] in ("danger", "warn")]
 
+    # 为每个风暴生成轨迹 SVG
+    for s in storms:
+        try:
+            s["track_svg"] = generate_track_svg(s)
+        except Exception as e:
+            log.warning(f"轨迹SVG生成失败 {s.get('name')}: {e}")
+            s["track_svg"] = ""
+
     ctx = {
         "date":           generated_at[:10],
         "brand":          Config.BRAND,
