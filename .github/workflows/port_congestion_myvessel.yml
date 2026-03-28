@@ -1,0 +1,61 @@
+name: ISOWAY 港口拥堵日报（船视宝版）
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      demo_mode:
+        description: '演示模式（模拟数据，测试推送格式用）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  port-congestion:
+    name: 港口拥堵日报推送
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: 'pip'}
+
+      - name: 安装依赖
+        run: pip install requests jinja2 python-dotenv playwright && playwright install chromium --with-deps
+
+      - name: 恢复7日历史状态
+        uses: actions/cache@v4
+        with:
+          path: reports/.port_state.json
+          key: port-state-${{ github.run_id }}
+          restore-keys: port-state-
+
+      - run: mkdir -p reports
+
+      - name: 执行港口拥堵日报
+        run: |
+          ARGS=""
+          [ "${{ github.event.inputs.demo_mode }}" = "true" ] && ARGS="--demo"
+          python port_congestion_myvessel.py --output-dir ./reports $ARGS
+        env:
+          WECOM_WEBHOOK:         ${{ secrets.WECOM_WEBHOOK }}
+          MYVESSEL_APP_ID:       ${{ secrets.MYVESSEL_APP_ID }}
+          MYVESSEL_APP_SECRET:   ${{ secrets.MYVESSEL_APP_SECRET }}
+
+      - name: 保存历史状态
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: reports/.port_state.json
+          key: port-state-${{ github.run_id }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: port-report-${{ github.run_id }}
+          path: reports/port_congestion_*.html
+          retention-days: 14
