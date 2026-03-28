@@ -8,15 +8,15 @@ ISOWAY 全球热带气旋预警系统
   4. 生成 HTML 预警报告（长截图用）+ 企业微信推送（截图 + markdown 文字）
   5. 无系统时推送"当前无活跃热带气旋"简报，有系统时立即推送完整预警
 
-数据来源（全部免费，无需 API Key）：
-  - IBTrACS NRT: https://www.ncei.noaa.gov/data/.../ibtracs.ACTIVE.list.v04r01.csv
-  - NOAA NHC: https://www.nhc.noaa.gov/CurrentStorms.json
-  - NOAA NHC RSS: https://www.nhc.noaa.gov/index-{at|ep|cp}.xml
+数据来源（三层融合，均免费）：
+  - Layer 1: NAVGreen current/storms/v1（最实时，含完整历史+预报轨迹）需 NAVGREEN_TOKEN
+  - Layer 2: NOAA IBTrACS NRT CSV（全球覆盖，补充 SSHS/R34/气压，有2-3天延迟）
+  - Layer 3: NOAA NHC JSON/RSS（大西洋/东太平洋官方实时补充）
 
 GitHub Actions 部署：
   - 事件触发：每 6 小时轮询一次（cron: '0 */6 * * *'）
   - 有新系统生成或强度显著变化时自动推送
-  - 只需 Secret: WECOM_WEBHOOK
+  - Secrets: WECOM_WEBHOOK（必填）+ NAVGREEN_TOKEN（强烈建议，否则数据有延迟）
 
 运行：
   python cyclone_push.py              # 立即执行（强制推送）
@@ -81,7 +81,11 @@ class Config:
     STATE_FILE     = Path(os.getenv("STATE_FILE", "./reports/.cyclone_state.json"))
     TIMEOUT        = 20
 
-    # IBTrACS NRT CSV — 全球实时最优路径（每 3-6 小时更新）
+    # NAVGreen API（最实时数据源，含完整轨迹）
+    NAVGREEN_CURRENT_URL = "https://miniapi.navgreen.cn/api/mete/forecast/current/storms/v1"
+    NAVGREEN_TOKEN       = os.getenv("NAVGREEN_TOKEN", "")
+
+    # IBTrACS NRT CSV — 全球覆盖兜底（每 3-6 小时更新，但有1-2天延迟）
     IBTRACS_URL = (
         "https://www.ncei.noaa.gov/data/"
         "international-best-track-archive-for-climate-stewardship-ibtracs/"
@@ -241,6 +245,228 @@ def safe_float(v) -> Optional[float]:
 # ══════════════════════════════════════════════════════════════════════════════
 # 3. 数据获取
 # ══════════════════════════════════════════════════════════════════════════════
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 数据源优先级策略（三层融合）：
+#
+#  Layer 1 — NAVGreen current/storms/v1（最实时，每小时更新，含完整历史+预报轨迹）
+#            ✅ 当前位置最准确，有 history[] + forecast[] 完整轨迹
+#            ⚠️  只有当前活跃系统，无全球基础信息（海盆、SSHS等）
+#
+#  Layer 2 — NOAA IBTrACS NRT CSV（全球覆盖，含海盆/SSHS/R34风圈，但有2-3天延迟）
+#            ✅ 覆盖 NAVGreen 没有的系统（大西洋、东太平洋）
+#            ✅ 有 R34 风圈半径、SSHS 等级等详细参数
+#            ⚠️  位置比 NAVGreen 落后 1-2 天
+#
+#  Layer 3 — NOAA NHC JSON/RSS（大西洋/东太平洋官方，实时）
+#            ✅ 补充 NHC 活跃系统名称和链接
+#
+#  融合逻辑：
+#   - NAVGreen 有的系统 → 用 NAVGreen 的位置/轨迹（最新），用 IBTrACS 补充 R34/SSHS
+#   - IBTrACS 有但 NAVGreen 没有的系统 → 直接用 IBTrACS（保底）
+#   - 轨迹画图：优先用 NAVGreen history[]（完整且最新），fallback IBTrACS positions
+# ══════════════════════════════════════════════════════════════════════════════
+
+NAVGREEN_TOKEN_ENV = "NAVGREEN_TOKEN"   # GitHub Secret 名
+
+def fetch_navgreen_storms() -> list[dict]:
+    """
+    Layer 1: 从 NAVGreen current/storms/v1 拉取实时台风数据。
+    返回格式统一化的风暴列表，包含完整历史轨迹和预报轨迹。
+    需要 NAVGREEN_TOKEN 环境变量（从 localStorage 获取的登录 token）。
+    """
+    token = os.getenv(NAVGREEN_TOKEN_ENV, "")
+    if not token:
+        log.warning("NAVGREEN_TOKEN 未配置，跳过 NAVGreen 数据源")
+        return []
+
+    url = "https://miniapi.navgreen.cn/api/mete/forecast/current/storms/v1"
+    try:
+        r = requests.get(url, headers={"token": token}, timeout=Config.TIMEOUT)
+        r.raise_for_status()
+        data = r.json()
+    except Exception as e:
+        log.warning(f"NAVGreen storms API 失败: {e}")
+        return []
+
+    raw_storms = data.get("data", [])
+    if not raw_storms:
+        log.info("NAVGreen: 当前无活跃系统")
+        return []
+
+    result = []
+    for s in raw_storms:
+        name     = s.get("name", "UNNAMED")
+        lat      = safe_float(s.get("lat"))
+        lon      = safe_float(s.get("lon"))
+        wind_ms  = safe_float(s.get("windSpeed"))   # 单位 m/s
+        strength = s.get("strength", "")
+
+        if lat is None or lon is None:
+            continue
+
+        # m/s → 节（1 m/s ≈ 1.94384 kn）
+        wind_kn = round(wind_ms * 1.94384, 1) if wind_ms else None
+
+        # 历史轨迹（API 返回倒序，反转为时间正序）
+        history_raw = list(reversed(s.get("history", [])))
+        # 预报轨迹
+        forecast_raw = s.get("forecast", [])
+
+        # 统一格式化轨迹点
+        def fmt_pt(p, is_forecast=False):
+            w_ms = safe_float(p.get("windSpeed"))
+            return {
+                "time":     p.get("time", ""),
+                "lat":      str(p.get("lat", "")),
+                "lon":      str(p.get("lon", "")),
+                "usa_wind": str(round(w_ms * 1.94384)) if w_ms else "",
+                "wmo_wind": "",
+                "usa_pres": str(p.get("pressure", "") or ""),
+                "r34_avg":  None,
+                "is_forecast": is_forecast,
+            }
+
+        positions  = [fmt_pt(p) for p in history_raw]
+        forecasts  = [fmt_pt(p, True) for p in forecast_raw]
+
+        # 推断移动方向（最后两个历史点）
+        mov_dir   = movement_direction(positions) if len(positions) >= 2 else None
+        mov_speed = movement_speed_kn(positions)  if len(positions) >= 2 else None
+
+        result.append({
+            "sid":         f"NG-{s.get('id', name).lower()}",  # NAVGreen 内部 ID
+            "ng_id":       s.get("id", ""),                    # 原始 NAVGreen id
+            "name":        name,
+            "basin":       _guess_basin(lat, lon),
+            "subbasin":    "",
+            "basin_name":  _basin_name_from_latlon(lat, lon),
+            "lat":         lat,
+            "lon":         lon,
+            "wind_kn":     wind_kn,
+            "pres_mb":     None,     # NAVGreen v1 无气压，后面从 IBTrACS 补
+            "sshs":        None,     # 后面从 IBTrACS 补
+            "sshs_text":   "",
+            "dist2land_nm": None,
+            "r34_avg_nm":  None,     # 后面从 IBTrACS 补
+            "intensity":   wind_to_intensity(wind_kn),
+            "last_time":   positions[-1]["time"] if positions else "",
+            "mov_dir":     mov_dir,
+            "mov_speed":   mov_speed,
+            "positions":   positions,    # 历史轨迹（用于画图）
+            "forecasts":   forecasts,    # 预报轨迹（画虚线）
+            "source":      "navgreen",
+        })
+
+    log.info(f"✅ NAVGreen: {len(result)} 个活跃系统（含实时位置和完整轨迹）")
+    return result
+
+
+def _guess_basin(lat: float, lon: float) -> str:
+    """根据经纬度推断 IBTrACS 海盆代码。"""
+    if lat >= 0:
+        if lon >= 100 or lon <= -120: return "WP"   # 西北太平洋
+        if -120 < lon < -40:          return "NA"   # 北大西洋（粗略）
+        if -40 <= lon < 100:          return "NI"   # 北印度洋
+        if lon < -120:                return "EP"   # 东北太平洋
+    else:
+        if 20 <= lon < 90:            return "SI"   # 南印度洋
+        if 90 <= lon <= 180:          return "SP"   # 南太平洋
+        if -70 <= lon < 20:           return "SA"   # 南大西洋
+    return "WP"
+
+
+def _basin_name_from_latlon(lat: float, lon: float) -> str:
+    basin = _guess_basin(lat, lon)
+    names = {
+        "WP": "西北太平洋", "EP": "东北太平洋", "NA": "北大西洋",
+        "NI": "北印度洋",  "SI": "南印度洋",   "SP": "南太平洋",
+        "SA": "南大西洋",
+    }
+    return names.get(basin, basin)
+
+
+def merge_storm_data(ng_storms: list, ibt_storms: list) -> list:
+    """
+    三层融合：
+    - NAVGreen 系统（有实时位置）+ IBTrACS 补充 SSHS/R34/气压
+    - IBTrACS 独有系统（NAVGreen 没覆盖的，如大西洋）直接加入
+    """
+    # 建立 NAVGreen id 的索引（用 ng_id 和 name 匹配）
+    ng_by_name = {s["name"].lower(): s for s in ng_storms}
+    ng_by_id   = {s["ng_id"].lower(): s for s in ng_storms}
+
+    merged = []
+    ibt_matched = set()
+
+    # 遍历 NAVGreen 系统，尝试从 IBTrACS 补充字段
+    for ng in ng_storms:
+        ng_name = ng["name"].lower()
+        ng_id   = ng["ng_id"].lower()
+
+        # 在 IBTrACS 里找同名系统
+        ibt_match = None
+        for ibt in ibt_storms:
+            ibt_name = (ibt.get("name") or "").lower()
+            if ibt_name == ng_name or ibt_name in ng_id or ng_id in ibt_name:
+                ibt_match = ibt
+                ibt_matched.add(ibt["sid"])
+                break
+
+        storm = dict(ng)  # 以 NAVGreen 为基础
+        if ibt_match:
+            # 用 IBTrACS 补充 NAVGreen 没有的字段
+            storm["pres_mb"]    = storm["pres_mb"] or ibt_match.get("pres_mb")
+            storm["sshs"]       = ibt_match.get("sshs")
+            storm["sshs_text"]  = ibt_match.get("sshs_text", "")
+            storm["r34_avg_nm"] = ibt_match.get("r34_avg_nm")
+            storm["dist2land_nm"] = ibt_match.get("dist2land_nm")
+            # IBTrACS 的 SID 留作参考
+            storm["ibt_sid"]    = ibt_match.get("sid", "")
+            log.info(f"  ✅ 融合: {ng['name']} — NAVGreen位置(-{abs(ng['lat']):.1f}°S/{ng['lon']}°E) + IBTrACS详情(SSHS={storm['sshs']})")
+        else:
+            log.info(f"  ℹ️  {ng['name']} — 仅 NAVGreen 数据，无 IBTrACS 匹配")
+
+        merged.append(storm)
+
+    # 把 IBTrACS 独有的系统（NAVGreen 没有的）也加入
+    for ibt in ibt_storms:
+        if ibt["sid"] not in ibt_matched:
+            ibt_copy = dict(ibt)
+            ibt_copy["source"] = "ibtracs"
+            ibt_copy["forecasts"] = []
+            merged.append(ibt_copy)
+            log.info(f"  ➕ IBTrACS独有: {ibt['name']} ({ibt['basin_name']})")
+
+    # 计算每个风暴的航线影响（统一用最新位置）
+    for storm in merged:
+        lat, lon = storm["lat"], storm["lon"]
+        route_dists = []
+        for rname, rlat, rlon in Config.SHIPPING_ROUTES:
+            dist = haversine_nm(lat, lon, rlat, rlon)
+            route_dists.append((dist, rname))
+        route_dists.sort(key=lambda x: x[0])
+
+        storm["nearest_route_dist"] = round(route_dists[0][0])
+        storm["nearest_route_name"] = route_dists[0][1]
+        storm["nearby_routes"] = [(round(d), n) for d, n in route_dists[:4]]
+
+        wind_kn = storm.get("wind_kn") or 0
+        dist    = storm["nearest_route_dist"]
+        if dist <= Config.CLOSE_DIST_NM and wind_kn >= 34:
+            storm["impact"] = "danger"
+        elif dist <= Config.WARN_DIST_NM and wind_kn >= 25:
+            storm["impact"] = "warn"
+        elif dist <= Config.WATCH_DIST_NM and wind_kn >= 25:
+            storm["impact"] = "watch"
+        else:
+            storm["impact"] = "monitor"
+
+    # 排序：危险 > 预警 > 关注 > 监测，同级按风速降序
+    impact_order = {"danger": 0, "warn": 1, "watch": 2, "monitor": 3}
+    merged.sort(key=lambda x: (impact_order[x["impact"]], -(x.get("wind_kn") or 0)))
+    return merged
+
 
 def fetch_ibtracs() -> list[dict]:
     """
@@ -507,6 +733,392 @@ def should_push(storms: list, force: bool = False) -> bool:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# 4b. 台风轨迹地图 SVG 生成（纯内置，无需外部地图服务）
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+# ── 各海盆的地图显示范围 [lon_min, lat_min, lon_max, lat_max] ─────────────────
+BASIN_BBOX = {
+    "WP":  [90,  -5,  180, 45],   # 西北太平洋（台风区）
+    "EP":  [-140, 5,  -70, 35],   # 东北太平洋
+    "NA":  [-100, 5,  -20, 45],   # 北大西洋
+    "NI":  [40,   0,   100, 30],  # 北印度洋（含孟加拉湾+阿拉伯海）
+    "SI":  [30,  -45,  115, -5],  # 南印度洋
+    "SP":  [90,  -45,  180, -5],  # 南太平洋（东澳）
+    "SA":  [-60, -35,   10,  5],  # 南大西洋
+    "DEFAULT": [60, -50, 190, 50],
+}
+
+
+def _merc_y(lat_deg: float) -> float:
+    """Web墨卡托Y值（处理极端纬度）"""
+    lat = max(-85.0, min(85.0, lat_deg))
+    return math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))
+
+
+def latlon_to_svg(lat: float, lon: float, bbox: list, W: int, H: int):
+    """经纬度 → SVG画布坐标（墨卡托投影）"""
+    lon_min, lat_min, lon_max, lat_max = bbox
+    # 经度线性映射
+    x = (lon - lon_min) / (lon_max - lon_min) * W
+    # 纬度墨卡托
+    y_min = _merc_y(lat_min)
+    y_max = _merc_y(lat_max)
+    y_val = _merc_y(lat)
+    y = (1.0 - (y_val - y_min) / (y_max - y_min)) * H
+    return round(x, 1), round(y, 1)
+
+
+def _wind_to_color(wind_kn: float) -> str:
+    """风速 → 颜色（蓝→绿→黄→橙→红→深红）"""
+    if wind_kn is None or wind_kn < 25:
+        return "#8a9db5"   # 灰蓝  扰动/低压
+    if wind_kn < 34:
+        return "#378ADD"   # 蓝    热带低压
+    if wind_kn < 48:
+        return "#1D9E75"   # 绿    热带风暴
+    if wind_kn < 64:
+        return "#ef9f27"   # 橙    强热带风暴
+    if wind_kn < 96:
+        return "#e24b4a"   # 红    台风
+    if wind_kn < 114:
+        return "#c0392b"   # 深红  强台风
+    return "#7b241c"       # 暗红  超强台风
+
+
+def _r34_to_px(r34_nm: float, bbox: list, W: int) -> float:
+    """34kn风圈半径（海里）→ SVG像素大小"""
+    if not r34_nm:
+        return 0
+    lon_span = bbox[2] - bbox[0]
+    px_per_deg = W / lon_span
+    nm_per_deg = 60.0
+    return r34_nm / nm_per_deg * px_per_deg
+
+
+def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
+    """
+    为单个风暴生成带轨迹的 SVG 地图（嵌入HTML）
+    
+    storm 字段要求：
+      basin, lat, lon, positions (list of dicts with lat/lon/wind/time)
+    """
+    basin    = storm.get("basin", "DEFAULT")
+    bbox     = BASIN_BBOX.get(basin, BASIN_BBOX["DEFAULT"])
+    positions = storm.get("positions", [])
+    
+    # 根据当前位置自动调整 bbox 中心（确保风暴在视野内）
+    cur_lat = storm.get("lat", 0) or 0
+    cur_lon = storm.get("lon", 0) or 0
+    lon_mid = (bbox[0] + bbox[2]) / 2
+    lat_mid = (bbox[1] + bbox[3]) / 2
+    lon_half = (bbox[2] - bbox[0]) / 2
+    lat_half = (bbox[3] - bbox[1]) / 2
+    # 如果当前位置偏离bbox中心太多，重新居中
+    if abs(cur_lon - lon_mid) > lon_half * 0.6 or abs(cur_lat - lat_mid) > lat_half * 0.6:
+        bbox = [cur_lon - lon_half, cur_lat - lat_half,
+                cur_lon + lon_half, cur_lat + lat_half]
+
+    def sv(lat, lon):
+        return latlon_to_svg(lat, lon, bbox, W, H)
+
+    # ── 筛选有效轨迹点 ────────────────────────────────────────────────────────
+    track = []
+    for p in positions:
+        try:
+            lat = float(p.get("lat", "") or 0)
+            lon = float(p.get("lon", "") or 0)
+            wind = float(p.get("usa_wind") or p.get("wmo_wind") or 0) or None
+            t    = (p.get("time") or "")[:16]
+            if lat == 0 and lon == 0:
+                continue
+            # 只保留 bbox 范围内 ± 20% 的点
+            margin_lon = (bbox[2] - bbox[0]) * 0.2
+            margin_lat = (bbox[3] - bbox[1]) * 0.2
+            if not (bbox[0]-margin_lon <= lon <= bbox[2]+margin_lon and
+                    bbox[1]-margin_lat <= lat <= bbox[3]+margin_lat):
+                continue
+            track.append({"lat": lat, "lon": lon, "wind": wind, "time": t,
+                           "r34": p.get("r34_avg")})
+        except Exception:
+            continue
+
+    if len(track) < 2:
+        # 至少用当前位置造一个点
+        track = [{"lat": cur_lat, "lon": cur_lon,
+                  "wind": storm.get("wind_kn"), "time": "", "r34": None}]
+
+    # ── SVG 开始 ──────────────────────────────────────────────────────────────
+    lines = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
+        f'style="background:#0d2137;border-radius:10px;display:block;">',
+
+        # 定义渐变和滤镜
+        '<defs>',
+        '  <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="blur"/>'
+        '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>',
+        '  <radialGradient id="bgGrad" cx="50%" cy="50%">',
+        '    <stop offset="0%" stop-color="#0d2a45"/>',
+        '    <stop offset="100%" stop-color="#081520"/>',
+        '  </radialGradient>',
+        '</defs>',
+
+        # 背景
+        f'<rect width="{W}" height="{H}" fill="url(#bgGrad)"/>',
+    ]
+
+    # ── 绘制简化海岸线（重要地标）─────────────────────────────────────────────
+    coastlines = _get_coastline_paths(basin, bbox, W, H)
+    for path_d in coastlines:
+        lines.append(f'<path d="{path_d}" fill="#1a3a5c" stroke="#2a5a8c" '
+                     f'stroke-width="0.5" opacity="0.7"/>')
+
+    # ── 经纬度网格 ─────────────────────────────────────────────────────────────
+    lon_min, lat_min, lon_max, lat_max = bbox
+    # 纬线（每10度）
+    for lat in range(int(lat_min//10)*10, int(lat_max//10+1)*10, 10):
+        if lat_min <= lat <= lat_max:
+            x0, y0 = sv(lat, lon_min)
+            x1, y1 = sv(lat, lon_max)
+            lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
+                         f'stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>')
+            lines.append(f'<text x="{x0+3}" y="{y0-2}" '
+                         f'fill="rgba(255,255,255,0.3)" font-size="9">'
+                         f'{abs(lat)}°{"N" if lat>=0 else "S"}</text>')
+    # 经线（每10度）
+    for lon in range(int(lon_min//10)*10, int(lon_max//10+1)*10, 10):
+        if lon_min <= lon <= lon_max:
+            x0, y0 = sv(lat_max, lon)
+            x1, y1 = sv(lat_min, lon)
+            lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
+                         f'stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>')
+            lines.append(f'<text x="{x0+2}" y="{y1-3}" '
+                         f'fill="rgba(255,255,255,0.3)" font-size="9">'
+                         f'{abs(lon)}°{"E" if lon>=0 else "W"}</text>')
+
+    # ── 绘制34kn风圈（最新位置）─────────────────────────────────────────────────
+    latest = track[-1]
+    r34_nm = latest.get("r34")
+    cur_x, cur_y = sv(latest["lat"], latest["lon"])
+    if r34_nm:
+        r34_px = _r34_to_px(float(r34_nm), bbox, W)
+        lines.append(
+            f'<ellipse cx="{cur_x}" cy="{cur_y}" rx="{r34_px}" ry="{r34_px*0.8}" '
+            f'fill="rgba(226,75,74,0.12)" stroke="rgba(226,75,74,0.35)" '
+            f'stroke-width="1" stroke-dasharray="4,3"/>'
+        )
+
+    # ── 绘制轨迹线（颜色按风速渐变）─────────────────────────────────────────────
+    for i in range(len(track) - 1):
+        p1, p2 = track[i], track[i+1]
+        x1, y1 = sv(p1["lat"], p1["lon"])
+        x2, y2 = sv(p2["lat"], p2["lon"])
+        color = _wind_to_color(p2.get("wind") or 0)
+        lines.append(
+            f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" '
+            f'stroke="{color}" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>'
+        )
+
+    # ── 绘制轨迹点（每隔2个画一个，节省空间）──────────────────────────────────────
+    for i, p in enumerate(track):
+        x, y = sv(p["lat"], p["lon"])
+        wind = p.get("wind") or 0
+        color = _wind_to_color(wind)
+        r = 3 if i < len(track) - 1 else 0  # 非当前位置小圆点
+        if i % 2 == 0 and i < len(track) - 1:
+            lines.append(
+                f'<circle cx="{x}" cy="{y}" r="{r}" '
+                f'fill="{color}" opacity="0.8"/>'
+            )
+
+    # ── 绘制预报轨迹（虚线，来自 NAVGreen forecast[]）────────────────────────────
+    forecast_pts = storm.get("forecasts", [])
+    if forecast_pts and track:
+        fc_track = [{"lat": latest["lat"], "lon": latest["lon"],
+                     "wind": safe_float(latest.get("usa_wind") or latest.get("wind"))}]
+        for fp in forecast_pts:
+            try:
+                flat = safe_float(fp.get("lat"))
+                flon = safe_float(fp.get("lon"))
+                if flat is None or flon is None: continue
+                if abs(flat) < 0.01 and abs(flon) < 0.01: continue
+                fw = safe_float(fp.get("usa_wind") or fp.get("windSpeed"))
+                if fw and fw > 5:  # m/s → kn
+                    fw = fw * 1.94384
+                fc_track.append({"lat": flat, "lon": flon, "wind": fw})
+            except Exception:
+                continue
+
+        for i in range(len(fc_track) - 1):
+            p1, p2 = fc_track[i], fc_track[i+1]
+            x1, y1 = sv(p1["lat"], p1["lon"])
+            x2, y2 = sv(p2["lat"], p2["lon"])
+            fc_color = _wind_to_color(p2.get("wind") or 0)
+            lines.append(
+                f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" '
+                f'stroke="{fc_color}" stroke-width="2.5" stroke-linecap="round" '
+                f'stroke-dasharray="7,5" opacity="0.7"/>'
+            )
+            mx, my = sv(p2["lat"], p2["lon"])
+            lines.append(
+                f'<polygon points="{mx},{my-5} {mx+4},{my} {mx},{my+5} {mx-4},{my}" '
+                f'fill="{fc_color}" opacity="0.75"/>'
+            )
+
+    # ── 当前位置：脉冲动画大圆 ─────────────────────────────────────────────────
+    cur_wind  = latest.get("wind") or storm.get("wind_kn") or 0
+    cur_color = _wind_to_color(float(cur_wind))
+    lines += [
+        # 外圈脉冲
+        f'<circle cx="{cur_x}" cy="{cur_y}" r="16" fill="none" '
+        f'stroke="{cur_color}" stroke-width="1.5" opacity="0.4">',
+        f'  <animate attributeName="r" values="14;22;14" dur="2.5s" repeatCount="indefinite"/>',
+        f'  <animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/>',
+        f'</circle>',
+        # 中圈
+        f'<circle cx="{cur_x}" cy="{cur_y}" r="8" fill="{cur_color}" opacity="0.35"/>',
+        # 实心中心
+        f'<circle cx="{cur_x}" cy="{cur_y}" r="5" fill="{cur_color}" '
+        f'stroke="white" stroke-width="1.5" filter="url(#glow)"/>',
+        # 台风符号 🌀 (用文字)
+        f'<text x="{cur_x}" y="{cur_y - 13}" text-anchor="middle" '
+        f'font-size="14" fill="{cur_color}" filter="url(#glow)">🌀</text>',
+    ]
+
+    # ── 风暴名标签 ─────────────────────────────────────────────────────────────
+    name     = storm.get("name", "")
+    abbr     = storm.get("intensity", {}).get("abbr", "")
+    wind_kn  = storm.get("wind_kn")
+    label_x  = min(W - 10, max(10, cur_x + 12))
+    label_y  = max(20, cur_y - 8)
+    lines += [
+        f'<rect x="{label_x-4}" y="{label_y-12}" width="{len(name)*7+55}" height="28" '
+        f'rx="4" fill="rgba(0,0,0,0.65)" stroke="{cur_color}" stroke-width="1"/>',
+        f'<text x="{label_x}" y="{label_y}" fill="white" font-size="11" font-weight="700">'
+        f'{abbr} {name}</text>',
+        f'<text x="{label_x}" y="{label_y+12}" fill="{cur_color}" font-size="10">'
+        f'{int(wind_kn) if wind_kn else "—"}kn · {storm.get("intensity",{}).get("name","")}</text>',
+    ]
+
+    # ── 图例 ──────────────────────────────────────────────────────────────────
+    legend_items = [
+        ("#378ADD", "热带低压 <34kn"),
+        ("#1D9E75", "热带风暴 34-48kn"),
+        ("#ef9f27", "强热带风暴 48-64kn"),
+        ("#e24b4a", "台风/飓风 64-96kn"),
+        ("#7b241c", "超强台风 ≥114kn"),
+    ]
+    lx, ly = 6, H - 8 - len(legend_items) * 13
+    lines.append(f'<rect x="4" y="{ly-4}" width="150" height="{len(legend_items)*13+8}" '
+                 f'rx="4" fill="rgba(0,0,0,0.5)"/>')
+    for j, (lcolor, ltext) in enumerate(legend_items):
+        yl = ly + j * 13
+        lines.append(f'<rect x="{lx}" y="{yl}" width="10" height="4" '
+                     f'rx="2" fill="{lcolor}"/>')
+        lines.append(f'<text x="{lx+14}" y="{yl+4}" fill="rgba(255,255,255,0.7)" '
+                     f'font-size="8">{ltext}</text>')
+
+    # ── 数据来源标注 ──────────────────────────────────────────────────────────
+    lines.append(
+        f'<text x="{W-4}" y="{H-4}" text-anchor="end" '
+        f'fill="rgba(255,255,255,0.3)" font-size="8">NOAA IBTrACS NRT</text>'
+    )
+
+    lines.append('</svg>')
+    return "\n".join(lines)
+
+
+def _get_coastline_paths(basin: str, bbox: list, W: int, H: int) -> list:
+    """
+    返回简化海岸线的 SVG path 字符串列表。
+    使用关键地标多边形（澳大利亚、亚洲大陆、日本等），
+    不依赖外部库，轻量内置。
+    """
+    def sv(lat, lon):
+        return latlon_to_svg(lat, lon, bbox, W, H)
+
+    def poly_path(points):
+        """多边形坐标 → SVG path"""
+        coords = []
+        for i, (lat, lon) in enumerate(points):
+            x, y = sv(lat, lon)
+            coords.append(f"{'M' if i==0 else 'L'}{x},{y}")
+        return " ".join(coords) + " Z"
+
+    paths = []
+
+    # ── 澳大利亚 ─────────────────────────────────────────────────────────────
+    australia = [
+        (-37.5,140),(-38,143),(-39,147),(-37,150),(-34,151),(-32,152),
+        (-28,154),(-25,153),(-23,151),(-20,149),(-17,146),(-15,145),
+        (-12,143),(-12,136),(-14,129),(-16,124),(-20,119),(-22,114),
+        (-25,114),(-29,115),(-32,116),(-34,119),(-34,123),(-34,125),
+        (-32,125),(-34,122),(-34,128),(-33,133),(-32,137),(-34,140),(-37.5,140)
+    ]
+    paths.append(poly_path(australia))
+
+    # ── 亚洲大陆南部（简化）─────────────────────────────────────────────────
+    if bbox[0] < 160 and bbox[3] > 0:
+        asia_south = [
+            (5,100),(8,98),(10,99),(13,100),(16,103),(18,107),(20,110),
+            (22,114),(24,118),(26,120),(30,122),(32,122),(35,120),(38,121),
+            (40,122),(40,118),(37,117),(35,118),(35,115),(30,120),(25,119),
+            (22,113),(18,110),(15,108),(12,109),(10,104),(8,100),(5,100)
+        ]
+        paths.append(poly_path(asia_south))
+
+    # ── 日本（简化）─────────────────────────────────────────────────────────
+    if bbox[0] < 145 and bbox[3] > 30:
+        japan = [
+            (31,131),(32,132),(33,131),(33,130),(31,131)
+        ]
+        paths.append(poly_path(japan))
+        japan2 = [
+            (34,136),(35,137),(36,137),(37,138),(38,141),
+            (40,142),(41,141),(40,140),(38,141),(36,138),(34,136)
+        ]
+        paths.append(poly_path(japan2))
+
+    # ── 菲律宾（简化）───────────────────────────────────────────────────────
+    if 110 < bbox[0]+bbox[2]//2 < 145 and bbox[3] > 5:
+        phil = [
+            (7,126),(9,125),(11,124),(14,122),(17,122),(18,121),(17,120),
+            (14,121),(12,123),(9,126),(7,126)
+        ]
+        paths.append(poly_path(phil))
+
+    # ── 新西兰（简化）───────────────────────────────────────────────────────
+    if basin in ("SP", "DEFAULT") and bbox[2] > 165:
+        nz_north = [
+            (-34,173),(-37,175),(-39,177),(-41,175),(-39,174),(-37,174),(-34,173)
+        ]
+        paths.append(poly_path(nz_north))
+        nz_south = [
+            (-41,174),(-43,172),(-45,169),(-46,168),(-46,170),(-44,172),(-42,173),(-41,174)
+        ]
+        paths.append(poly_path(nz_south))
+
+    # ── 印度半岛（简化）─────────────────────────────────────────────────────
+    if basin in ("NI", "DEFAULT") and 65 < bbox[0]+bbox[2]//2 < 100:
+        india = [
+            (23,68),(22,72),(20,73),(18,73),(16,73),(13,80),(10,80),
+            (8,77),(8,80),(10,76),(14,75),(16,74),(18,73),(22,73),(23,68)
+        ]
+        paths.append(poly_path(india))
+
+    # ── 非洲东部/马达加斯加（简化）──────────────────────────────────────────
+    if basin in ("SI", "DEFAULT"):
+        madagascar = [
+            (-12,49),(-15,50),(-18,48),(-20,44),(-22,44),(-24,44),
+            (-25,47),(-25,48),(-22,48),(-20,48),(-15,50),(-12,49)
+        ]
+        paths.append(poly_path(madagascar))
+
+    return paths
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # 5. HTML 报告生成
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -653,7 +1265,7 @@ td:first-child{text-align:left;font-weight:600;}
 <!-- Header -->
 <div class="header">
   <div class="h-left">
-    <div class="h-date">{{ generated_at }} UTC · 数据来源：NOAA IBTrACS NRT + NHC RSS · 全球覆盖</div>
+    <div class="h-date">{{ generated_at }} UTC · 数据来源：NAVGreen实时 + IBTrACS NRT + NHC RSS · 三层融合</div>
     <div class="h-title">🌀 全球热带气旋预警报告</div>
     <div class="h-sub">西太平洋 / 印度洋 / 南太平洋 / 大西洋 · 实时监测 · 航运影响评估</div>
   </div>
@@ -703,7 +1315,7 @@ td:first-child{text-align:left;font-weight:600;}
   <div class="no-storm-title">当前全球无活跃热带气旋</div>
   <div class="no-storm-text">
     全球各大洋当前未监测到活跃热带气旋系统（含热带低压及以上级别）。<br>
-    ISOWAY 气象导航系统将持续每 6 小时轮询 NOAA IBTrACS 数据源，<br>
+    ISOWAY 气象导航系统将持续每 6 小时轮询全球台风数据，<br>
     一旦有新系统形成或达到热带低压强度，将立即推送预警。
   </div>
 </div>
@@ -794,6 +1406,14 @@ td:first-child{text-align:left;font-weight:600;}
       {% endfor %}
     </div>
   </div>
+  <!-- 轨迹地图 -->
+  {% if s.track_svg %}
+  <div style="padding:12px 14px;border-top:1px solid #f0f2f8;">
+    <div style="font-size:10px;font-weight:600;color:#8a9db5;text-transform:uppercase;
+                letter-spacing:.05em;margin-bottom:8px;">📍 历史轨迹 & 当前位置</div>
+    {{ s.track_svg|safe }}
+  </div>
+  {% endif %}
 </div>
 {% endfor %}
 </div>
@@ -836,7 +1456,7 @@ td:first-child{text-align:left;font-weight:600;}
 <div class="footer">
   <div>
     <span class="ft-brand">{{ brand }}</span>
-    &nbsp;气象导航 · 数据：NOAA IBTrACS NRT（全球）+ NOAA NHC（大西洋/东太平洋）
+    &nbsp;气象导航 · 数据：NAVGreen实时轨迹 + IBTrACS NRT + NHC · 预报路径为虚线
     · 更新频率：每 6 小时 · 仅供参考，请以官方气象机构公告为准
   </div>
   <span>生成：{{ generated_at }} UTC</span>
@@ -917,7 +1537,7 @@ def build_wecom_card_storms(storms: list, generated_at: str) -> dict:
 
     lines = [
         f"# 🌀 {Config.BRAND} 全球热带气旋预警 · {today}",
-        f"<font color=\"comment\">数据时间：{generated_at} UTC · NOAA IBTrACS NRT 全球覆盖</font>",
+        f"<font color=\"comment\">数据时间：{generated_at} UTC · NAVGreen实时 + IBTrACS全球覆盖</font>",
         "",
     ]
 
@@ -982,7 +1602,7 @@ def build_wecom_card_no_storm(generated_at: str) -> dict:
                 "| 南印度洋/南太平洋 | ✅ 无系统 |\n"
                 "| 大西洋/东太平洋 | ✅ 无系统 |\n\n"
                 f"下次自动检测将在 6 小时后进行。\n\n"
-                f"<font color=\"comment\">数据：NOAA IBTrACS NRT · {generated_at} UTC · {Config.BRAND}</font>"
+                f"<font color=\"comment\">数据：NAVGreen实时 + IBTrACS NRT · {generated_at} UTC · {Config.BRAND}</font>"
             )
         }
     }
@@ -1040,13 +1660,22 @@ def run_once(force: bool = False, check_only: bool = False) -> bool:
     log.info(f"{Config.BRAND} 热带气旋预警 — 开始执行")
     now_utc = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M")
 
-    # 1. 拉取数据
-    storms = fetch_ibtracs()
+    # ── 三层数据融合 ─────────────────────────────────────────────────────────
+    # Layer 1: NAVGreen（最实时位置 + 完整轨迹）
+    ng_storms = fetch_navgreen_storms()
 
-    # 2. 可选：补充 NHC 详细信息
-    if any(s["basin"] in ("NA", "EP", "CP") for s in storms):
-        nhc_details = fetch_nhc_details()
-        # 可将 nhc_details 匹配到对应风暴（此处略，不影响主流程）
+    # Layer 2: IBTrACS NRT（全球覆盖 + SSHS/R34/气压）
+    ibt_storms = fetch_ibtracs()
+
+    # Layer 3: NHC 详细信息（大西洋/东太 补充）
+    if any(s.get("basin") in ("NA", "EP", "CP") for s in ibt_storms):
+        fetch_nhc_details()   # 可扩展匹配，当前仅记录日志
+
+    # 融合：NAVGreen 实时位置 + IBTrACS 详情
+    storms = merge_storm_data(ng_storms, ibt_storms)
+
+    log.info(f"融合后共 {len(storms)} 个活跃系统 "
+             f"(NAVGreen:{len(ng_storms)} IBTrACS:{len(ibt_storms)})")
 
     # 3. 判断是否推送
     if check_only:

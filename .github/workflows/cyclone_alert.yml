@@ -65,7 +65,10 @@ jobs:
           fi
           python cyclone_push.py --output-dir ./reports $FORCE_ARG
         env:
-          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
+          WECOM_WEBHOOK:   ${{ secrets.WECOM_WEBHOOK }}
+          # NAVGreen token — 提供实时台风位置和完整轨迹（强烈建议配置）
+          # 获取方式：登录 vip.navgreen.cn → DevTools → Application → LocalStorage → 复制 "token"
+          NAVGREEN_TOKEN:  ${{ secrets.NAVGREEN_TOKEN }}
 
       # 保存状态文件（缓存到下次运行）
       - name: 保存状态文件
