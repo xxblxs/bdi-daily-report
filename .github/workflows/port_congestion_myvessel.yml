@@ -2,7 +2,7 @@ name: ISOWAY 港口拥堵日报（船视宝版）
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 4 * * *'    # UTC 04:00（北京时间 12:00）每日一次
   workflow_dispatch:
     inputs:
       demo_mode:
