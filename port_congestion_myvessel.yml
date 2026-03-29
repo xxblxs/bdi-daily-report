@@ -1,12 +1,12 @@
-name: ISOWAY 港口拥堵日报（船视宝版）
+name: ISOWAY 港口拥堵日报 v2
 
 on:
   schedule:
-    - cron: '0 1 * * *'   # UTC 01:00 = 北京 09:00
+    - cron: '0 1 * * *'      # UTC 01:00 = 北京 09:00
   workflow_dispatch:
     inputs:
       demo_mode:
-        description: '演示模式（模拟数据，测试推送格式用）'
+        description: '演示模式（模拟数据，测试推送）'
         type: boolean
         default: false
 
@@ -15,9 +15,9 @@ permissions:
 
 jobs:
   port-congestion:
-    name: 港口拥堵日报推送
+    name: 港口拥堵日报
     runs-on: ubuntu-latest
-    timeout-minutes: 5    # 船视宝 API 秒级返回，总耗时 < 3分钟
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
       - name: 安装依赖
         run: pip install requests jinja2 python-dotenv playwright && playwright install chromium --with-deps
 
-      - name: 恢复7日历史状态
+      - name: 恢复7日历史
         uses: actions/cache@v4
         with:
           path: reports/.port_state.json
@@ -36,7 +36,7 @@ jobs:
 
       - run: mkdir -p reports
 
-      - name: 执行港口拥堵日报
+      - name: 执行港口日报
         run: |
           ARGS=""
           [ "${{ github.event.inputs.demo_mode }}" = "true" ] && ARGS="--demo"
