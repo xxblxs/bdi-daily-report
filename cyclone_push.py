@@ -1265,8 +1265,8 @@ td:first-child{text-align:left;font-weight:600;}
 <!-- Header -->
 <div class="header">
   <div class="h-left">
-    <div class="h-date">{{ generated_at }} UTC · 数据来源：NAVGreen实时 + IBTrACS NRT + NHC RSS · 三层融合</div>
-    <div class="h-title">🌀 全球热带气旋预警报告</div>
+    <div class="h-date">{{ generated_at }} UTC · 全球多源气象数据融合 · 实时监测</div>
+    <div class="h-title"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjQ4IiBmaWxsPSIjMWEyYTRhIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxlbGxpcHNlIGN4PSI1MCIgY3k9IjcwIiByeD0iMzgiIHJ5PSI4IiBmaWxsPSIjMjA2MGI4Ii8+PHBhdGggZD0iTTI4IDY1IFEzOCA1NiA1MCA1NiBRNjIgNTYgNzIgNjUiIGZpbGw9IiMyMDYwYjgiLz48cGF0aCBkPSJNMzggNTUgTDQyIDI4IEw1OCAyOCBMNjIgNTUiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuOSIvPjxwYXRoIGQ9Ik00MiA0MCBMMzAgNTUgTDcwIDU1IEw1OCA0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik00NiAyOCBMNTAgMTYgTDU0IDI4IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjgiLz48L3N2Zz4=" alt="ISOWAY" style="height:28px;vertical-align:middle;margin-right:8px;"> 全球热带气旋预警报告</div>
     <div class="h-sub">西太平洋 / 印度洋 / 南太平洋 / 大西洋 · 实时监测 · 航运影响评估</div>
   </div>
   <div class="h-right">
@@ -1456,7 +1456,7 @@ td:first-child{text-align:left;font-weight:600;}
 <div class="footer">
   <div>
     <span class="ft-brand">{{ brand }}</span>
-    &nbsp;气象导航 · 数据：NAVGreen实时轨迹 + IBTrACS NRT + NHC · 预报路径为虚线
+    &nbsp;气象导航 · 全球实时气象监测 · 预报路径为虚线
     · 更新频率：每 6 小时 · 仅供参考，请以官方气象机构公告为准
   </div>
   <span>生成：{{ generated_at }} UTC</span>
@@ -1545,7 +1545,7 @@ def build_wecom_card_storms(storms: list, generated_at: str) -> dict:
 
     lines = [
         f"# 🌀 {Config.BRAND} 全球热带气旋预警 · {today}",
-        f"<font color=\"comment\">数据时间：{generated_at} UTC · NAVGreen实时 + IBTrACS全球覆盖</font>",
+        f"<font color=\"comment\">数据时间：{generated_at} UTC · 全球实时气象监测</font>",
         "",
     ]
 
@@ -1610,7 +1610,7 @@ def build_wecom_card_no_storm(generated_at: str) -> dict:
                 "| 南印度洋/南太平洋 | ✅ 无系统 |\n"
                 "| 大西洋/东太平洋 | ✅ 无系统 |\n\n"
                 f"下次自动检测将在 6 小时后进行。\n\n"
-                f"<font color=\"comment\">数据：NAVGreen实时 + IBTrACS NRT · {generated_at} UTC · {Config.BRAND}</font>"
+                f"<font color=\"comment\">全球实时气象监测 · {generated_at} UTC · {Config.BRAND}</font>"
             )
         }
     }

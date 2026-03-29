@@ -323,7 +323,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   <div class="header">
     <div>
       <div class="h-date">{{ date }}</div>
-      <div class="h-title">干散货市场日报</div>
+      <div class="h-title"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjQ4IiBmaWxsPSIjMWEyYTRhIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxlbGxpcHNlIGN4PSI1MCIgY3k9IjcwIiByeD0iMzgiIHJ5PSI4IiBmaWxsPSIjMjA2MGI4Ii8+PHBhdGggZD0iTTI4IDY1IFEzOCA1NiA1MCA1NiBRNjIgNTYgNzIgNjUiIGZpbGw9IiMyMDYwYjgiLz48cGF0aCBkPSJNMzggNTUgTDQyIDI4IEw1OCAyOCBMNjIgNTUiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuOSIvPjxwYXRoIGQ9Ik00MiA0MCBMMzAgNTUgTDcwIDU1IEw1OCA0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik00NiAyOCBMNTAgMTYgTDU0IDI4IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjgiLz48L3N2Zz4=" alt="ISOWAY" style="height:28px;vertical-align:middle;margin-right:8px;"> 干散货市场日报</div>
       <div class="h-sub">BDI {{ indices.BDI.val|int }} &nbsp;·&nbsp; {{ headline }}</div>
     </div>
     <span class="h-src">实时数据</span>
@@ -462,7 +462,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   </div>
 
   <div class="footer">
-    <div>新闻来源：Hellenic Shipping News / Splash247</div>
+    <div>ISOWAY 市场参考资讯 · 仅供参考</div>
     <span>生成时间：{{ generated_at }}</span>
   </div>
 </div>

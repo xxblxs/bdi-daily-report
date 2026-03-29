@@ -502,8 +502,8 @@ td:first-child{font-weight:600;}
 
 <div class="header">
   <div>
-    <div class="h-date">{{ date }} UTC · 数据：船视宝 SDC API · 23个核心干散货港口实时动态</div>
-    <div class="h-title">⚓ 干散货全球港口拥堵日报</div>
+    <div class="h-date">{{ date }} UTC · 23个核心干散货港口实时动态</div>
+    <div class="h-title"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjQ4IiBmaWxsPSIjMWEyYTRhIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxlbGxpcHNlIGN4PSI1MCIgY3k9IjcwIiByeD0iMzgiIHJ5PSI4IiBmaWxsPSIjMjA2MGI4Ii8+PHBhdGggZD0iTTI4IDY1IFEzOCA1NiA1MCA1NiBRNjIgNTYgNzIgNjUiIGZpbGw9IiMyMDYwYjgiLz48cGF0aCBkPSJNMzggNTUgTDQyIDI4IEw1OCAyOCBMNjIgNTUiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuOSIvPjxwYXRoIGQ9Ik00MiA0MCBMMzAgNTUgTDcwIDU1IEw1OCA0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik00NiAyOCBMNTAgMTYgTDU0IDI4IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjgiLz48L3N2Zz4=" alt="ISOWAY" style="height:28px;vertical-align:middle;margin-right:8px;"> 干散货全球港口拥堵日报</div>
     <div class="h-sub">铁矿石 · 煤炭 · 铝矾土 · 装卸港实时锚泊 · Demurrage 风险预警</div>
   </div>
   <div class="h-right">
@@ -634,7 +634,7 @@ td:first-child{font-weight:600;}
 <div class="sum-card">
   <div class="sum-head">
     <span class="sum-title">全港拥堵汇总对比 · {{ date }}</span>
-    <span class="sum-badge">数据：船视宝 SDC API · 23个核心港口</span>
+    <span class="sum-badge">23个核心干散货港口</span>
   </div>
   <table>
     <thead><tr>
@@ -671,7 +671,7 @@ td:first-child{font-weight:600;}
 
 <div class="footer">
   <div>
-    <div><span class="ft-brand">{{ brand }}</span> 港口拥堵监测 v2.0 · 数据：船视宝 SDC API · 23个核心干散货港口</div>
+    <div><span class="ft-brand">{{ brand }}</span> 港口拥堵监测 · 23个核心干散货港口 · 仅供参考，以官方数据为准</div>
     <div class="ft-note">等待时间为估算值，仅供参考。实际 Demurrage 以 NOR 递交时间和 Laycan 为准。</div>
   </div>
   <span>{{ generated_at }} UTC{% if demo_mode %} · ⚠️演示模式{% endif %}</span>
@@ -768,21 +768,17 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
             )
         lines.append("")
 
-    # 按分组展示
-    groups_order = ["装港·澳大利亚","装港·巴西","装港·南非","装港·印尼","装港·西非","卸港·中国","卸港·印度"]
-    lines.append("## 📊 各港口实时概况")
-    for grp in groups_order:
-        grp_ports = [p for p in port_results if p["group"] == grp]
-        if not grp_ports: continue
-        lines.append(f"\n**{grp}**")
-        lines.append("| 港口 | ⚓锚泊 | 🚢靠泊 | 📍预抵 | 状态 |")
-        lines.append("|:---|---:|---:|---:|:---:|")
-        for p in grp_ports:
-            lines.append(
-                f"| {p['flag']}{p['name_cn']} | **{p['n_anchored']}** | "
-                f"{p['n_moored']} | {p['n_estimate']} | "
-                f"{cong_emoji[p['congestion']]} {cong_label[p['congestion']]} |"
-            )
+    # 锚泊排名 Top 8（不按分组展开，节省字符）
+    top_ports = sorted(port_results, key=lambda p: p["n_anchored"], reverse=True)[:8]
+    lines.append("## 📊 锚泊 Top 8 港口")
+    lines.append("| 港口 | ⚓锚泊 | 🚢靠泊 | 📍预抵 | 状态 |")
+    lines.append("|:---|---:|---:|---:|:---:|")
+    for p in top_ports:
+        lines.append(
+            f"| {p['flag']}{p['name_cn']} | **{p['n_anchored']}** | "
+            f"{p['n_moored']} | {p['n_estimate']} | "
+            f"{cong_emoji[p['congestion']]} {cong_label[p['congestion']]} |"
+        )
 
     lines += [
         "", "## 💡 操作建议",
@@ -799,8 +795,12 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
     else:
         lines.append("> 当前各港口拥堵程度正常，无需特别关注。")
 
-    lines += ["", f"<font color=\"comment\">数据：船视宝 SDC API · 仅供参考 · {Config.BRAND}</font>"]
-    return {"msgtype":"markdown","markdown":{"content":"\n".join(lines)}}
+    lines += ["", f"<font color=\"comment\">仅供参考 · {Config.BRAND}</font>"]
+    content = "\n".join(lines)
+    # 企业微信 markdown 上限 4096 字符，超出则截断并提示
+    if len(content) > 4000:
+        content = content[:3900] + "\n\n> …（更多港口详情见 HTML 报告）"
+    return {"msgtype":"markdown","markdown":{"content":content}}
 
 
 def push_wecom(port_results: list, html_path: str, generated_at: str) -> bool:
