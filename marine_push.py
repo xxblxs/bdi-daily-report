@@ -371,7 +371,276 @@ def _generate_views(routes: list[dict]) -> dict:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 4. HTML 报告生成
+# 4. 航区 SVG 地图生成（纯 Python，不依赖外网）
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _merc_y(lat: float) -> float:
+    """纬度 → 墨卡托投影 Y 值"""
+    import math
+    lat_r = math.radians(max(-85.0, min(85.0, lat)))
+    return math.log(math.tan(math.pi / 4 + lat_r / 2))
+
+
+def _latlon_to_xy(lat: float, lon: float, bbox: list, W: int, H: int):
+    """经纬度 → SVG 画布坐标"""
+    lon_min, lat_min, lon_max, lat_max = bbox
+    x = (lon - lon_min) / (lon_max - lon_min) * W
+    y_min = _merc_y(lat_min)
+    y_max = _merc_y(lat_max)
+    y_val = _merc_y(lat)
+    y = (1.0 - (y_val - y_min) / (y_max - y_min)) * H
+    return round(x, 1), round(y, 1)
+
+
+def _wh_to_color(wh: float) -> str:
+    """波高 → 热力色（蓝→青→绿→黄→橙→红）"""
+    if wh is None or wh < 0.5:  return "#378ADD"   # 蓝  平稳
+    if wh < 1.0:                 return "#1D9E75"   # 绿  轻浪
+    if wh < 1.5:                 return "#5dbb8a"   # 浅绿 小浪
+    if wh < 2.5:                 return "#ef9f27"   # 橙  中浪
+    if wh < 3.5:                 return "#e24b4a"   # 红  大浪
+    return "#7b241c"                                # 暗红 巨浪
+
+
+# 各航区 bbox [lon_min, lat_min, lon_max, lat_max]
+_ROUTE_BBOX = {
+    "SCS-N": [105, 5,  130, 28],
+    "SCS-S": [100, -2, 122, 18],
+    "WPAC":  [135, 15, 175, 45],
+    "AUNW":  [105, -32, 128, -8],
+    "NIO":   [55,  2,  88,  28],
+    "ADEN":  [40,  5,  62,  22],
+    "RSEA":  [32,  8,  50,  25],
+    "WMED":  [-8,  28, 22,  47],
+    "NATL":  [-55, 30, -10, 60],
+    "CAPE":  [5,  -50, 40,  -20],
+    "BRAZ":  [-55, -35, -25, -5],
+}
+
+# 内置简化海岸线多边形 [lat, lon, ...]
+_COASTLINES = [
+    # 亚洲南部/东南亚
+    [(5,100),(8,98),(10,99),(13,100),(16,103),(18,107),(20,110),
+     (22,114),(24,118),(26,120),(30,122),(32,122),(35,120),(38,121),
+     (40,122),(40,118),(37,117),(35,118),(35,115),(30,120),(25,119),
+     (22,113),(18,110),(15,108),(12,109),(10,104),(8,100),(5,100)],
+    # 澳大利亚
+    [(-37.5,140),(-38,143),(-39,147),(-37,150),(-34,151),(-32,152),
+     (-28,154),(-25,153),(-23,151),(-20,149),(-17,146),(-15,145),
+     (-12,143),(-12,136),(-14,129),(-16,124),(-20,119),(-22,114),
+     (-25,114),(-29,115),(-32,116),(-34,119),(-34,123),(-34,125),
+     (-32,125),(-34,122),(-34,128),(-33,133),(-32,137),(-34,140),(-37.5,140)],
+    # 日本本州
+    [(34,136),(35,137),(36,137),(37,138),(38,141),(40,142),(41,141),
+     (40,140),(38,141),(36,138),(34,136)],
+    # 菲律宾
+    [(7,126),(9,125),(11,124),(14,122),(17,122),(18,121),(17,120),
+     (14,121),(12,123),(9,126),(7,126)],
+    # 印度半岛
+    [(23,68),(22,72),(20,73),(18,73),(16,73),(13,80),(10,80),
+     (8,77),(8,80),(10,76),(14,75),(16,74),(18,73),(22,73),(23,68)],
+    # 阿拉伯半岛
+    [(28,48),(24,57),(22,59),(18,57),(13,50),(12,44),(15,43),
+     (18,42),(22,39),(25,37),(28,35),(30,40),(28,48)],
+    # 非洲东部/好望角
+    [(-35,18),(-33,18),(-30,17),(-26,15),(-22,14),(-18,12),
+     (-15,12),(-10,13),(-5,10),(0,9),(5,2),(10,0),(15,0),
+     (20,37),(15,40),(10,45),(5,45),(0,42),(-5,40),(-10,38),
+     (-15,36),(-20,35),(-25,33),(-30,31),(-34,26),(-35,20),(-35,18)],
+    # 欧洲西部（伊比利亚）
+    [(44,-9),(43,-9),(42,-9),(38,-9),(36,-6),(36,-5),(37,-2),
+     (40,-0.5),(44,-2),(44,-8),(44,-9)],
+    # 北非
+    [(35,-6),(35,10),(33,13),(31,30),(30,32),(32,35),(36,35),(37,10),(35,-6)],
+    # 南美东海岸
+    [(-5,-35),(-10,-37),(-15,-39),(-20,-40),(-23,-43),(-26,-48),
+     (-30,-50),(-33,-53),(-35,-57),(-38,-57),(-38,-57),(-35,-57),
+     (-30,-50),(-23,-43),(-20,-40),(-15,-39),(-10,-37),(-5,-35)],
+    # 马达加斯加
+    [(-12,49),(-15,50),(-18,48),(-20,44),(-22,44),(-24,44),
+     (-25,47),(-25,48),(-22,48),(-20,48),(-15,50),(-12,49)],
+]
+
+
+def generate_route_svg(route: dict, W: int = 320, H: int = 150) -> str:
+    """
+    为单个航区生成 SVG 波高地图（纯 Python，无外网依赖）
+    包含：海岸线轮廓、经纬度网格、中心点波高热力圈、数值标注
+    """
+    code = route.get("code", "")
+    bbox = _ROUTE_BBOX.get(code, [
+        route.get("lon", 0) - 15, route.get("lat", 0) - 12,
+        route.get("lon", 0) + 15, route.get("lat", 0) + 12,
+    ])
+    lon_min, lat_min, lon_max, lat_max = bbox
+
+    def sv(lat, lon):
+        return _latlon_to_xy(lat, lon, bbox, W, H)
+
+    wh   = route.get("wh_max") or 0
+    wind = route.get("wind")   or 0
+    sh   = route.get("sh_max") or 0
+    risk = route.get("risk", "calm")
+
+    # 热力主色
+    main_color = _wh_to_color(wh)
+    # 背景色按风险级别
+    bg_colors = {
+        "high":  ("#1a0808", "#2a1010"),
+        "mod":   ("#1a1208", "#2a1e0a"),
+        "low":   ("#081a10", "#0d2a18"),
+        "calm":  ("#08101a", "#0d1e2e"),
+    }
+    bg1, bg2 = bg_colors.get(risk, bg_colors["calm"])
+
+    lines = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
+        f'viewBox="0 0 {W} {H}" style="display:block;border-radius:8px;">',
+        '<defs>',
+        f'  <linearGradient id="bg-{code}" x1="0" y1="0" x2="0" y2="1">',
+        f'    <stop offset="0%" stop-color="{bg1}"/>',
+        f'    <stop offset="100%" stop-color="{bg2}"/>',
+        f'  </linearGradient>',
+        f'  <radialGradient id="heat-{code}" cx="50%" cy="50%" r="50%">',
+        f'    <stop offset="0%" stop-color="{main_color}" stop-opacity="0.55"/>',
+        f'    <stop offset="40%" stop-color="{main_color}" stop-opacity="0.20"/>',
+        f'    <stop offset="100%" stop-color="{main_color}" stop-opacity="0"/>',
+        f'  </radialGradient>',
+        '</defs>',
+        f'<rect width="{W}" height="{H}" fill="url(#bg-{code})"/>',
+    ]
+
+    # ── 经纬度网格（每10度）
+    step = 10
+    for lat in range(int(lat_min // step) * step, int(lat_max // step + 1) * step, step):
+        if lat_min - step <= lat <= lat_max + step:
+            try:
+                x0, y0 = sv(lat, lon_min)
+                x1, y1 = sv(lat, lon_max)
+                lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
+                              f'stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>')
+                if lat_min <= lat <= lat_max:
+                    label = f'{abs(lat)}°{"N" if lat >= 0 else "S"}'
+                    lines.append(f'<text x="3" y="{y0 - 2}" fill="rgba(255,255,255,0.25)" '
+                                 f'font-size="7" font-family="sans-serif">{label}</text>')
+            except Exception:
+                pass
+    for lon in range(int(lon_min // step) * step, int(lon_max // step + 1) * step, step):
+        if lon_min - step <= lon <= lon_max + step:
+            try:
+                x0, y0 = sv(lat_max, lon)
+                x1, y1 = sv(lat_min, lon)
+                lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
+                              f'stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>')
+                if lon_min <= lon <= lon_max:
+                    label = f'{abs(lon)}°{"E" if lon >= 0 else "W"}'
+                    lines.append(f'<text x="{x0 + 2}" y="{H - 3}" fill="rgba(255,255,255,0.25)" '
+                                 f'font-size="7" font-family="sans-serif">{label}</text>')
+            except Exception:
+                pass
+
+    # ── 海岸线
+    for coast in _COASTLINES:
+        pts_in_bbox = [(la, lo) for la, lo in coast
+                       if (lon_min - 20 <= lo <= lon_max + 20 and
+                           lat_min - 15 <= la <= lat_max + 15)]
+        if len(pts_in_bbox) < 2:
+            continue
+        path_parts = []
+        for i, (la, lo) in enumerate(coast):
+            try:
+                x, y = sv(la, lo)
+                path_parts.append(f"{'M' if i == 0 else 'L'}{x},{y}")
+            except Exception:
+                continue
+        if len(path_parts) >= 2:
+            lines.append(f'<path d="{" ".join(path_parts)} Z" '
+                         f'fill="#1e3a5c" stroke="#2d5a8c" stroke-width="0.5" opacity="0.75"/>')
+
+    # ── 波高热力圈（以航区中心点为圆心）
+    cx_lat = (lat_min + lat_max) / 2
+    cx_lon = (lon_min + lon_max) / 2
+    # 用实际坐标点
+    r_lat = route.get("lat") or cx_lat
+    r_lon = route.get("lon") or cx_lon
+    try:
+        cx, cy = sv(r_lat, r_lon)
+    except Exception:
+        cx, cy = W / 2, H / 2
+
+    # 热力圈大小随波高缩放
+    r_outer = min(W, H) * (0.25 + min(wh / 5.0, 1.0) * 0.25)
+    lines.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{r_outer}" ry="{r_outer * 0.75}" '
+                 f'fill="url(#heat-{code})"/>')
+    # 内圈强调
+    r_inner = r_outer * 0.45
+    lines.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{r_inner}" ry="{r_inner * 0.75}" '
+                 f'fill="{main_color}" opacity="0.18"/>')
+
+    # ── 中心坐标点
+    lines.append(f'<circle cx="{cx}" cy="{cy}" r="4" fill="{main_color}" '
+                 f'stroke="white" stroke-width="1.2" opacity="0.9"/>')
+    lines.append(f'<circle cx="{cx}" cy="{cy}" r="10" fill="none" '
+                 f'stroke="{main_color}" stroke-width="1" opacity="0.4"/>')
+
+    # ── 波高数值标注（右上角信息框）
+    info_x, info_y = W - 6, 14
+    wh_txt  = f"{wh:.1f}m" if wh > 0 else "—"
+    wn_txt  = f"{wind:.0f}kn" if wind > 0 else "—"
+    sh_txt  = f"{sh:.1f}m" if sh > 0 else "—"
+
+    # 信息框背景
+    lines.append(f'<rect x="{W - 72}" y="4" width="66" height="44" rx="4" '
+                 f'fill="rgba(0,0,0,0.55)" stroke="{main_color}" stroke-width="0.8" opacity="0.9"/>')
+    # 波高（大字）
+    lines.append(f'<text x="{info_x}" y="{info_y}" text-anchor="end" '
+                 f'fill="{main_color}" font-size="15" font-weight="700" '
+                 f'font-family="sans-serif">{wh_txt}</text>')
+    lines.append(f'<text x="{info_x}" y="{info_y + 10}" text-anchor="end" '
+                 f'fill="rgba(255,255,255,0.45)" font-size="7" font-family="sans-serif">波高峰值</text>')
+    # 风速
+    lines.append(f'<text x="{info_x}" y="{info_y + 22}" text-anchor="end" '
+                 f'fill="rgba(255,255,255,0.7)" font-size="8" font-family="sans-serif">'
+                 f'风 {wn_txt}</text>')
+    # 涌浪
+    lines.append(f'<text x="{info_x}" y="{info_y + 33}" text-anchor="end" '
+                 f'fill="rgba(255,255,255,0.7)" font-size="8" font-family="sans-serif">'
+                 f'涌 {sh_txt}</text>')
+
+    # ── 波高色阶图例（底部）
+    legend_w = min(W - 20, 180)
+    lx = (W - legend_w) // 2
+    ly = H - 14
+    grades = [
+        ("#378ADD", "<0.5m"),
+        ("#1D9E75", "1m"),
+        ("#5dbb8a", "1.5m"),
+        ("#ef9f27", "2.5m"),
+        ("#e24b4a", "3.5m"),
+        ("#7b241c", ">4m"),
+    ]
+    seg_w = legend_w // len(grades)
+    lines.append(f'<rect x="{lx - 2}" y="{ly - 3}" width="{legend_w + 4}" height="13" '
+                 f'rx="3" fill="rgba(0,0,0,0.45)"/>')
+    for gi, (gc, gl) in enumerate(grades):
+        gx = lx + gi * seg_w
+        lines.append(f'<rect x="{gx}" y="{ly}" width="{seg_w - 1}" height="5" '
+                     f'rx="1" fill="{gc}" opacity="0.85"/>')
+        if gi == 0 or gi == len(grades) - 1:
+            lines.append(f'<text x="{gx + seg_w // 2}" y="{ly + 12}" text-anchor="middle" '
+                         f'fill="rgba(255,255,255,0.45)" font-size="6" font-family="sans-serif">{gl}</text>')
+
+    # ── 数据来源
+    lines.append(f'<text x="{W - 3}" y="{H - 2}" text-anchor="end" '
+                 f'fill="rgba(255,255,255,0.2)" font-size="6" font-family="sans-serif">'
+                 f'Open-Meteo GFS Wave</text>')
+
+    lines.append('</svg>')
+    return "\n".join(lines)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 5. HTML 报告生成
 # ══════════════════════════════════════════════════════════════════════════════
 
 MARINE_HTML_TEMPLATE = r"""<!DOCTYPE html>
@@ -498,43 +767,14 @@ td:first-child{text-align:left;font-weight:500;}
   .rc-main{grid-template-columns:repeat(3,1fr);}
 }
 
-/* ── 航区气象地图 ─────────────────────────────────────────── */
+/* ── 航区 SVG 地图 ─────────────────────────────────────────── */
 .grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));}
 .rc-map-wrap{
-  position:relative;width:100%;height:160px;
-  border-radius:8px;overflow:hidden;margin-bottom:10px;
-  background:#0d2137;border:1px solid #dde5ee;
+  width:100%;margin-bottom:10px;border-radius:8px;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.08);
+  background:#0d2137;
 }
-.rc-map-wrap iframe{
-  width:100%;height:100%;border:none;display:block;
-  opacity:0;transition:opacity .5s ease;
-}
-.rc-map-wrap iframe.map-ok{opacity:1;}
-.rc-map-canvas{
-  display:none;width:100%;height:100%;
-  position:absolute;top:0;left:0;
-}
-.map-title-tag{
-  position:absolute;top:6px;left:8px;
-  font-size:9px;font-weight:600;
-  color:rgba(255,255,255,.85);
-  background:rgba(0,0,0,.5);
-  padding:2px 7px;border-radius:3px;
-  pointer-events:none;letter-spacing:.03em;z-index:2;
-}
-.map-src-tag{
-  position:absolute;bottom:5px;right:7px;
-  font-size:9px;color:rgba(255,255,255,.5);
-  background:rgba(0,0,0,.4);
-  padding:1px 5px;border-radius:2px;
-  pointer-events:none;z-index:2;
-}
-.map-spinner{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  color:rgba(255,255,255,.3);font-size:10px;
-  pointer-events:none;z-index:1;
-}
+.rc-map-wrap svg{display:block;width:100%;height:auto;}
 </style>
 </head>
 <body>
@@ -566,15 +806,11 @@ td:first-child{text-align:left;font-weight:500;}
   {% endfor %}
 </div>
 
-<!-- Route cards（含气象图层地图）-->
+<!-- Route cards（含纯本地 SVG 波高地图）-->
 <div class="grid">
 {% for r in routes %}
 {% set risk = r.risk %}
 {% set label, card_cls, badge_cls = risk_labels[risk] %}
-{# Windy zoom：跨度大的航区用4，其余用5 #}
-{% set _zoom = 4 if r.code in ['WPAC','NIO','NATL'] else 5 %}
-{# Windy embed URL：overlay=waves 综合波高热力图 #}
-{% set _windy = "https://embed.windy.com/embed2.html?lat=" ~ (r.lat|string) ~ "&lon=" ~ (r.lon|string) ~ "&detailLat=" ~ (r.lat|string) ~ "&detailLon=" ~ (r.lon|string) ~ "&zoom=" ~ (_zoom|string) ~ "&level=surface&overlay=waves&product=ecmwf&menu=&message=true&marker=true&metricWind=kt&metricTemp=%C2%B0C" %}
 <div class="rcard {{ card_cls }}">
   <div class="rc-head">
     <div>
@@ -585,23 +821,9 @@ td:first-child{text-align:left;font-weight:500;}
   </div>
   <div class="rc-body">
 
-    <!-- 气象图层地图（Windy iframe + Canvas 自动降级）-->
+    <!-- SVG 波高地图（纯本地生成，无需外网）-->
     <div class="rc-map-wrap">
-      <div class="map-spinner" id="sp-{{ r.code }}">载入地图...</div>
-      <iframe
-        id="ifr-{{ r.code }}"
-        src="{{ _windy }}"
-        loading="lazy"
-        allowfullscreen
-        data-wh="{{ r.wh_max or 0 }}"
-        data-wind="{{ r.wind or 0 }}"
-        data-sh="{{ r.sh_max or 0 }}"
-        onload="mapLoaded('{{ r.code }}')"
-      ></iframe>
-      <canvas id="cvs-{{ r.code }}" class="rc-map-canvas" width="340" height="160"></canvas>
-      <!-- 遮罩已移除，保留 Windy 原始 UI -->
-      <div class="map-title-tag">{{ r.name }} · 波高图层</div>
-      <div class="map-src-tag" id="src-{{ r.code }}">Windy ECMWF</div>
+      {{ r.route_svg|safe }}
     </div>
 
     <!-- 数值指标 -->
@@ -723,119 +945,7 @@ td:first-child{text-align:left;font-weight:500;}
   <span>生成时间：{{ generated_at }}</span>
 </div>
 
-</div><!-- /wrap -->
-
-<script>
-/* ── Windy iframe 加载成功回调 ── */
-function mapLoaded(code) {
-  var ifr = document.getElementById('ifr-' + code);
-  var sp  = document.getElementById('sp-'  + code);
-  if (ifr) { ifr.classList.add('map-ok'); ifr._loaded = true; }
-  if (sp)  sp.style.display = 'none';
-}
-
-/* ── 全局降级入口：Playwright 截图前由 Python 调用 ── */
-function forceRenderAll() {
-  document.querySelectorAll('[id^="ifr-"]').forEach(function(ifr) {
-    if (!ifr._loaded) {
-      var code = ifr.id.replace('ifr-', '');
-      drawFallback(code,
-        parseFloat(ifr.dataset.wh   || 0),
-        parseFloat(ifr.dataset.wind || 0),
-        parseFloat(ifr.dataset.sh   || 0));
-    }
-  });
-}
-
-/* ── 页面加载完成后 5 秒自动触发降级（浏览器环境兜底）── */
-window.addEventListener('load', function() {
-  setTimeout(forceRenderAll, 5000);
-});
-
-/* ── Canvas 降级：根据波高数据绘制本地热力示意图 ── */
-function drawFallback(code, wh, wind, sh) {
-  var ifr = document.getElementById('ifr-'  + code);
-  var cvs = document.getElementById('cvs-'  + code);
-  var sp  = document.getElementById('sp-'   + code);
-  var src = document.getElementById('src-'  + code);
-  if (!cvs) return;
-
-  if (ifr) ifr.style.display = 'none';
-  if (sp)  sp.style.display  = 'none';
-  cvs.style.display = 'block';
-  if (src) src.textContent = '本地波高示意';
-
-  var ctx = cvs.getContext('2d');
-  var W = cvs.width, H = cvs.height;
-
-  /* 深海背景 */
-  var bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(0.5, '#0d2137'); bg.addColorStop(1, '#102845');
-  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-
-  /* 波纹线 */
-  var amp = Math.min(wh * 2.5, 10);
-  for (var i = 0; i < 12; i++) {
-    var y0 = H * 0.15 + i * (H * 0.62 / 12);
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(80,160,220,' + (0.03 + i * 0.005) + ')';
-    ctx.lineWidth = 0.8; ctx.moveTo(0, y0);
-    for (var x = 0; x <= W; x += 4)
-      ctx.lineTo(x, y0 + Math.sin(x * 0.035 + i * 0.7) * amp);
-    ctx.stroke();
-  }
-
-  /* 热力色（蓝→绿→橙→红随波高变化）*/
-  var t = Math.min(wh / 4.5, 1.0), r_c, g_c, b_c;
-  if (t < 0.33) {
-    r_c = Math.round(29  + t*3*(239-29));
-    g_c = Math.round(158 + t*3*(159-158));
-    b_c = Math.round(117 + t*3*(39-117));
-  } else if (t < 0.66) {
-    var tt = (t-0.33)*3;
-    r_c = Math.round(239 + tt*(226-239));
-    g_c = Math.round(159 + tt*(75-159));
-    b_c = Math.round(39  + tt*(74-39));
-  } else { r_c=226; g_c=75; b_c=74; }
-
-  /* 辐射热力圈 */
-  var cx = W*0.5, cy = H*0.52;
-  [[H*0.42,0.10],[H*0.26,0.20],[H*0.13,0.38]].forEach(function(p) {
-    var grad = ctx.createRadialGradient(cx,cy,0,cx,cy,p[0]);
-    grad.addColorStop(0,   'rgba('+r_c+','+g_c+','+b_c+','+p[1]+')');
-    grad.addColorStop(0.55,'rgba('+r_c+','+g_c+','+b_c+','+(p[1]*0.35)+')');
-    grad.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.beginPath(); ctx.arc(cx,cy,p[0],0,Math.PI*2);
-    ctx.fillStyle=grad; ctx.fill();
-  });
-
-  /* 中心标记 */
-  ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2);
-  ctx.fillStyle='rgba(255,255,255,0.95)'; ctx.fill();
-  ctx.beginPath(); ctx.arc(cx,cy,11,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1.5; ctx.stroke();
-
-  /* 数值标注 */
-  ctx.textAlign='center';
-  ctx.fillStyle='rgba(255,255,255,0.95)';
-  ctx.font='bold 20px -apple-system,sans-serif';
-  ctx.fillText(wh>0 ? wh.toFixed(1)+'m' : '—', cx, cy-20);
-  ctx.font='10px -apple-system,sans-serif';
-  ctx.fillStyle='rgba(255,255,255,0.5)';
-  ctx.fillText('波高峰值', cx, cy-7);
-
-  /* 右下角：风速 / 涌浪 */
-  ctx.textAlign='right'; ctx.font='10px -apple-system,sans-serif';
-  ctx.fillStyle='rgba(255,255,255,0.65)';
-  if (wind>0) ctx.fillText('风 '+wind.toFixed(0)+' kn', W-8, H-18);
-  if (sh>0)   ctx.fillText('涌 '+sh.toFixed(1)+' m',   W-8, H-6);
-
-  /* 轻微网格 */
-  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=0.5;
-  [W/4,W/2,W*3/4].forEach(function(x){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();});
-  [H/3,H*2/3].forEach(function(y){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();});
-}
-</script>
+</div>
 </body>
 </html>"""
 
@@ -848,12 +958,17 @@ def render_marine_html(routes: list[dict], views: dict) -> str:
     enriched = []
     for r in routes:
         rc = dict(r)
-        rc["risk"]         = _risk_level(r)
-        rc["sdir_compass"] = _deg_to_compass(r.get("sdir"))
+        rc["risk"]          = _risk_level(r)
+        rc["sdir_compass"]  = _deg_to_compass(r.get("sdir"))
         rc["wdir2_compass"] = _deg_to_compass(r.get("wdir2"))
-        rc["beaufort"]     = _beaufort(r.get("wind"))
+        rc["beaufort"]      = _beaufort(r.get("wind"))
         f5d = [v for v in (r.get("f5d_max") or []) if v is not None]
-        rc["f5d_peak"]     = max(f5d) if f5d else None
+        rc["f5d_peak"]      = max(f5d) if f5d else None
+        # 生成航区 SVG 地图（纯本地，不依赖外网）
+        try:
+            rc["route_svg"] = generate_route_svg(rc, W=320, H=150)
+        except Exception:
+            rc["route_svg"] = ""
         enriched.append(rc)
 
     # 汇总 badge
@@ -921,22 +1036,13 @@ def render_marine_html(routes: list[dict], views: dict) -> str:
 
 def html_to_image(html_path: str) -> bytes:
     """用 Playwright 截全页长图，返回 PNG 字节。
-    策略：
-      1. 打开页面，等待 DOM 加载完成（不等 iframe 外网资源）
-      2. 等待 12 秒：网络好时 Windy 能加载，网络差时也够用
-      3. 主动调用 forceRenderAll()：所有未加载的 iframe → Canvas 热力图（保证无黑屏）
-      4. 再等 1 秒让 Canvas 绘制完毕，截图
+    SVG 地图为纯本地静态内容，无需等待外网，直接截图即可。
     """
-    import time
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1080, "height": 900})
-        # 用 domcontentloaded，不等外部 iframe 加载，避免卡死
         page.goto(f"file://{html_path}", wait_until="domcontentloaded")
-        time.sleep(12)                        # 给 Windy 机会加载（网络好时生效）
-        page.evaluate("forceRenderAll()")     # 强制所有未加载卡片切换为 Canvas
-        time.sleep(1)                         # Canvas 绘制完成缓冲
         img = page.screenshot(full_page=True)
         browser.close()
     return img
