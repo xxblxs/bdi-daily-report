@@ -497,6 +497,44 @@ td:first-child{text-align:left;font-weight:500;}
   .alerts{flex-direction:column;}
   .rc-main{grid-template-columns:repeat(3,1fr);}
 }
+
+/* ── 航区气象地图 ─────────────────────────────────────────── */
+.grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));}
+.rc-map-wrap{
+  position:relative;width:100%;height:160px;
+  border-radius:8px;overflow:hidden;margin-bottom:10px;
+  background:#0d2137;border:1px solid #dde5ee;
+}
+.rc-map-wrap iframe{
+  width:100%;height:100%;border:none;display:block;
+  opacity:0;transition:opacity .5s ease;
+}
+.rc-map-wrap iframe.map-ok{opacity:1;}
+.rc-map-canvas{
+  display:none;width:100%;height:100%;
+  position:absolute;top:0;left:0;
+}
+.map-title-tag{
+  position:absolute;top:6px;left:8px;
+  font-size:9px;font-weight:600;
+  color:rgba(255,255,255,.85);
+  background:rgba(0,0,0,.5);
+  padding:2px 7px;border-radius:3px;
+  pointer-events:none;letter-spacing:.03em;z-index:2;
+}
+.map-src-tag{
+  position:absolute;bottom:5px;right:7px;
+  font-size:9px;color:rgba(255,255,255,.5);
+  background:rgba(0,0,0,.4);
+  padding:1px 5px;border-radius:2px;
+  pointer-events:none;z-index:2;
+}
+.map-spinner{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  color:rgba(255,255,255,.3);font-size:10px;
+  pointer-events:none;z-index:1;
+}
 </style>
 </head>
 <body>
@@ -528,11 +566,15 @@ td:first-child{text-align:left;font-weight:500;}
   {% endfor %}
 </div>
 
-<!-- Route cards -->
+<!-- Route cards（含气象图层地图）-->
 <div class="grid">
 {% for r in routes %}
 {% set risk = r.risk %}
 {% set label, card_cls, badge_cls = risk_labels[risk] %}
+{# Windy zoom：跨度大的航区用4，其余用5 #}
+{% set _zoom = 4 if r.code in ['WPAC','NIO','NATL'] else 5 %}
+{# Windy embed URL：overlay=waves 综合波高热力图 #}
+{% set _windy = "https://embed.windy.com/embed2.html?lat=" ~ (r.lat|string) ~ "&lon=" ~ (r.lon|string) ~ "&detailLat=" ~ (r.lat|string) ~ "&detailLon=" ~ (r.lon|string) ~ "&zoom=" ~ (_zoom|string) ~ "&level=surface&overlay=waves&product=ecmwf&menu=&message=true&marker=true&metricWind=kt&metricTemp=%C2%B0C" %}
 <div class="rcard {{ card_cls }}">
   <div class="rc-head">
     <div>
@@ -542,6 +584,26 @@ td:first-child{text-align:left;font-weight:500;}
     <span class="rc-badge {{ badge_cls }}">{{ label }}</span>
   </div>
   <div class="rc-body">
+
+    <!-- 气象图层地图（Windy iframe + Canvas 自动降级）-->
+    <div class="rc-map-wrap">
+      <div class="map-spinner" id="sp-{{ r.code }}">载入地图...</div>
+      <iframe
+        id="ifr-{{ r.code }}"
+        src="{{ _windy }}"
+        loading="lazy"
+        allowfullscreen
+        data-wh="{{ r.wh_max or 0 }}"
+        data-wind="{{ r.wind or 0 }}"
+        data-sh="{{ r.sh_max or 0 }}"
+        onload="mapLoaded('{{ r.code }}')"
+      ></iframe>
+      <canvas id="cvs-{{ r.code }}" class="rc-map-canvas" width="340" height="160"></canvas>
+      <div class="map-title-tag">{{ r.name }} · 波高图层</div>
+      <div class="map-src-tag" id="src-{{ r.code }}">Windy ECMWF</div>
+    </div>
+
+    <!-- 数值指标 -->
     <div class="rc-main">
       <div>
         <div class="rcs-label">今日最大波高</div>
@@ -579,7 +641,7 @@ td:first-child{text-align:left;font-weight:500;}
     <div class="rc-row">
       <span class="rc-icon">📍</span>
       <span class="rc-lbl">参考坐标</span>
-      <span class="rc-val">{{ r.lat }}° / {{ r.lon }}°E</span>
+      <span class="rc-val">{{ r.lat }}° / {{ r.lon }}°</span>
     </div>
     <!-- 5-day forecast -->
     <div class="forecast">
@@ -660,7 +722,116 @@ td:first-child{text-align:left;font-weight:500;}
   <span>生成时间：{{ generated_at }}</span>
 </div>
 
-</div>
+</div><!-- /wrap -->
+
+<script>
+/* ── Windy iframe 加载成功回调 ── */
+function mapLoaded(code) {
+  var ifr = document.getElementById('ifr-' + code);
+  var sp  = document.getElementById('sp-'  + code);
+  if (ifr) ifr.classList.add('map-ok');
+  if (sp)  sp.style.display = 'none';
+}
+
+/* ── 超时检测：8秒后未加载完成 → Canvas 降级 ── */
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('[id^="ifr-"]').forEach(function(ifr) {
+    var code = ifr.id.replace('ifr-', '');
+    setTimeout(function() {
+      if (!ifr.classList.contains('map-ok')) {
+        drawFallback(code,
+          parseFloat(ifr.dataset.wh   || 0),
+          parseFloat(ifr.dataset.wind || 0),
+          parseFloat(ifr.dataset.sh   || 0));
+      }
+    }, 8000);
+  });
+});
+
+/* ── Canvas 降级：根据波高数据绘制本地热力示意图 ── */
+function drawFallback(code, wh, wind, sh) {
+  var ifr = document.getElementById('ifr-'  + code);
+  var cvs = document.getElementById('cvs-'  + code);
+  var sp  = document.getElementById('sp-'   + code);
+  var src = document.getElementById('src-'  + code);
+  if (!cvs) return;
+
+  if (ifr) ifr.style.display = 'none';
+  if (sp)  sp.style.display  = 'none';
+  cvs.style.display = 'block';
+  if (src) src.textContent = '本地波高示意';
+
+  var ctx = cvs.getContext('2d');
+  var W = cvs.width, H = cvs.height;
+
+  /* 深海背景 */
+  var bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#0a1a2e'); bg.addColorStop(0.5, '#0d2137'); bg.addColorStop(1, '#102845');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  /* 波纹线 */
+  var amp = Math.min(wh * 2.5, 10);
+  for (var i = 0; i < 12; i++) {
+    var y0 = H * 0.15 + i * (H * 0.62 / 12);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(80,160,220,' + (0.03 + i * 0.005) + ')';
+    ctx.lineWidth = 0.8; ctx.moveTo(0, y0);
+    for (var x = 0; x <= W; x += 4)
+      ctx.lineTo(x, y0 + Math.sin(x * 0.035 + i * 0.7) * amp);
+    ctx.stroke();
+  }
+
+  /* 热力色（蓝→绿→橙→红随波高变化）*/
+  var t = Math.min(wh / 4.5, 1.0), r_c, g_c, b_c;
+  if (t < 0.33) {
+    r_c = Math.round(29  + t*3*(239-29));
+    g_c = Math.round(158 + t*3*(159-158));
+    b_c = Math.round(117 + t*3*(39-117));
+  } else if (t < 0.66) {
+    var tt = (t-0.33)*3;
+    r_c = Math.round(239 + tt*(226-239));
+    g_c = Math.round(159 + tt*(75-159));
+    b_c = Math.round(39  + tt*(74-39));
+  } else { r_c=226; g_c=75; b_c=74; }
+
+  /* 辐射热力圈 */
+  var cx = W*0.5, cy = H*0.52;
+  [[H*0.42,0.10],[H*0.26,0.20],[H*0.13,0.38]].forEach(function(p) {
+    var grad = ctx.createRadialGradient(cx,cy,0,cx,cy,p[0]);
+    grad.addColorStop(0,   'rgba('+r_c+','+g_c+','+b_c+','+p[1]+')');
+    grad.addColorStop(0.55,'rgba('+r_c+','+g_c+','+b_c+','+(p[1]*0.35)+')');
+    grad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(cx,cy,p[0],0,Math.PI*2);
+    ctx.fillStyle=grad; ctx.fill();
+  });
+
+  /* 中心标记 */
+  ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,0.95)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx,cy,11,0,Math.PI*2);
+  ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1.5; ctx.stroke();
+
+  /* 数值标注 */
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(255,255,255,0.95)';
+  ctx.font='bold 20px -apple-system,sans-serif';
+  ctx.fillText(wh>0 ? wh.toFixed(1)+'m' : '—', cx, cy-20);
+  ctx.font='10px -apple-system,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.5)';
+  ctx.fillText('波高峰值', cx, cy-7);
+
+  /* 右下角：风速 / 涌浪 */
+  ctx.textAlign='right'; ctx.font='10px -apple-system,sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.65)';
+  if (wind>0) ctx.fillText('风 '+wind.toFixed(0)+' kn', W-8, H-18);
+  if (sh>0)   ctx.fillText('涌 '+sh.toFixed(1)+' m',   W-8, H-6);
+
+  /* 轻微网格 */
+  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=0.5;
+  [W/4,W/2,W*3/4].forEach(function(x){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();});
+  [H/3,H*2/3].forEach(function(y){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();});
+}
+</script>
 </body>
 </html>"""
 
@@ -745,13 +916,21 @@ def render_marine_html(routes: list[dict], views: dict) -> str:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def html_to_image(html_path: str) -> bytes:
-    """用 Playwright 截全页长图，返回 PNG 字节。"""
+    """用 Playwright 截全页长图，返回 PNG 字节。
+    等待策略：先等 networkidle，再额外等 8 秒让 Windy iframe 加载真实气象图层。
+    若网络不通，JS 会在 8 秒后自动切换 Canvas 降级图，截图同样正常。
+    """
+    import time
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1080, "height": 900})
         page.goto(f"file://{html_path}")
-        page.wait_for_load_state("networkidle")
+        try:
+            page.wait_for_load_state("networkidle", timeout=15000)
+        except Exception:
+            pass  # 超时也继续，Canvas 降级已在 JS 中处理
+        time.sleep(8)  # 给 Windy iframe 足够渲染时间
         img = page.screenshot(full_page=True)
         browser.close()
     return img
