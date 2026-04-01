@@ -535,6 +535,15 @@ td:first-child{text-align:left;font-weight:500;}
   color:rgba(255,255,255,.3);font-size:10px;
   pointer-events:none;z-index:1;
 }
+/* 遮罩：盖住 Windy 底部进度条（高度约34px）和左上角 Logo */
+.map-mask-bottom{
+  position:absolute;bottom:0;left:0;right:0;height:36px;
+  background:#0d2137;z-index:3;pointer-events:none;
+}
+.map-mask-logo{
+  position:absolute;top:0;left:0;width:88px;height:30px;
+  background:#0d2137;z-index:3;pointer-events:none;
+}
 </style>
 </head>
 <body>
@@ -599,6 +608,9 @@ td:first-child{text-align:left;font-weight:500;}
         onload="mapLoaded('{{ r.code }}')"
       ></iframe>
       <canvas id="cvs-{{ r.code }}" class="rc-map-canvas" width="340" height="160"></canvas>
+      <!-- 遮罩：覆盖 Windy Logo（左上）和时间进度条（底部）-->
+      <div class="map-mask-bottom"></div>
+      <div class="map-mask-logo"></div>
       <div class="map-title-tag">{{ r.name }} · 波高图层</div>
       <div class="map-src-tag" id="src-{{ r.code }}">Windy ECMWF</div>
     </div>
@@ -729,23 +741,26 @@ td:first-child{text-align:left;font-weight:500;}
 function mapLoaded(code) {
   var ifr = document.getElementById('ifr-' + code);
   var sp  = document.getElementById('sp-'  + code);
-  if (ifr) ifr.classList.add('map-ok');
+  if (ifr) { ifr.classList.add('map-ok'); ifr._loaded = true; }
   if (sp)  sp.style.display = 'none';
 }
 
-/* ── 超时检测：8秒后未加载完成 → Canvas 降级 ── */
-document.addEventListener('DOMContentLoaded', function() {
+/* ── 全局降级入口：Playwright 截图前由 Python 调用 ── */
+function forceRenderAll() {
   document.querySelectorAll('[id^="ifr-"]').forEach(function(ifr) {
-    var code = ifr.id.replace('ifr-', '');
-    setTimeout(function() {
-      if (!ifr.classList.contains('map-ok')) {
-        drawFallback(code,
-          parseFloat(ifr.dataset.wh   || 0),
-          parseFloat(ifr.dataset.wind || 0),
-          parseFloat(ifr.dataset.sh   || 0));
-      }
-    }, 8000);
+    if (!ifr._loaded) {
+      var code = ifr.id.replace('ifr-', '');
+      drawFallback(code,
+        parseFloat(ifr.dataset.wh   || 0),
+        parseFloat(ifr.dataset.wind || 0),
+        parseFloat(ifr.dataset.sh   || 0));
+    }
   });
+}
+
+/* ── 页面加载完成后 5 秒自动触发降级（浏览器环境兜底）── */
+window.addEventListener('load', function() {
+  setTimeout(forceRenderAll, 5000);
 });
 
 /* ── Canvas 降级：根据波高数据绘制本地热力示意图 ── */
@@ -917,8 +932,11 @@ def render_marine_html(routes: list[dict], views: dict) -> str:
 
 def html_to_image(html_path: str) -> bytes:
     """用 Playwright 截全页长图，返回 PNG 字节。
-    等待策略：先等 networkidle，再额外等 8 秒让 Windy iframe 加载真实气象图层。
-    若网络不通，JS 会在 8 秒后自动切换 Canvas 降级图，截图同样正常。
+    策略：
+      1. 打开页面，等待网络空闲（最多 15 秒）
+      2. 等待 10 秒让 Windy iframe 尽量加载
+      3. 主动执行 JS forceRenderAll()，将所有未加载的地图强制切换为 Canvas 热力图
+      4. 再等 0.5 秒让 Canvas 绘制完成，截图
     """
     import time
     from playwright.sync_api import sync_playwright
@@ -929,8 +947,10 @@ def html_to_image(html_path: str) -> bytes:
         try:
             page.wait_for_load_state("networkidle", timeout=15000)
         except Exception:
-            pass  # 超时也继续，Canvas 降级已在 JS 中处理
-        time.sleep(8)  # 给 Windy iframe 足够渲染时间
+            pass
+        time.sleep(10)                        # 给 Windy 足够加载时间
+        page.evaluate("forceRenderAll()")     # 强制渲染所有未加载的 Canvas
+        time.sleep(0.5)                       # Canvas 绘制完成缓冲
         img = page.screenshot(full_page=True)
         browser.close()
     return img
