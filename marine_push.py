@@ -535,15 +535,6 @@ td:first-child{text-align:left;font-weight:500;}
   color:rgba(255,255,255,.3);font-size:10px;
   pointer-events:none;z-index:1;
 }
-/* 遮罩：盖住 Windy 底部进度条（高度约34px）和左上角 Logo */
-.map-mask-bottom{
-  position:absolute;bottom:0;left:0;right:0;height:36px;
-  background:#0d2137;z-index:3;pointer-events:none;
-}
-.map-mask-logo{
-  position:absolute;top:0;left:0;width:88px;height:30px;
-  background:#0d2137;z-index:3;pointer-events:none;
-}
 </style>
 </head>
 <body>
@@ -608,9 +599,7 @@ td:first-child{text-align:left;font-weight:500;}
         onload="mapLoaded('{{ r.code }}')"
       ></iframe>
       <canvas id="cvs-{{ r.code }}" class="rc-map-canvas" width="340" height="160"></canvas>
-      <!-- 遮罩：覆盖 Windy Logo（左上）和时间进度条（底部）-->
-      <div class="map-mask-bottom"></div>
-      <div class="map-mask-logo"></div>
+      <!-- 遮罩已移除，保留 Windy 原始 UI -->
       <div class="map-title-tag">{{ r.name }} · 波高图层</div>
       <div class="map-src-tag" id="src-{{ r.code }}">Windy ECMWF</div>
     </div>
@@ -933,24 +922,21 @@ def render_marine_html(routes: list[dict], views: dict) -> str:
 def html_to_image(html_path: str) -> bytes:
     """用 Playwright 截全页长图，返回 PNG 字节。
     策略：
-      1. 打开页面，等待网络空闲（最多 15 秒）
-      2. 等待 10 秒让 Windy iframe 尽量加载
-      3. 主动执行 JS forceRenderAll()，将所有未加载的地图强制切换为 Canvas 热力图
-      4. 再等 0.5 秒让 Canvas 绘制完成，截图
+      1. 打开页面，等待 DOM 加载完成（不等 iframe 外网资源）
+      2. 等待 12 秒：网络好时 Windy 能加载，网络差时也够用
+      3. 主动调用 forceRenderAll()：所有未加载的 iframe → Canvas 热力图（保证无黑屏）
+      4. 再等 1 秒让 Canvas 绘制完毕，截图
     """
     import time
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1080, "height": 900})
-        page.goto(f"file://{html_path}")
-        try:
-            page.wait_for_load_state("networkidle", timeout=15000)
-        except Exception:
-            pass
-        time.sleep(10)                        # 给 Windy 足够加载时间
-        page.evaluate("forceRenderAll()")     # 强制渲染所有未加载的 Canvas
-        time.sleep(0.5)                       # Canvas 绘制完成缓冲
+        # 用 domcontentloaded，不等外部 iframe 加载，避免卡死
+        page.goto(f"file://{html_path}", wait_until="domcontentloaded")
+        time.sleep(12)                        # 给 Windy 机会加载（网络好时生效）
+        page.evaluate("forceRenderAll()")     # 强制所有未加载卡片切换为 Canvas
+        time.sleep(1)                         # Canvas 绘制完成缓冲
         img = page.screenshot(full_page=True)
         browser.close()
     return img
