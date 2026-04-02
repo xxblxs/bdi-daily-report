@@ -766,7 +766,6 @@ td:first-child { font-weight:600; color:var(--ink); }
 
 <div class="footer">
   <div class="f-left">
-    数据来源：MyVessel AIS 实时数据 · 更新频率：每日一次<br>
     <strong>{{ brand }}</strong> 港口智能监控 · 本报告仅供参考
   </div>
   <div class="f-right">

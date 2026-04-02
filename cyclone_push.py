@@ -1536,7 +1536,6 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
 
 <div class="footer">
   <div class="f-left">
-    数据来源：NOAA IBTrACS NRT · NAVGreen 气旋追踪 · NOAA NHC<br>
     <strong>{{ brand }}</strong> 气象导航服务 · 仅供参考，以官方气象机构公告为准
   </div>
   <div class="f-right">

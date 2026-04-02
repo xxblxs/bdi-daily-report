@@ -559,7 +559,6 @@ body {
 
 <div class="footer">
   <div class="f-left">
-    数据来源：NAVGreen Baltic Exchange API &nbsp;·&nbsp;
     新闻：Hellenic Shipping News / Splash247<br>
     <strong>本报告仅供参考，不构成投资建议</strong>
   </div>

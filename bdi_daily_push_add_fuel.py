@@ -790,7 +790,6 @@ body {
 
 <div class="footer">
   <div class="f-left">
-    数据来源：NAVGreen Baltic Exchange API &nbsp;·&nbsp;
     新闻：Hellenic Shipping News / Splash247<br>
     <strong>本报告仅供参考，不构成投资建议</strong>
   </div>
@@ -1458,7 +1457,7 @@ td:first-child { text-align:left; }
 
 <div class="footer">
   <div class="f-left">
-    燃油价格数据 · 仅供参考 · 数据来源：NAVGreen Fuel Price API
+    燃油价格数据 · 仅供参考
   </div>
   <div class="f-right">
     BUNKER PRICE REPORT<br>
