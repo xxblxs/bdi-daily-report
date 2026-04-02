@@ -1317,19 +1317,9 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
     </div>
   </div>
   <div class="status-strip">
-    {{ storms_by_impact.danger | length }} 个危险系统
-    {%- if storms_by_impact.danger -%}
-    <span class="sb sb-r">🚨 危险 {{ storms_by_impact.danger|length }}</span>
-    {%- endif -%}
-    {%- if storms_by_impact.warn -%}
-    <span class="sb sb-o">⚠️ 预警 {{ storms_by_impact.warn|length }}</span>
-    {%- endif -%}
-    {%- if storms_by_impact.watch -%}
-    <span class="sb sb-b">👁 关注 {{ storms_by_impact.watch|length }}</span>
-    {%- endif -%}
-    {%- if storms_by_impact.monitor -%}
-    <span class="sb sb-g">📡 监测 {{ storms_by_impact.monitor|length }}</span>
-    {%- endif -%}
+    {%- for cls, text in stat_badges %}
+    <span class="sb {{ 'sb-r' if cls=='hst-r' else ('sb-o' if cls=='hst-o' else ('sb-b' if cls=='hst-b' else 'sb-g')) }}">{{ text }}</span>
+    {%- endfor %}
   </div>
 </div>
 
@@ -1353,19 +1343,22 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
 </div>
 {%- else %}
 <!-- 预警横幅 -->
-{%- if alert_bars %}
+{%- if alert_storms %}
 <div class="section-head">
   <span class="section-num">01</span>
   <span class="section-label">重点预警</span>
   <span class="section-line"></span>
 </div>
 <div class="alert-bars">
-  {%- for a in alert_bars %}
-  <div class="abar abar-{{ a.level }}">
-    <div class="abar-icon">{{ a.icon }}</div>
+  {%- for s in alert_storms %}
+  <div class="abar abar-{{ 'danger' if s.impact=='danger' else 'warn' }}">
+    <div class="abar-icon">{{ '🚨' if s.impact=='danger' else '⚠️' }}</div>
     <div>
-      <div class="abar-title">{{ a.title }}</div>
-      <div class="abar-text">{{ a.text }}</div>
+      <div class="abar-title">{{ s.intensity.name }} {{ s.name }} · {{ s.basin_name }}</div>
+      <div class="abar-text">
+        风速 {{ s.wind_kn|int if s.wind_kn else '—' }}kn · 气压 {{ s.pres_mb|int if s.pres_mb else '—' }}hPa ·
+        距最近航线 {{ s.nearest_route_name or '—' }} {{ s.nearest_route_dist|int if s.nearest_route_dist else '—' }}nm
+      </div>
     </div>
   </div>
   {%- endfor %}
@@ -1374,7 +1367,7 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
 
 <!-- 气旋详情 -->
 <div class="section-head">
-  <span class="section-num">{{ '02' if alert_bars else '01' }}</span>
+  <span class="section-num">{{ '02' if alert_storms else '01' }}</span>
   <span class="section-label">活跃气旋系统详情</span>
   <span class="section-line"></span>
 </div>
@@ -1482,7 +1475,7 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
 
 <!-- 全球活跃系统汇总 -->
 <div class="section-head">
-  <span class="section-num">{{ '03' if alert_bars else '02' }}</span>
+  <span class="section-num">{{ '03' if alert_storms else '02' }}</span>
   <span class="section-label">全球活跃系统汇总</span>
   <span class="section-line"></span>
 </div>

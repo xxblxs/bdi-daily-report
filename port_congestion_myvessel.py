@@ -561,13 +561,13 @@ td:first-child { font-weight:600; color:var(--ink); }
     </div>
     <div class="doc-meta">
       <div class="meta-date">{{ date }}</div>
-      <div class="meta-ref">{{ brand }} · {{ total_ports }} 港口实时数据</div>
+      <div class="meta-ref">{{ brand }} · {{ ports|length }} 港口实时数据</div>
     </div>
   </div>
   <div class="status-strip">
-    {% if congested_count %}<span class="sb sb-r">🔴 严重拥堵 {{ congested_count }} 港</span>{% endif %}
-    {% if moderate_count %}<span class="sb sb-o">🟡 中度拥堵 {{ moderate_count }} 港</span>{% endif %}
-    {% if normal_count %}<span class="sb sb-g">✓ 正常 {{ normal_count }} 港</span>{% endif %}
+    {% for b in stat_badges %}
+    <span class="sb {{ 'sb-r' if b.cls=='hb-r' else ('sb-o' if b.cls=='hb-o' else 'sb-g') }}">{{ b.text }}</span>
+    {% endfor %}
   </div>
 </div>
 
@@ -586,33 +586,33 @@ td:first-child { font-weight:600; color:var(--ink); }
 
 <div class="kpi-row">
   <div class="kpi">
-    <div class="k-val red">{{ congested_count or 0 }}</div>
+    <div class="k-val red">{{ high_ports }}</div>
     <div class="k-label">严重拥堵</div>
   </div>
   <div class="kpi">
-    <div class="k-val amber">{{ moderate_count or 0 }}</div>
+    <div class="k-val amber">{{ mod_ports }}</div>
     <div class="k-label">中度拥堵</div>
   </div>
   <div class="kpi">
-    <div class="k-val green">{{ normal_count or 0 }}</div>
+    <div class="k-val green">{{ normal_ports }}</div>
     <div class="k-label">正常运营</div>
   </div>
   <div class="kpi">
-    <div class="k-val blue">{{ total_vessels or 0 }}</div>
-    <div class="k-label">在港船舶(艘)</div>
+    <div class="k-val blue">{{ total_anchored }}</div>
+    <div class="k-label">总锚泊(艘)</div>
   </div>
   <div class="kpi">
-    <div class="k-val blue">{{ avg_wait or '—' }}</div>
-    <div class="k-label">平均等待(天)</div>
+    <div class="k-val blue">{{ total_estimate }}</div>
+    <div class="k-label">预抵(艘)</div>
   </div>
 </div>
 
-{% if dem_alert %}
+{% if dem_alerts %}
 <div class="dem-alert">
   <div class="dem-icon">⚠️</div>
   <div>
     <div class="dem-title">Demurrage 风险提示</div>
-    <div class="dem-text">{{ dem_alert }}</div>
+    <div class="dem-text">{{ dem_alerts }}</div>
   </div>
 </div>
 {% endif %}
@@ -624,19 +624,21 @@ td:first-child { font-weight:600; color:var(--ink); }
   <span class="section-line"></span>
 </div>
 
-{% for region, ports in port_groups.items() %}
+{# 按 group 字段分组展示 #}
+{% set groups = ports | groupby('group') %}
+{% for grp_name, grp_ports in groups %}
 <div class="group-hd">
-  {{ region }}
-  <span class="group-count">{{ ports|length }} 港</span>
+  {{ grp_name }}
+  <span class="group-count">{{ grp_ports|list|length }} 港</span>
 </div>
 <div class="port-grid">
-{% for p in ports %}
-{% set cong = p.congestion_level %}
+{% for p in grp_ports %}
+{% set cong = p.congestion %}
 <div class="pcard cong-{{ cong }}">
   <div class="pc-head">
     <div>
-      <div class="pc-name">{{ p.name }}</div>
-      <div class="pc-sub">{{ p.country }} · {{ p.code }}</div>
+      <div class="pc-name">{{ p.flag }}{{ p.name_cn }}</div>
+      <div class="pc-sub">{{ p.country }} · {{ p.cargo }}</div>
     </div>
     <span class="pc-badge pb-{{ cong }}">
       {{ '严重拥堵' if cong=='high' else ('中度拥堵' if cong=='mod' else ('轻度拥堵' if cong=='low' else '正常')) }}
@@ -644,73 +646,64 @@ td:first-child { font-weight:600; color:var(--ink); }
   </div>
   <div class="pc-stats">
     <div class="ps-cell">
-      <div class="ps-label">在港船</div>
-      <div class="ps-val {{ 'v-high' if (p.vessels or 0)>=30 else ('v-mod' if (p.vessels or 0)>=15 else 'v-blue') }}">
-        {{ p.vessels or '—' }}
-      </div>
-      <div class="ps-sub">艘</div>
-    </div>
-    <div class="ps-cell">
       <div class="ps-label">锚泊</div>
-      <div class="ps-val {{ 'v-high' if (p.anchored or 0)>=10 else 'v-gray' }}">
-        {{ p.anchored or '—' }}
+      <div class="ps-val {{ 'v-high' if (p.n_anchored or 0)>=30 else ('v-mod' if (p.n_anchored or 0)>=15 else 'v-blue') }}">
+        {{ p.n_anchored if p.data_fresh else '—' }}
       </div>
       <div class="ps-sub">艘</div>
     </div>
     <div class="ps-cell">
-      <div class="ps-label">等待</div>
-      <div class="ps-val {{ 'v-high' if (p.waiting or 0)>=10 else 'v-gray' }}">
-        {{ p.waiting or '—' }}
+      <div class="ps-label">靠泊</div>
+      <div class="ps-val v-blue">
+        {{ p.n_moored if p.data_fresh else '—' }}
       </div>
       <div class="ps-sub">艘</div>
     </div>
     <div class="ps-cell">
-      <div class="ps-label">等待天</div>
-      <div class="ps-val {{ 'v-high' if (p.avg_wait or 0)>=5 else ('v-mod' if (p.avg_wait or 0)>=2 else 'v-ok') }}">
-        {{ '%.1f'|format(p.avg_wait) if p.avg_wait else '—' }}
+      <div class="ps-label">预抵</div>
+      <div class="ps-val v-gray">
+        {{ p.n_estimate if p.data_fresh else '—' }}
+      </div>
+      <div class="ps-sub">艘</div>
+    </div>
+    <div class="ps-cell">
+      <div class="ps-label">估等</div>
+      <div class="ps-val {{ 'v-high' if (p.est_wait_days or 0)>=5 else ('v-mod' if (p.est_wait_days or 0)>=2 else 'v-ok') }}">
+        {{ '%.1f'|format(p.est_wait_days) if p.est_wait_days else '—' }}
       </div>
       <div class="ps-sub">天</div>
     </div>
   </div>
-  {% if p.trend %}
+  {% if p.trend_data %}
   <div class="trend-wrap">
-    <div class="trend-label">近期趋势</div>
+    <div class="trend-label">近期锚泊趋势</div>
     <div class="trend-bars">
-      {% set max_v = p.trend|map(attribute='vessels')|select('ne',None)|list|max or 1 %}
-      {% for t in p.trend %}
+      {% set max_v = (p.trend_data | map(attribute='n') | list | max) or 1 %}
+      {% for t in p.trend_data %}
       <div class="tb-day">
-        <div class="tb-bar" style="height:{{ ((t.vessels or 0)/max_v*100)|int }}%;
-          background:{{ '#c0392b' if (t.vessels or 0)>=30 else ('#b86c0a' if (t.vessels or 0)>=15 else '#2d5f96') }};"></div>
-        <div class="tb-dt">{{ t.date[-5:] }}</div>
+        <div class="tb-bar" style="height:{{ ((t.n or 0)/max_v*100)|int }}%;
+          background:{{ '#c0392b' if (t.n or 0)>=30 else ('#b86c0a' if (t.n or 0)>=15 else '#2d5f96') }};"></div>
+        <div class="tb-dt">{{ t.date[-5:] if t.date else '' }}</div>
       </div>
       {% endfor %}
     </div>
   </div>
   {% endif %}
   <div class="pc-detail">
-    {% if p.demurrage_risk %}
+    {% if p.est_wait_days and p.est_wait_days >= 2 %}
     <div class="pd-row">
       <span class="pd-icon">⚠️</span>
       <span class="pd-label">Demurrage</span>
-      <span class="pd-val" style="color:var(--amber);">{{ p.demurrage_risk }}</span>
+      <span class="pd-val" style="color:var(--amber);">预计 {{ '%.1f'|format(p.est_wait_days) }} 天等待风险</span>
     </div>
     {% endif %}
-    {% if p.berth_delay %}
     <div class="pd-row">
-      <span class="pd-icon">⚓</span>
-      <span class="pd-label">泊位延迟</span>
-      <span class="pd-val">{{ p.berth_delay }}</span>
+      <span class="pd-icon">📦</span>
+      <span class="pd-label">货类</span>
+      <span class="pd-val" style="font-family:inherit;">{{ p.cargo }}</span>
     </div>
-    {% endif %}
-    {% if p.note %}
-    <div class="pd-row">
-      <span class="pd-icon">📝</span>
-      <span class="pd-label">备注</span>
-      <span class="pd-val" style="font-family:inherit;font-size:10.5px;color:var(--ink-2);">{{ p.note }}</span>
-    </div>
-    {% endif %}
-    {% if not p.demurrage_risk and not p.berth_delay and not p.note %}
-    <div class="no-data">暂无附加信息</div>
+    {% if not p.data_fresh %}
+    <div class="no-data">⚠ 数据更新中</div>
     {% endif %}
   </div>
 </div>
@@ -733,36 +726,34 @@ td:first-child { font-weight:600; color:var(--ink); }
   <table>
     <thead>
       <tr>
-        <th>港口</th><th>国家</th><th>区域</th>
-        <th style="text-align:right;">在港(艘)</th>
-        <th style="text-align:right;">锚泊</th>
-        <th style="text-align:right;">等待</th>
-        <th style="text-align:right;">+/-</th>
-        <th style="text-align:right;">等待天</th>
-        <th style="text-align:right;">Demurrage</th>
+        <th>港口</th><th>区域</th><th>货类</th>
+        <th style="text-align:right;">锚泊(艘)</th>
+        <th style="text-align:right;">靠泊</th>
+        <th style="text-align:right;">预抵</th>
+        <th style="text-align:right;">7日均值</th>
+        <th style="text-align:right;">估等(天)</th>
         <th style="text-align:right;">评级</th>
       </tr>
     </thead>
     <tbody>
-      {% for p in all_ports_sorted %}
-      {% set cong = p.congestion_level %}
+      {% for p in ports | sort(attribute='n_anchored', reverse=True) %}
+      {% set cong = p.congestion %}
       <tr {% if cong=='high' %}class="high-row"{% endif %}>
-        <td>{{ p.name }}</td>
-        <td style="color:var(--ink-m);">{{ p.country }}</td>
-        <td style="color:var(--ink-m);font-size:10.5px;">{{ p.region }}</td>
-        <td class="{{ 'td-high' if (p.vessels or 0)>=30 else ('td-mod' if (p.vessels or 0)>=15 else '') }}"
-            style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;">{{ p.vessels or '—' }}</td>
-        <td style="font-family:'DM Mono',monospace;font-size:12px;">{{ p.anchored or '—' }}</td>
-        <td style="font-family:'DM Mono',monospace;font-size:12px;">{{ p.waiting or '—' }}</td>
-        <td style="font-family:'DM Mono',monospace;font-size:12px;color:{% if (p.change or 0)>0 %}var(--red){% elif (p.change or 0)<0 %}var(--green){% else %}var(--ink-m){% endif %};">
-          {{ ('+' if (p.change or 0)>0 else '') + (p.change|string) if p.change is not none else '—' }}
+        <td>{{ p.flag }}{{ p.name_cn }}</td>
+        <td style="color:var(--ink-m);font-size:10.5px;">{{ p.group }}</td>
+        <td style="color:var(--ink-m);font-size:10.5px;">{{ p.cargo }}</td>
+        <td class="{{ 'td-high' if (p.n_anchored or 0)>=30 else ('td-mod' if (p.n_anchored or 0)>=15 else '') }}"
+            style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;">
+          {{ p.n_anchored if p.data_fresh else '—' }}
         </td>
-        <td class="{{ 'td-high' if (p.avg_wait or 0)>=5 else ('td-mod' if (p.avg_wait or 0)>=2 else '') }}"
+        <td style="font-family:'DM Mono',monospace;font-size:12px;">{{ p.n_moored if p.data_fresh else '—' }}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:12px;">{{ p.n_estimate if p.data_fresh else '—' }}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ink-m);">
+          {{ '%.0f'|format(p.avg7) if p.avg7 else '—' }}
+        </td>
+        <td class="{{ 'td-high' if (p.est_wait_days or 0)>=5 else ('td-mod' if (p.est_wait_days or 0)>=2 else '') }}"
             style="font-family:'DM Mono',monospace;font-size:12px;">
-          {{ '%.1f'|format(p.avg_wait) if p.avg_wait else '—' }}
-        </td>
-        <td style="font-size:11px;color:{% if p.demurrage_risk %}var(--amber){% else %}var(--ink-m){% endif %};">
-          {{ p.demurrage_risk or '—' }}
+          {{ '%.1f'|format(p.est_wait_days) if p.est_wait_days else '—' }}
         </td>
         <td><span class="cp cp-{{ cong }}">{{ '严重' if cong=='high' else ('中度' if cong=='mod' else ('轻度' if cong=='low' else '正常')) }}</span></td>
       </tr>
