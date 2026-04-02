@@ -403,74 +403,118 @@ def _wh_to_color(wh: float) -> str:
 
 
 # 各航区 bbox [lon_min, lat_min, lon_max, lat_max]
+# 各航区精确 bbox [lon_min, lat_min, lon_max, lat_max]
+# 收窄 bbox 让海岸线更突出、更易辨认
 _ROUTE_BBOX = {
-    "SCS-N": [105, 5,  130, 28],
-    "SCS-S": [100, -2, 122, 18],
-    "WPAC":  [135, 15, 175, 45],
-    "AUNW":  [105, -32, 128, -8],
-    "NIO":   [55,  2,  88,  28],
-    "ADEN":  [40,  5,  62,  22],
-    "RSEA":  [32,  8,  50,  25],
-    "WMED":  [-8,  28, 22,  47],
-    "NATL":  [-55, 30, -10, 60],
-    "CAPE":  [5,  -50, 40,  -20],
-    "BRAZ":  [-55, -35, -25, -5],
+    "SCS-N": [108, 8,  125, 25],   # 南海中部：广东/越南/菲律宾
+    "SCS-S": [102, 0,  118, 14],   # 南海南部：马来西亚/婆罗洲
+    "WPAC":  [140, 18, 172, 42],   # 西太平洋：日本南部到关岛
+    "AUNW":  [108, -26, 122, -12], # 澳大利亚西北：Hedland附近
+    "NIO":   [58,  5,  82,  24],   # 北印度洋：印度/斯里兰卡
+    "ADEN":  [42,  8,  60,  20],   # 亚丁湾：也门/索马里
+    "RSEA":  [34, 10,  46, 24],    # 红海南部：厄立特里亚/吉布提
+    "WMED":  [-5, 30,  18, 46],    # 地中海西部：直布罗陀/撒丁岛
+    "NATL":  [-50, 33, -15, 58],   # 北大西洋中部：亚速尔群岛附近
+    "CAPE":  [8,  -42,  35, -22],  # 好望角：南非西南端
+    "BRAZ":  [-50, -32, -25, -8],  # 巴西东海岸：里约/桑托斯
 }
 
-# 内置简化海岸线多边形 [lat, lon, ...]
+# 各航区关键地标标注 [(lat, lon, 名称, 锚点方向), ...]
+_LANDMARKS = {
+    "SCS-N": [(22.3, 114.1, "香港", "end"),   (10.8, 106.7, "胡志明", "start"),
+              (14.1, 121.0, "马尼拉", "start"), (20.0, 110.3, "海口", "middle")],
+    "SCS-S": [(1.3,  103.8, "新加坡", "start"), (3.1, 113.0, "古晋", "middle"),
+              (5.4,  100.3, "槟城", "end")],
+    "WPAC":  [(35.7, 139.7, "东京", "end"),    (26.2, 127.7, "冲绳", "end"),
+              (13.4, 144.8, "关岛", "start")],
+    "AUNW":  [(-20.3, 118.6, "Hedland", "start"), (-17.9, 122.2, "Broome", "start"),
+              (-14.5, 112.0, "↑印度洋", "middle")],
+    "NIO":   [(19.1, 72.9, "孟买", "end"),    (6.9, 79.9, "科伦坡", "start"),
+              (22.6, 68.0, "坎德拉", "end"),  (11.7, 79.8, "金奈", "start")],
+    "ADEN":  [(12.8, 45.0, "亚丁", "end"),    (11.5, 43.1, "吉布提", "start"),
+              (15.6, 54.1, "萨拉拉", "start")],
+    "RSEA":  [(15.6, 39.5, "马萨瓦", "end"),  (12.6, 43.1, "吉布提", "start"),
+              (21.5, 39.2, "吉达", "end")],
+    "WMED":  [(36.1, -5.4, "直布罗陀", "start"), (37.5, 12.5, "突尼斯", "start"),
+              (43.3,  5.4, "马赛", "middle"),   (38.1,  13.4, "巴勒莫", "middle")],
+    "NATL":  [(38.7, -27.2, "亚速尔", "middle"), (51.5, -9.5, "爱尔兰", "end"),
+              (38.7, -9.1, "里斯本", "end")],
+    "CAPE":  [(-34.4, 18.5, "好望角", "start"), (-33.9, 25.6, "伊丽莎白港", "start"),
+              (-29.9, 31.0, "德班", "start")],
+    "BRAZ":  [(-23.0, -43.2, "里约", "middle"), (-33.5, -70.7, "桑托斯", "middle"),
+              (-8.1, -34.9, "累西腓", "middle")],
+}
+
+# 海岸线多边形数据（精细化，各航区专用）
 _COASTLINES = [
-    # 亚洲南部/东南亚
-    [(5,100),(8,98),(10,99),(13,100),(16,103),(18,107),(20,110),
-     (22,114),(24,118),(26,120),(30,122),(32,122),(35,120),(38,121),
-     (40,122),(40,118),(37,117),(35,118),(35,115),(30,120),(25,119),
-     (22,113),(18,110),(15,108),(12,109),(10,104),(8,100),(5,100)],
-    # 澳大利亚
-    [(-37.5,140),(-38,143),(-39,147),(-37,150),(-34,151),(-32,152),
-     (-28,154),(-25,153),(-23,151),(-20,149),(-17,146),(-15,145),
-     (-12,143),(-12,136),(-14,129),(-16,124),(-20,119),(-22,114),
-     (-25,114),(-29,115),(-32,116),(-34,119),(-34,123),(-34,125),
-     (-32,125),(-34,122),(-34,128),(-33,133),(-32,137),(-34,140),(-37.5,140)],
-    # 日本本州
-    [(34,136),(35,137),(36,137),(37,138),(38,141),(40,142),(41,141),
-     (40,140),(38,141),(36,138),(34,136)],
-    # 菲律宾
-    [(7,126),(9,125),(11,124),(14,122),(17,122),(18,121),(17,120),
-     (14,121),(12,123),(9,126),(7,126)],
-    # 印度半岛
-    [(23,68),(22,72),(20,73),(18,73),(16,73),(13,80),(10,80),
-     (8,77),(8,80),(10,76),(14,75),(16,74),(18,73),(22,73),(23,68)],
-    # 阿拉伯半岛
-    [(28,48),(24,57),(22,59),(18,57),(13,50),(12,44),(15,43),
-     (18,42),(22,39),(25,37),(28,35),(30,40),(28,48)],
-    # 非洲东部/好望角
-    [(-35,18),(-33,18),(-30,17),(-26,15),(-22,14),(-18,12),
-     (-15,12),(-10,13),(-5,10),(0,9),(5,2),(10,0),(15,0),
-     (20,37),(15,40),(10,45),(5,45),(0,42),(-5,40),(-10,38),
-     (-15,36),(-20,35),(-25,33),(-30,31),(-34,26),(-35,20),(-35,18)],
-    # 欧洲西部（伊比利亚）
-    [(44,-9),(43,-9),(42,-9),(38,-9),(36,-6),(36,-5),(37,-2),
-     (40,-0.5),(44,-2),(44,-8),(44,-9)],
-    # 北非
-    [(35,-6),(35,10),(33,13),(31,30),(30,32),(32,35),(36,35),(37,10),(35,-6)],
-    # 南美东海岸
-    [(-5,-35),(-10,-37),(-15,-39),(-20,-40),(-23,-43),(-26,-48),
-     (-30,-50),(-33,-53),(-35,-57),(-38,-57),(-38,-57),(-35,-57),
-     (-30,-50),(-23,-43),(-20,-40),(-15,-39),(-10,-37),(-5,-35)],
-    # 马达加斯加
-    [(-12,49),(-15,50),(-18,48),(-20,44),(-22,44),(-24,44),
-     (-25,47),(-25,48),(-22,48),(-20,48),(-15,50),(-12,49)],
+    # ── 中国/越南/华南海岸（SCS-N、SCS-S关键）
+    [(18,109),(20,110),(21,110),(22,114),(22.5,113.5),(22,114),
+     (23,117),(24,118),(25,119),(26,120),(28,121),(30,122),
+     (32,122),(35,120),(36,120),(38,121),(39,122),(40,122),
+     (40,119),(38,117),(36,120),(35,117),(22,113),(20,110),(18,109)],
+    # ── 越南东海岸
+    [(8,104),(10,104),(12,109),(14,110),(16,108),(18,107),(20,107),(20,106),(16,108),(12,109),(8,104)],
+    # ── 马来半岛/新加坡
+    [(1.2,104),(2,104),(4,103),(5,101),(6,100),(7,100),(5,101),(3,103),(1.2,104)],
+    # ── 婆罗洲北部
+    [(3,108),(4,108),(5,115),(6,117),(7,117),(5,116),(4,114),(3,110),(3,108)],
+    # ── 菲律宾吕宋岛
+    [(14,120),(15,121),(17,122),(18,122),(18,121),(16,120),(14,120)],
+    # ── 菲律宾中部
+    [(10,123),(11,124),(13,124),(14,123),(12,122),(10,123)],
+    # ── 日本九州/本州西部
+    [(31,131),(33,131),(34,131),(34,134),(35,135),(35,136),(34,136)],
+    # ── 日本本州东部
+    [(34,136),(35,137),(36,138),(37,138),(38,141),(39,142),(40,142),
+     (41,141),(40,140),(38,140),(36,138),(35,137),(34,136)],
+    # ── 日本四国/纪伊半岛
+    [(33,132),(33,134),(34,135),(33,134),(33,132)],
+    # ── 澳大利亚西北海岸（AUNW精细）
+    [(-13,130),(-14,129),(-15,128),(-17,122),(-20,119),(-22,114),
+     (-25,114),(-26,113),(-28,114),(-29,115),(-22,113),(-20,119),(-17,122),(-13,130)],
+    # ── 印度半岛西海岸
+    [(23,68),(22,70),(20,73),(18,73),(16,74),(14,74),(12,75),
+     (10,76),(8,77),(8,80),(10,80),(12,80),(14,80),(16,81),(18,84),(20,87),(22,88),(23,87),(22,88),(20,87),(18,73),(22,72),(23,68)],
+    # ── 斯里兰卡
+    [(10,80),(9,80),(8,81),(7,82),(8,81),(9,81),(10,80)],
+    # ── 阿拉伯半岛/亚丁湾南岸
+    [(12,44),(13,44),(14,48),(15,50),(16,52),(18,56),(20,58),(22,59),
+     (24,57),(22,59),(18,57),(15,50),(12,44)],
+    # ── 非洲之角/索马里
+    [(12,44),(11,43),(11,41),(10,42),(8,48),(5,48),(5,47),(8,48),(11,41),(12,44)],
+    # ── 红海西岸（厄立特里亚/苏丹）
+    [(22,37),(20,37),(18,38),(16,39),(15,39),(14,41),(13,42),(12,43),(13,42),(15,39),(18,38),(22,37)],
+    # ── 红海东岸（沙特/也门）
+    [(24,38),(22,39),(20,40),(18,41),(16,43),(14,43),(15,43),(18,41),(22,39),(24,38)],
+    # ── 伊比利亚半岛
+    [(44,-9),(43,-9),(42,-9),(40,-9),(38,-9),(37,-9),(36,-6),(36,-5),(37,-2),
+     (39,-1),(40,0),(41,1),(42,3),(43,2),(44,3),(44,1),(43,0),(44,-2),(44,-8),(44,-9)],
+    # ── 北非海岸（地中海南岸）
+    [(35,-5),(35,0),(36,5),(37,10),(37,12),(33,13),(32,14),(31,24),
+     (31,30),(30,32),(32,32),(33,35),(36,35),(37,10),(36,5),(35,-5)],
+    # ── 意大利/撒丁岛
+    [(38,14),(39,15),(40,16),(41,16),(42,15),(43,14),(44,12),(44,13),(43,14),(42,15),(40,15),(38,14)],
+    # ── 好望角/南非
+    [(-34,26),(-33,26),(-32,29),(-31,30),(-30,31),(-29,32),(-28,33),(-26,33),
+     (-25,33),(-22,35),(-20,35),(-18,36),(-15,36),(-26,33),(-29,32),(-32,29),
+     (-33,26),(-34,26),(-34,24),(-34,22),(-34,20),(-34,19),(-33,18),(-30,17),
+     (-28,16),(-25,15),(-22,14),(-28,16),(-34,19),(-34,26)],
+    # ── 南美东海岸（巴西）
+    [(-5,-35),(-8,-35),(-10,-37),(-13,-38),(-15,-39),(-20,-40),
+     (-23,-43),(-25,-48),(-28,-49),(-30,-51),(-33,-52),(-35,-57),
+     (-38,-57),(-35,-57),(-33,-52),(-30,-51),(-23,-43),(-15,-39),(-5,-35)],
 ]
 
 
-def generate_route_svg(route: dict, W: int = 320, H: int = 150) -> str:
+def generate_route_svg(route: dict, W: int = 320, H: int = 170) -> str:
     """
     为单个航区生成 SVG 波高地图（纯 Python，无外网依赖）
-    包含：海岸线轮廓、经纬度网格、中心点波高热力圈、数值标注
+    改进：精确 bbox 让地图更清晰、加粗海岸线、加入地标城市名、波高泡泡更直观
     """
     code = route.get("code", "")
     bbox = _ROUTE_BBOX.get(code, [
-        route.get("lon", 0) - 15, route.get("lat", 0) - 12,
-        route.get("lon", 0) + 15, route.get("lat", 0) + 12,
+        route.get("lon", 0) - 12, route.get("lat", 0) - 10,
+        route.get("lon", 0) + 12, route.get("lat", 0) + 10,
     ])
     lon_min, lat_min, lon_max, lat_max = bbox
 
@@ -481,159 +525,202 @@ def generate_route_svg(route: dict, W: int = 320, H: int = 150) -> str:
     wind = route.get("wind")   or 0
     sh   = route.get("sh_max") or 0
     risk = route.get("risk", "calm")
-
-    # 热力主色
     main_color = _wh_to_color(wh)
-    # 背景色按风险级别
-    bg_colors = {
-        "high":  ("#1a0808", "#2a1010"),
-        "mod":   ("#1a1208", "#2a1e0a"),
-        "low":   ("#081a10", "#0d2a18"),
-        "calm":  ("#08101a", "#0d1e2e"),
-    }
-    bg1, bg2 = bg_colors.get(risk, bg_colors["calm"])
+
+    # 背景：统一深海蓝，用细微渐变区分风险
+    bg_dark  = {"high": "#150808", "mod": "#110e04", "low": "#04100a", "calm": "#050d14"}.get(risk, "#050d14")
+    bg_light = {"high": "#1e0f0f", "mod": "#191408", "low": "#071a10", "calm": "#0a1a26"}.get(risk, "#0a1a26")
 
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
-        f'viewBox="0 0 {W} {H}" style="display:block;border-radius:8px;">',
+        f'viewBox="0 0 {W} {H}" style="display:block;border-radius:8px;overflow:hidden;">',
         '<defs>',
-        f'  <linearGradient id="bg-{code}" x1="0" y1="0" x2="0" y2="1">',
-        f'    <stop offset="0%" stop-color="{bg1}"/>',
-        f'    <stop offset="100%" stop-color="{bg2}"/>',
+        f'  <linearGradient id="bg-{code}" x1="0" y1="0" x2="0.3" y2="1">',
+        f'    <stop offset="0%" stop-color="{bg_dark}"/>',
+        f'    <stop offset="100%" stop-color="{bg_light}"/>',
         f'  </linearGradient>',
-        f'  <radialGradient id="heat-{code}" cx="50%" cy="50%" r="50%">',
-        f'    <stop offset="0%" stop-color="{main_color}" stop-opacity="0.55"/>',
-        f'    <stop offset="40%" stop-color="{main_color}" stop-opacity="0.20"/>',
+        # 波高热力光晕
+        f'  <radialGradient id="glow-{code}">',
+        f'    <stop offset="0%"   stop-color="{main_color}" stop-opacity="0.50"/>',
+        f'    <stop offset="35%"  stop-color="{main_color}" stop-opacity="0.18"/>',
+        f'    <stop offset="70%"  stop-color="{main_color}" stop-opacity="0.05"/>',
         f'    <stop offset="100%" stop-color="{main_color}" stop-opacity="0"/>',
         f'  </radialGradient>',
+        # 陆地渐变
+        f'  <linearGradient id="land-{code}" x1="0" y1="0" x2="0" y2="1">',
+        f'    <stop offset="0%"   stop-color="#1d3d5c"/>',
+        f'    <stop offset="100%" stop-color="#162e44"/>',
+        f'  </linearGradient>',
         '</defs>',
         f'<rect width="{W}" height="{H}" fill="url(#bg-{code})"/>',
     ]
 
-    # ── 经纬度网格（每10度）
-    step = 10
+    # ── 经纬度网格（每5度，细密一些）
+    step = 5
     for lat in range(int(lat_min // step) * step, int(lat_max // step + 1) * step, step):
-        if lat_min - step <= lat <= lat_max + step:
+        if lat_min - step < lat < lat_max + step:
             try:
                 x0, y0 = sv(lat, lon_min)
-                x1, y1 = sv(lat, lon_max)
-                lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
-                              f'stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>')
-                if lat_min <= lat <= lat_max:
-                    label = f'{abs(lat)}°{"N" if lat >= 0 else "S"}'
-                    lines.append(f'<text x="3" y="{y0 - 2}" fill="rgba(255,255,255,0.25)" '
-                                 f'font-size="7" font-family="sans-serif">{label}</text>')
+                x1, _  = sv(lat, lon_max)
+                is_10  = (lat % 10 == 0)
+                alpha  = "0.12" if is_10 else "0.06"
+                lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y0}" '
+                              f'stroke="rgba(255,255,255,{alpha})" stroke-width="0.5"/>')
+                if is_10 and lat_min < lat < lat_max:
+                    lbl = f'{abs(lat)}°{"N" if lat >= 0 else "S"}'
+                    lines.append(f'<text x="3" y="{y0 - 2}" fill="rgba(255,255,255,0.30)" '
+                                 f'font-size="8" font-family="Arial,sans-serif">{lbl}</text>')
             except Exception:
                 pass
     for lon in range(int(lon_min // step) * step, int(lon_max // step + 1) * step, step):
-        if lon_min - step <= lon <= lon_max + step:
+        if lon_min - step < lon < lon_max + step:
             try:
                 x0, y0 = sv(lat_max, lon)
-                x1, y1 = sv(lat_min, lon)
-                lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
-                              f'stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>')
-                if lon_min <= lon <= lon_max:
-                    label = f'{abs(lon)}°{"E" if lon >= 0 else "W"}'
-                    lines.append(f'<text x="{x0 + 2}" y="{H - 3}" fill="rgba(255,255,255,0.25)" '
-                                 f'font-size="7" font-family="sans-serif">{label}</text>')
+                _,  y1 = sv(lat_min, lon)
+                is_10  = (lon % 10 == 0)
+                alpha  = "0.12" if is_10 else "0.06"
+                lines.append(f'<line x1="{x0}" y1="{y0}" x2="{x0}" y2="{y1}" '
+                              f'stroke="rgba(255,255,255,{alpha})" stroke-width="0.5"/>')
+                if is_10 and lon_min < lon < lon_max:
+                    lbl = f'{abs(lon)}°{"E" if lon >= 0 else "W"}'
+                    lines.append(f'<text x="{x0 + 2}" y="{H - 4}" fill="rgba(255,255,255,0.30)" '
+                                 f'font-size="8" font-family="Arial,sans-serif">{lbl}</text>')
             except Exception:
                 pass
 
-    # ── 海岸线
+    # ── 海岸线（加粗 + 高亮边缘，提升辨识度）
+    margin_lon = (lon_max - lon_min) * 0.4
+    margin_lat = (lat_max - lat_min) * 0.4
     for coast in _COASTLINES:
         pts_in_bbox = [(la, lo) for la, lo in coast
-                       if (lon_min - 20 <= lo <= lon_max + 20 and
-                           lat_min - 15 <= la <= lat_max + 15)]
+                       if (lon_min - margin_lon <= lo <= lon_max + margin_lon and
+                           lat_min - margin_lat <= la <= lat_max + margin_lat)]
         if len(pts_in_bbox) < 2:
             continue
         path_parts = []
         for i, (la, lo) in enumerate(coast):
             try:
                 x, y = sv(la, lo)
-                path_parts.append(f"{'M' if i == 0 else 'L'}{x},{y}")
+                path_parts.append(f"{'M' if i == 0 else 'L'}{x:.1f},{y:.1f}")
             except Exception:
                 continue
-        if len(path_parts) >= 2:
-            lines.append(f'<path d="{" ".join(path_parts)} Z" '
-                         f'fill="#1e3a5c" stroke="#2d5a8c" stroke-width="0.5" opacity="0.75"/>')
+        if len(path_parts) >= 3:
+            d = " ".join(path_parts) + " Z"
+            # 填充（陆地色）
+            lines.append(f'<path d="{d}" fill="url(#land-{code})" opacity="0.90"/>')
+            # 海岸线描边（明亮细线，提升辨识）
+            lines.append(f'<path d="{d}" fill="none" stroke="#4a8ab5" '
+                         f'stroke-width="1.2" opacity="0.85"/>')
 
-    # ── 波高热力圈（以航区中心点为圆心）
-    cx_lat = (lat_min + lat_max) / 2
-    cx_lon = (lon_min + lon_max) / 2
-    # 用实际坐标点
-    r_lat = route.get("lat") or cx_lat
-    r_lon = route.get("lon") or cx_lon
+    # ── 波高热力光晕（以航区测量坐标为中心）
+    r_lat = route.get("lat") or (lat_min + lat_max) / 2
+    r_lon = route.get("lon") or (lon_min + lon_max) / 2
     try:
         cx, cy = sv(r_lat, r_lon)
     except Exception:
         cx, cy = W / 2, H / 2
 
-    # 热力圈大小随波高缩放
-    r_outer = min(W, H) * (0.25 + min(wh / 5.0, 1.0) * 0.25)
-    lines.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{r_outer}" ry="{r_outer * 0.75}" '
-                 f'fill="url(#heat-{code})"/>')
-    # 内圈强调
-    r_inner = r_outer * 0.45
-    lines.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{r_inner}" ry="{r_inner * 0.75}" '
-                 f'fill="{main_color}" opacity="0.18"/>')
+    # 光晕半径随波高变化（0m→小，4m+→占满1/3区域）
+    r_glow = min(W, H) * (0.20 + min(wh / 4.5, 1.0) * 0.30)
+    lines.append(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" '
+                 f'rx="{r_glow:.1f}" ry="{r_glow * 0.78:.1f}" '
+                 f'fill="url(#glow-{code})"/>')
 
-    # ── 中心坐标点
-    lines.append(f'<circle cx="{cx}" cy="{cy}" r="4" fill="{main_color}" '
-                 f'stroke="white" stroke-width="1.2" opacity="0.9"/>')
-    lines.append(f'<circle cx="{cx}" cy="{cy}" r="10" fill="none" '
-                 f'stroke="{main_color}" stroke-width="1" opacity="0.4"/>')
-
-    # ── 波高数值标注（右上角信息框）
-    info_x, info_y = W - 6, 14
-    wh_txt  = f"{wh:.1f}m" if wh > 0 else "—"
-    wn_txt  = f"{wind:.0f}kn" if wind > 0 else "—"
-    sh_txt  = f"{sh:.1f}m" if sh > 0 else "—"
-
-    # 信息框背景
-    lines.append(f'<rect x="{W - 72}" y="4" width="66" height="44" rx="4" '
-                 f'fill="rgba(0,0,0,0.55)" stroke="{main_color}" stroke-width="0.8" opacity="0.9"/>')
-    # 波高（大字）
-    lines.append(f'<text x="{info_x}" y="{info_y}" text-anchor="end" '
-                 f'fill="{main_color}" font-size="15" font-weight="700" '
-                 f'font-family="sans-serif">{wh_txt}</text>')
-    lines.append(f'<text x="{info_x}" y="{info_y + 10}" text-anchor="end" '
-                 f'fill="rgba(255,255,255,0.45)" font-size="7" font-family="sans-serif">波高峰值</text>')
-    # 风速
-    lines.append(f'<text x="{info_x}" y="{info_y + 22}" text-anchor="end" '
-                 f'fill="rgba(255,255,255,0.7)" font-size="8" font-family="sans-serif">'
-                 f'风 {wn_txt}</text>')
-    # 涌浪
-    lines.append(f'<text x="{info_x}" y="{info_y + 33}" text-anchor="end" '
-                 f'fill="rgba(255,255,255,0.7)" font-size="8" font-family="sans-serif">'
-                 f'涌 {sh_txt}</text>')
-
-    # ── 波高色阶图例（底部）
-    legend_w = min(W - 20, 180)
-    lx = (W - legend_w) // 2
-    ly = H - 14
-    grades = [
-        ("#378ADD", "<0.5m"),
-        ("#1D9E75", "1m"),
-        ("#5dbb8a", "1.5m"),
-        ("#ef9f27", "2.5m"),
-        ("#e24b4a", "3.5m"),
-        ("#7b241c", ">4m"),
+    # ── 中心位置标记（菱形 + 脉冲圆）
+    lines += [
+        # 外圈（淡色脉冲感）
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="12" fill="none" '
+        f'stroke="{main_color}" stroke-width="0.8" opacity="0.30"/>',
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="7" fill="none" '
+        f'stroke="{main_color}" stroke-width="1.0" opacity="0.55"/>',
+        # 中心实心点
+        f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="4" '
+        f'fill="{main_color}" stroke="white" stroke-width="1.5" opacity="0.95"/>',
     ]
-    seg_w = legend_w // len(grades)
-    lines.append(f'<rect x="{lx - 2}" y="{ly - 3}" width="{legend_w + 4}" height="13" '
-                 f'rx="3" fill="rgba(0,0,0,0.45)"/>')
-    for gi, (gc, gl) in enumerate(grades):
-        gx = lx + gi * seg_w
-        lines.append(f'<rect x="{gx}" y="{ly}" width="{seg_w - 1}" height="5" '
-                     f'rx="1" fill="{gc}" opacity="0.85"/>')
-        if gi == 0 or gi == len(grades) - 1:
-            lines.append(f'<text x="{gx + seg_w // 2}" y="{ly + 12}" text-anchor="middle" '
-                         f'fill="rgba(255,255,255,0.45)" font-size="6" font-family="sans-serif">{gl}</text>')
 
-    # ── 数据来源
-    lines.append(f'<text x="{W - 3}" y="{H - 2}" text-anchor="end" '
-                 f'fill="rgba(255,255,255,0.2)" font-size="6" font-family="sans-serif">'
-                 f'Open-Meteo GFS Wave</text>')
+    # ── 地标城市标注
+    landmarks = _LANDMARKS.get(code, [])
+    for (la, lo, name, anchor) in landmarks:
+        if not (lon_min <= lo <= lon_max and lat_min <= la <= lat_max):
+            continue
+        try:
+            lx, ly = sv(la, lo)
+            # 小圆点
+            lines.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="2.5" '
+                         f'fill="rgba(255,255,255,0.75)"/>')
+            # 城市名（带描边提升可读性）
+            offset_x = -4 if anchor == "end" else (4 if anchor == "start" else 0)
+            lines.append(f'<text x="{lx + offset_x:.1f}" y="{ly - 5:.1f}" '
+                         f'text-anchor="{anchor}" font-size="9" font-weight="600" '
+                         f'font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" '
+                         f'stroke="#050d14" stroke-width="2.5" paint-order="stroke">'
+                         f'{name}</text>')
+            lines.append(f'<text x="{lx + offset_x:.1f}" y="{ly - 5:.1f}" '
+                         f'text-anchor="{anchor}" font-size="9" font-weight="600" '
+                         f'font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" '
+                         f'fill="rgba(255,255,255,0.90)">{name}</text>')
+        except Exception:
+            continue
+
+    # ── 右上角数据信息框
+    wh_txt = f"{wh:.1f}m" if wh > 0 else "—"
+    wn_txt = f"{wind:.0f}kn" if wind > 0 else "—"
+    sh_txt = f"{sh:.1f}m" if sh > 0 else "—"
+    bw, bh = 70, 52
+    bx, by = W - bw - 4, 4
+    lines += [
+        f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" rx="5" '
+        f'fill="rgba(5,13,20,0.72)" stroke="{main_color}" stroke-width="1" opacity="0.95"/>',
+        # 波高大字
+        f'<text x="{bx + bw - 5}" y="{by + 18}" text-anchor="end" '
+        f'fill="{main_color}" font-size="18" font-weight="700" '
+        f'font-family="Arial,sans-serif">{wh_txt}</text>',
+        f'<text x="{bx + bw - 5}" y="{by + 27}" text-anchor="end" '
+        f'fill="rgba(255,255,255,0.40)" font-size="7.5" '
+        f'font-family="Arial,sans-serif">波高峰值</text>',
+        # 风速 / 涌浪
+        f'<text x="{bx + 6}" y="{by + 39}" '
+        f'fill="rgba(255,255,255,0.72)" font-size="8.5" '
+        f'font-family="Arial,sans-serif">风 {wn_txt}</text>',
+        f'<text x="{bx + 6}" y="{by + 50}" '
+        f'fill="rgba(255,255,255,0.72)" font-size="8.5" '
+        f'font-family="Arial,sans-serif">涌 {sh_txt}</text>',
+    ]
+
+    # ── 底部色阶条（渐变版，更美观）
+    bar_x, bar_y = 6, H - 13
+    bar_w, bar_h = W - 80, 5
+    # 用线性渐变填充色阶
+    lines += [
+        '<defs>',
+        f'  <linearGradient id="legend-{code}" x1="0" y1="0" x2="1" y2="0">',
+        f'    <stop offset="0%"   stop-color="#378ADD"/>',
+        f'    <stop offset="30%"  stop-color="#1D9E75"/>',
+        f'    <stop offset="55%"  stop-color="#ef9f27"/>',
+        f'    <stop offset="80%"  stop-color="#e24b4a"/>',
+        f'    <stop offset="100%" stop-color="#7b241c"/>',
+        f'  </linearGradient>',
+        '</defs>',
+        f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w}" height="{bar_h}" rx="2" '
+        f'fill="url(#legend-{code})" opacity="0.80"/>',
+        f'<text x="{bar_x}" y="{H - 2}" fill="rgba(255,255,255,0.38)" '
+        f'font-size="7.5" font-family="Arial,sans-serif">0m</text>',
+        f'<text x="{bar_x + bar_w}" y="{H - 2}" text-anchor="end" '
+        f'fill="rgba(255,255,255,0.38)" font-size="7.5" font-family="Arial,sans-serif">4m+</text>',
+        # 当前波高指示线
+    ]
+    if wh > 0:
+        indicator_x = bar_x + min(wh / 4.5, 1.0) * bar_w
+        lines += [
+            f'<line x1="{indicator_x:.1f}" y1="{bar_y - 2}" '
+            f'x2="{indicator_x:.1f}" y2="{bar_y + bar_h + 2}" '
+            f'stroke="white" stroke-width="1.5" opacity="0.80"/>',
+        ]
+
+    # ── 数据来源（右下角极小字）
+    lines.append(f'<text x="{W - 4}" y="{H - 2}" text-anchor="end" '
+                 f'fill="rgba(255,255,255,0.18)" font-size="6.5" '
+                 f'font-family="Arial,sans-serif">GFS Wave</text>')
 
     lines.append('</svg>')
     return "\n".join(lines)
@@ -966,7 +1053,7 @@ def render_marine_html(routes: list[dict], views: dict) -> str:
         rc["f5d_peak"]      = max(f5d) if f5d else None
         # 生成航区 SVG 地图（纯本地，不依赖外网）
         try:
-            rc["route_svg"] = generate_route_svg(rc, W=320, H=150)
+            rc["route_svg"] = generate_route_svg(rc, W=320, H=170)
         except Exception:
             rc["route_svg"] = ""
         enriched.append(rc)
