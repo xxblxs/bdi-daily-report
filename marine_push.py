@@ -736,11 +736,451 @@ MARINE_HTML_TEMPLATE = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>全球航线海况日报 — {{ date }} | {{ brand }}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-     font-size:13px;color:#1a1a18;background:#edf1f7;padding:20px;}
-.wrap{max-width:1060px;margin:0 auto;}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:          #0f1217;
+  --ink-secondary:#4a5261;
+  --ink-muted:    #8a93a3;
+  --surface:      #ffffff;
+  --surface-soft: #f5f6f8;
+  --surface-mid:  #eceef2;
+  --accent:       #1a3a5c;
+  --accent-light: #e8eef5;
+  --accent-mid:   #2d5f96;
+  --gold:         #b8922a;
+  --gold-light:   #f9f3e6;
+  --red:          #c0392b;
+  --red-light:    #fdf0ee;
+  --amber:        #b86c0a;
+  --amber-light:  #fdf5e8;
+  --green:        #1e7f5a;
+  --green-light:  #e8f5f0;
+  --border:       #dde1e8;
+  --border-strong:#c4c9d4;
+}
+
+body {
+  font-family: 'Outfit', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #eef0f4;
+  color: var(--ink);
+  padding: 2.5rem 1.5rem;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+}
+
+/* ── HEADER ────────────────────────────────────────────────────── */
+.header {
+  background: var(--accent);
+  padding: 2.2rem 2.8rem 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; top: -70px; right: -70px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.header::after {
+  content: '';
+  position: absolute; bottom: -90px; left: 240px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.6rem;
+}
+.doc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.40);
+  text-transform: uppercase;
+  margin-bottom: 0.45rem;
+}
+.doc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: #fff;
+  line-height: 1.25;
+}
+.doc-title em { font-style: italic; color: rgba(255,255,255,0.65); }
+.doc-meta { text-align: right; }
+.doc-meta .meta-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.48);
+  letter-spacing: 0.05em;
+}
+.doc-meta .meta-ref {
+  font-size: 11px;
+  color: rgba(255,255,255,0.30);
+  margin-top: 3px;
+}
+
+/* 航区状态徽章条 */
+.status-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 2px;
+  letter-spacing: 0.02em;
+}
+.sb-ok    { background: rgba(30,127,90,0.28);  color: #7de0b8; outline: 1px solid rgba(30,127,90,0.3); }
+.sb-warn  { background: rgba(184,108,10,0.28); color: #f5c76e; outline: 1px solid rgba(184,108,10,0.3); }
+.sb-high  { background: rgba(192,57,43,0.28);  color: #f0a09a; outline: 1px solid rgba(192,57,43,0.3); }
+.sb-sep   { color: rgba(255,255,255,0.20); font-size: 13px; }
+
+/* ── BODY ────────────────────────────────────────────────────────── */
+.body { padding: 2.2rem 2.8rem; }
+
+/* Section header — EU ETS style */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+  margin-top: 1.8rem;
+}
+.section-head:first-child { margin-top: 0; }
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  letter-spacing: 0.1em;
+  min-width: 22px;
+}
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.section-line { flex: 1; height: 1px; background: var(--border); }
+
+/* ── Alert banners ───────────────────────────────────────────────── */
+.alerts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1.8rem;
+}
+.alert {
+  background: var(--surface);
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.al-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.al-title { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+.al-text  { font-size: 11px; line-height: 1.55; color: var(--ink-secondary); }
+.al-ok   { } .al-ok   .al-title { color: var(--green); }
+.al-warn { } .al-warn .al-title { color: var(--amber); }
+
+/* ── Route cards ────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(316px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1.8rem;
+}
+.rcard { background: var(--surface); }
+.rcard.risk-high { outline: 2px solid var(--red); outline-offset: -2px; }
+.rcard.risk-mod  { outline: 1.5px solid var(--amber); outline-offset: -1.5px; }
+
+.rc-head {
+  padding: 10px 14px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
+}
+.rc-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.rc-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+.rc-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.rb-high  { background: var(--red-light);   color: var(--red);   border: 1px solid #e8b4b0; }
+.rb-mod   { background: var(--amber-light); color: var(--amber); border: 1px solid #e8c990; }
+.rb-low   { background: var(--green-light); color: var(--green); border: 1px solid #a0d4bc; }
+.rb-calm  { background: var(--accent-light);color: var(--accent-mid); border: 1px solid #b0c8e4; }
+
+.rc-body { padding: 10px 14px 12px; }
+
+/* SVG 地图 */
+.rc-map-wrap {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #0a1a2e;
+}
+.rc-map-wrap svg { display: block; width: 100%; height: auto; }
+
+/* KPI 三格 */
+.rc-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rc-kpi {
+  background: var(--surface-soft);
+  padding: 7px 10px;
+}
+.rc-kpi .k-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 3px;
+}
+.rc-kpi .k-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+}
+.rc-kpi .k-val.v-high  { color: var(--red); }
+.rc-kpi .k-val.v-mod   { color: var(--amber); }
+.rc-kpi .k-val.v-ok    { color: var(--green); }
+.rc-kpi .k-val.v-calm  { color: var(--accent-mid); }
+.rc-kpi .k-unit {
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+/* 详情行 */
+.rc-detail-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11.5px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rc-detail-row:last-of-type { border-bottom: none; }
+.rc-dl { color: var(--ink-muted); width: 72px; flex-shrink: 0; font-size: 11px; }
+.rc-dv { color: var(--ink); font-weight: 500; font-family: 'DM Mono', monospace; font-size: 12px; }
+.rc-dn { color: var(--ink-muted); font-size: 10.5px; margin-left: 2px; }
+.rc-dn-warn { color: var(--amber); font-size: 10.5px; margin-left: 2px; font-weight: 500; }
+
+/* 5日预报 */
+.forecast {
+  display: flex;
+  gap: 3px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.fc-day { flex: 1; text-align: center; }
+.fc-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  color: var(--ink-muted);
+  margin-bottom: 3px;
+  letter-spacing: 0.02em;
+}
+.fc-wrap {
+  height: 26px;
+  background: var(--surface-mid);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.fc-bar { width: 100%; border-radius: 1px 1px 0 0; }
+.fc-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  color: var(--ink-secondary);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* ── Summary table ──────────────────────────────────────────────── */
+.tcard {
+  border: 1px solid var(--border);
+  margin-bottom: 1.8rem;
+}
+.tc-head {
+  padding: 9px 16px;
+  background: var(--surface-soft);
+  border-bottom: 1.5px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tc-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.tc-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead tr { background: var(--surface-soft); border-bottom: 1.5px solid var(--border-strong); }
+thead th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+thead th:not(:first-child) { text-align: right; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface-soft); }
+tbody td { padding: 8px 12px; color: var(--ink-secondary); }
+tbody td:not(:first-child) {
+  text-align: right;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.td-high { color: var(--red) !important; font-weight: 600 !important; }
+.td-mod  { color: var(--amber) !important; font-weight: 600 !important; }
+.td-ok   { color: var(--green) !important; }
+.td-calm { color: var(--accent-mid) !important; }
+.risk-pill {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.rp-h { background: var(--red-light);   color: var(--red);   border: 1px solid #e8b4b0; }
+.rp-m { background: var(--amber-light); color: var(--amber); border: 1px solid #e8c990; }
+.rp-l { background: var(--green-light); color: var(--green); border: 1px solid #a0d4bc; }
+.rp-c { background: var(--accent-light);color: var(--accent-mid); border: 1px solid #b0c8e4; }
+
+/* ── Analysis views ─────────────────────────────────────────────── */
+.views {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1.8rem;
+}
+.vc {
+  background: var(--surface);
+  padding: 1.1rem 1.2rem;
+}
+.vc-seg {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 5px;
+}
+.vc-verdict {
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+.v-ok-t   { color: var(--green); }
+.v-warn-t { color: var(--amber); }
+.vc-text { font-size: 11px; color: var(--ink-secondary); line-height: 1.65; }
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+.footer {
+  border-top: 1.5px solid var(--border-strong);
+  padding: 1.1rem 2.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface-soft);
+}
+.footer .f-left {
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+.footer .f-left strong { color: var(--ink-secondary); font-weight: 600; }
+.footer .f-right {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  text-align: right;
+  letter-spacing: 0.05em;
+}
+
+@media(max-width:720px) {
+  .alerts, .views { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .body { padding: 1.5rem; }
+}
 
 /* header */
 .header{background:linear-gradient(135deg,#0d2137 0%,#1a3a5c 100%);
@@ -853,34 +1293,44 @@ td:first-child{text-align:left;font-weight:500;}
   .alerts{flex-direction:column;}
   .rc-main{grid-template-columns:repeat(3,1fr);}
 }
-
-/* ── 航区 SVG 地图 ─────────────────────────────────────────── */
-.grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));}
-.rc-map-wrap{
-  width:100%;margin-bottom:10px;border-radius:8px;overflow:hidden;
-  border:1px solid rgba(255,255,255,0.08);
-  background:#0d2137;
-}
-.rc-map-wrap svg{display:block;width:100%;height:auto;}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="page">
 
-<!-- Header -->
+<!-- ── HEADER ── -->
 <div class="header">
-  <div>
-    <div class="h-date">{{ date }} · 数据来源：Open-Meteo Marine API（NOAA GFS Wave 0.25° + ECMWF WAM）· 免费无需 Key</div>
-    <div class="h-title">全球主要航线海况日报</div>
-    <div class="h-sub">{{ route_count }} 个关键航区 · 波高 / 涌浪 / 风速 · 5日预报 · 航行安全评级</div>
+  <div class="header-top">
+    <div>
+      <div class="doc-label">Marine Weather Intelligence · {{ brand }}</div>
+      <div class="doc-title">全球主要航线海况日报<br><em>Global Route Sea Conditions Report</em></div>
+    </div>
+    <div class="doc-meta">
+      <div class="meta-date">{{ date }}</div>
+      <div class="meta-ref">{{ route_count }} 航区 · GFS Wave 0.25° · ECMWF WAM</div>
+    </div>
   </div>
-  <div class="h-badges">
-    {% for b in summary_badges %}<span class="hb {{ b.cls }}">{{ b.text }}</span>{% endfor %}
-    <span class="h-brand">{{ brand }}</span>
+  <div class="status-strip">
+    {% for b in summary_badges %}
+    <span class="status-badge {{ 'sb-ok' if b.cls=='hb-g' else ('sb-warn' if b.cls=='hb-a' else 'sb-high') }}">
+      {{ b.text }}
+    </span>
+    {% endfor %}
+    <span class="sb-sep">·</span>
+    <span style="font-size:11px;color:rgba(255,255,255,0.38);font-style:italic;">5日预报 · 航行安全评级</span>
   </div>
 </div>
 
-<!-- Alert banners -->
+<!-- ── BODY ── -->
+<div class="body">
+
+<!-- 01 区域概况 -->
+<div class="section-head">
+  <span class="section-num">01</span>
+  <span class="section-label">区域海况概况</span>
+  <span class="section-line"></span>
+</div>
+
 <div class="alerts">
   {% for a in alert_banners %}
   <div class="alert {{ a.cls }}">
@@ -893,7 +1343,13 @@ td:first-child{text-align:left;font-weight:500;}
   {% endfor %}
 </div>
 
-<!-- Route cards（含纯本地 SVG 波高地图）-->
+<!-- 02 各航区详情 -->
+<div class="section-head">
+  <span class="section-num">02</span>
+  <span class="section-label">各航区海况详情</span>
+  <span class="section-line"></span>
+</div>
+
 <div class="grid">
 {% for r in routes %}
 {% set risk = r.risk %}
@@ -908,52 +1364,49 @@ td:first-child{text-align:left;font-weight:500;}
   </div>
   <div class="rc-body">
 
-    <!-- SVG 波高地图（纯本地生成，无需外网）-->
-    <div class="rc-map-wrap">
-      {{ r.route_svg|safe }}
+    <!-- SVG 波高地图 -->
+    <div class="rc-map-wrap">{{ r.route_svg|safe }}</div>
+
+    <!-- KPI 三格 -->
+    <div class="rc-kpi-row">
+      <div class="rc-kpi">
+        <div class="k-label">波高峰值</div>
+        <div class="k-val {{ 'v-high' if (r.wh_max or 0)>=2.5 else ('v-mod' if (r.wh_max or 0)>=1.5 else ('v-ok' if (r.wh_max or 0)>=0.8 else 'v-calm')) }}">
+          {{ '%.1f'|format(r.wh_max) if r.wh_max else '—' }}
+        </div>
+        <div class="k-unit">m &nbsp;当前 {{ '%.1f'|format(r.wh) if r.wh else '—' }}m</div>
+      </div>
+      <div class="rc-kpi">
+        <div class="k-label">波浪周期</div>
+        <div class="k-val">{{ '%.1f'|format(r.wper) if r.wper else '—' }}</div>
+        <div class="k-unit">s &nbsp;涌浪 {{ '%.1f'|format(r.sper) if r.sper else '—' }}s</div>
+      </div>
+      <div class="rc-kpi">
+        <div class="k-label">当前风速</div>
+        <div class="k-val {{ 'v-high' if (r.wind or 0)>=25 else ('v-mod' if (r.wind or 0)>=15 else 'v-ok') }}">
+          {{ '%.0f'|format(r.wind) if r.wind else '—' }}
+        </div>
+        <div class="k-unit">kn &nbsp;阵风 {{ '%.0f'|format(r.gust) if r.gust else '—' }}kn</div>
+      </div>
     </div>
 
-    <!-- 数值指标 -->
-    <div class="rc-main">
-      <div>
-        <div class="rcs-label">今日最大波高</div>
-        <div class="rcs-val {{ 'v-high' if (r.wh_max or 0)>=2.5 else ('v-mod' if (r.wh_max or 0)>=1.5 else ('v-ok' if (r.wh_max or 0)>=0.8 else 'v-calm')) }}">
-          {{ '%.2f'|format(r.wh_max) if r.wh_max else '—' }}<span class="rcs-unit">m</span>
-        </div>
-        <div class="rcs-sub">当前 {{ '%.1f'|format(r.wh) if r.wh else '—' }}m</div>
-      </div>
-      <div>
-        <div class="rcs-label">波浪周期</div>
-        <div class="rcs-val">{{ '%.1f'|format(r.wper) if r.wper else '—' }}<span class="rcs-unit">s</span></div>
-        <div class="rcs-sub">涌浪 {{ '%.1f'|format(r.sper) if r.sper else '—' }}s</div>
-      </div>
-      <div>
-        <div class="rcs-label">当前风速</div>
-        <div class="rcs-val {{ 'v-high' if (r.wind or 0)>=25 else ('v-mod' if (r.wind or 0)>=15 else 'v-ok') }}">
-          {{ '%.1f'|format(r.wind) if r.wind else '—' }}<span class="rcs-unit">kn</span>
-        </div>
-        <div class="rcs-sub">阵风 {{ '%.1f'|format(r.gust) if r.gust else '—' }}kn</div>
-      </div>
+    <!-- 详情行 -->
+    <div class="rc-detail-row">
+      <span class="rc-dl">涌浪高度</span>
+      <span class="rc-dv">{{ '%.2f'|format(r.sh) if r.sh else '—' }}m</span>
+      <span class="rc-dn">来向 {{ r.sdir_compass }}</span>
     </div>
-    <div class="divider"></div>
-    <div class="rc-row">
-      <span class="rc-icon">🌊</span>
-      <span class="rc-lbl">涌浪高度</span>
-      <span class="rc-val">{{ '%.2f'|format(r.sh) if r.sh else '—' }}m</span>
-      <span class="rc-note">来向 {{ r.sdir_compass }}</span>
+    <div class="rc-detail-row">
+      <span class="rc-dl">风向 / 风级</span>
+      <span class="rc-dv">{{ r.wdir2_compass }}</span>
+      <span class="rc-dn{% if (r.wind or 0)>=15 %}-warn{% endif %}">{{ r.beaufort }}</span>
     </div>
-    <div class="rc-row">
-      <span class="rc-icon">💨</span>
-      <span class="rc-lbl">风向 / 风级</span>
-      <span class="rc-val">{{ r.wdir2_compass }}</span>
-      <span class="rc-note{% if (r.wind or 0)>=15 %}-warn{% endif %}">{{ r.beaufort }}</span>
+    <div class="rc-detail-row">
+      <span class="rc-dl">参考坐标</span>
+      <span class="rc-dv">{{ r.lat }}° / {{ r.lon }}°</span>
     </div>
-    <div class="rc-row">
-      <span class="rc-icon">📍</span>
-      <span class="rc-lbl">参考坐标</span>
-      <span class="rc-val">{{ r.lat }}° / {{ r.lon }}°</span>
-    </div>
-    <!-- 5-day forecast -->
+
+    <!-- 5日预报条 -->
     <div class="forecast">
       {% for i in range(5) %}
       {% set v = r.f5d_max[i] if r.f5d_max and i < r.f5d_max|length else None %}
@@ -967,23 +1420,30 @@ td:first-child{text-align:left;font-weight:500;}
       </div>
       {% endfor %}
     </div>
+
   </div>
 </div>
 {% endfor %}
 </div>
 
-<!-- Summary table -->
+<!-- 03 汇总表 -->
+<div class="section-head">
+  <span class="section-num">03</span>
+  <span class="section-label">各航区海况汇总对比</span>
+  <span class="section-line"></span>
+</div>
+
 <div class="tcard">
   <div class="tc-head">
-    <span class="tc-title">各航区海况汇总对比</span>
+    <span class="tc-title">Sea Conditions Summary</span>
     <span class="tc-badge">{{ date }} UTC</span>
   </div>
   <table>
     <thead>
       <tr>
-        <th style="text-align:left;">航区</th>
-        <th>波高(当前)</th><th>波高(峰值)</th><th>涌浪高度</th>
-        <th>波浪周期</th><th>风速(kn)</th><th>5日峰值</th><th>评级</th>
+        <th>航区</th>
+        <th>波高(当前)</th><th>波高(峰值)</th><th>涌浪</th>
+        <th>周期</th><th>风速(kn)</th><th>5日峰值</th><th>评级</th>
       </tr>
     </thead>
     <tbody>
@@ -992,8 +1452,10 @@ td:first-child{text-align:left;font-weight:500;}
       {% set cls = 'td-high' if risk=='high' else ('td-mod' if risk=='mod' else ('td-ok' if risk=='low' else 'td-calm')) %}
       {% set pill_cls = 'rp-h' if risk=='high' else ('rp-m' if risk=='mod' else ('rp-l' if risk=='low' else 'rp-c')) %}
       {% set rl, _, __ = risk_labels[risk] %}
-      <tr {% if risk=='high' %}style="background:#fff8f8;"{% endif %}>
-        <td>{{ r.name }}</td>
+      <tr>
+        <td style="font-weight:500;color:var(--ink);">{{ r.name }}
+          <span style="font-family:'DM Mono',monospace;font-size:9.5px;color:var(--ink-muted);margin-left:4px;">{{ r.code }}</span>
+        </td>
         <td class="{{ cls }}">{{ '%.1f'|format(r.wh) if r.wh else '—' }}m</td>
         <td class="{{ cls }}"><strong>{{ '%.1f'|format(r.wh_max) if r.wh_max else '—' }}m</strong></td>
         <td>{{ '%.1f'|format(r.sh_max) if r.sh_max else '—' }}m</td>
@@ -1009,30 +1471,39 @@ td:first-child{text-align:left;font-weight:500;}
   </table>
 </div>
 
-<!-- Analysis views -->
+<!-- 04 分区观点 -->
+<div class="section-head">
+  <span class="section-num">04</span>
+  <span class="section-label">分区航行分析</span>
+  <span class="section-line"></span>
+</div>
+
 <div class="views">
-  {% for key, seg, icon in [('apac','亚太航线','🌏'),('io','印度洋/中东','⚓'),('atl','大西洋/欧洲','⛵')] %}
+  {% for key, seg, icon in [('apac','亚太 / 南海航线','🌏'),('io','印度洋 / 中东航线','⚓'),('atl','大西洋 / 欧洲 / 好望角','⛵')] %}
   {% set v = analysis[key] %}
   <div class="vc">
-    <div class="vc-seg">{{ icon }} {{ seg }}</div>
+    <div class="vc-seg">{{ seg }}</div>
     <div class="vc-verdict {{ 'v-ok-t' if v.direction=='ok' else 'v-warn-t' }}">{{ v.verdict }}</div>
     <div class="vc-text">{{ v.text }}</div>
   </div>
   {% endfor %}
 </div>
 
-<!-- Footer -->
+</div><!-- /body -->
+
+<!-- ── FOOTER ── -->
 <div class="footer">
-  <div>
-    <span class="ft-brand">{{ brand }}</span>
-    &nbsp;气象导航服务 &nbsp;·&nbsp;
-    海浪数据：Open-Meteo Marine API（GFS Wave + ECMWF WAM）&nbsp;·&nbsp;
-    预报时效：5天 · 分辨率 0.25°
+  <div class="f-left">
+    数据来源：Open-Meteo Marine API（NOAA GFS Wave 0.25° + ECMWF WAM）· 预报时效：5天 · 分辨率 0.25°<br>
+    <strong>{{ brand }}</strong> 气象导航服务 · 本报告仅供参考，航行决策请结合官方气象机构公告
   </div>
-  <span>生成时间：{{ generated_at }}</span>
+  <div class="f-right">
+    MARINE WEATHER REPORT<br>
+    {{ brand }} · {{ generated_at }}
+  </div>
 </div>
 
-</div>
+</div><!-- /page -->
 </body>
 </html>"""
 
