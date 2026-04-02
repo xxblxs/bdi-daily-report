@@ -472,231 +472,335 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>干散货市场日报 — {{ date }}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-     font-size:13px;color:#1a1a18;background:#f5f5f3;padding:20px;}
-.report{max-width:960px;margin:0 auto;}
-.header{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;padding:16px 20px;
-        margin-bottom:12px;display:flex;align-items:flex-start;justify-content:space-between;}
-.h-date{font-size:11px;color:#6b6b65;margin-bottom:4px;}
-.h-title{font-size:20px;font-weight:500;}
-.h-sub{font-size:12px;color:#6b6b65;margin-top:3px;}
-.h-src{font-size:10px;padding:3px 8px;background:#E1F5EE;color:#085041;border-radius:4px;}
-.indices-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;}
-.idx{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;padding:12px 14px;}
-.idx.highlight{border-color:#1D9E75;border-width:1.5px;}
-.idx-name{font-size:10px;color:#6b6b65;margin-bottom:4px;}
-.idx-val{font-size:22px;font-weight:500;}
-.idx-chg{font-size:12px;margin-top:3px;}
-.up{color:#0F6E56;} .dn{color:#A32D2D;} .neu{color:#6b6b65;}
-.mini-bar{height:3px;border-radius:2px;margin-top:6px;background:#f0f0ec;overflow:hidden;}
-.mb-fill{height:100%;border-radius:2px;}
-.two-col{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;margin-bottom:12px;}
-.card{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;overflow:hidden;}
-.card-hd{padding:10px 14px;background:#f8f8f5;border-bottom:0.5px solid #e8e8e3;
-         display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:12px;font-weight:500;}
-.badge{font-size:10px;padding:2px 7px;border-radius:10px;}
-.b-up{background:#E1F5EE;color:#085041;} .b-dn{background:#FCEBEB;color:#A32D2D;}
-.b-neu{background:#f0f0ec;color:#6b6b65;}
-.card-body{padding:12px 14px;}
-.route-row{display:flex;align-items:center;gap:8px;padding:6px 0;
-           border-bottom:0.5px solid #f0f0ec;}
-.route-row:last-child{border-bottom:none;}
-.route-name{font-size:11px;color:#6b6b65;flex:1;line-height:1.3;}
-.route-sub{font-size:10px;color:#aaa;}
-.route-val{font-size:13px;font-weight:500;color:#1a1a18;min-width:64px;text-align:right;}
-.route-chg{font-size:11px;min-width:50px;text-align:right;}
-.sec-lbl{font-size:11px;font-weight:500;color:#6b6b65;padding:8px 0 5px;
-          border-bottom:0.5px solid #f0f0ec;margin-top:4px;}
-.trend-row{display:flex;align-items:center;gap:6px;padding:5px 0;
-           border-bottom:0.5px solid #f0f0ec;}
-.trend-row:last-child{border-bottom:none;}
-.tr-date{font-size:11px;color:#6b6b65;width:80px;flex-shrink:0;}
-.tr-bdi{font-size:12px;font-weight:500;width:50px;}
-.tr-bci{font-size:12px;color:#185FA5;width:50px;}
-.tr-bar-wrap{flex:1;height:5px;background:#f0f0ec;border-radius:3px;overflow:hidden;}
-.tr-bar{height:100%;border-radius:3px;background:#378ADD;}
-.week-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;
-          border-bottom:0.5px solid #f0f0ec;}
-.week-row:last-child{border-bottom:none;}
-.week-label{font-size:12px;color:#6b6b65;}
-.week-val{font-size:13px;font-weight:500;}
-.week-note{font-size:10px;color:#aaa;margin-top:2px;}
-.news-item{padding:12px 14px;border-bottom:0.5px solid #f0f0ec;}
-.news-item:last-child{border-bottom:none;}
-.ni-tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;
-        border-radius:4px;margin-bottom:7px;}
-.nt-bull{background:#E1F5EE;color:#085041;}
-.nt-bear{background:#FCEBEB;color:#A32D2D;}
-.nt-neu{background:#FEF3C7;color:#854F0B;}
-.ni-text{font-size:12px;color:#1a1a18;line-height:1.75;}
-.view-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
-.view-card{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;padding:12px 14px;}
-.vc-seg{font-size:10px;font-weight:500;color:#6b6b65;text-transform:uppercase;
-         letter-spacing:0.05em;margin-bottom:6px;}
-.vc-verdict{font-size:13px;font-weight:500;margin-bottom:6px;}
-.verdict-bull{color:#0F6E56;} .verdict-bear{color:#A32D2D;} .verdict-neu{color:#854F0B;}
-.vc-text{font-size:11px;color:#6b6b65;line-height:1.6;}
-.footer{background:#f8f8f5;border-radius:8px;padding:10px 14px;font-size:11px;
-        color:#6b6b65;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;}
-.nv{font-size:12px;font-weight:500;color:#0F6E56;}
-@media(max-width:700px){
-  .indices-row{grid-template-columns:repeat(3,1fr);}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --ink:#0f1217; --ink-2:#4a5261; --ink-m:#8a93a3;
+  --surface:#ffffff; --sf-soft:#f5f6f8; --sf-mid:#eceef2;
+  --accent:#1a3a5c; --accent-l:#e8eef5; --accent-mid:#2d5f96;
+  --red:#c0392b; --red-l:#fdf0ee; --amber:#b86c0a; --amber-l:#fdf5e8;
+  --green:#1e7f5a; --green-l:#e8f5f0; --border:#dde1e8; --border-s:#c4c9d4;
+}
+body {
+  font-family:'Outfit','PingFang SC','Microsoft YaHei',sans-serif;
+  background:#eef0f4; color:var(--ink);
+  padding:2.5rem 1.5rem;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+.page { max-width:1000px; margin:0 auto; background:var(--surface);
+        border:1px solid var(--border); box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+/* Header */
+.header { background:var(--accent); padding:2rem 2.8rem 1.6rem;
+          position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-70px; right:-70px;
+  width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,0.04); }
+.header::after  { content:''; position:absolute; bottom:-90px; left:200px;
+  width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.03); }
+.header-top { display:flex; justify-content:space-between;
+              align-items:flex-start; margin-bottom:1.2rem; }
+.doc-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em;
+             color:rgba(255,255,255,0.40); text-transform:uppercase; margin-bottom:0.4rem; }
+.doc-title { font-family:'DM Serif Display',serif; font-size:26px; color:#fff; line-height:1.25; }
+.doc-title em { font-style:italic; color:rgba(255,255,255,0.65); }
+.doc-meta { text-align:right; }
+.doc-meta .meta-date { font-family:'DM Mono',monospace; font-size:11px;
+                       color:rgba(255,255,255,0.48); letter-spacing:0.05em; }
+.doc-meta .meta-ref  { font-size:11px; color:rgba(255,255,255,0.30); margin-top:3px; }
+.headline-strip { font-size:12px; color:rgba(255,255,255,0.55); font-style:italic; }
+/* Body */
+.body { padding:2rem 2.8rem; }
+.section-head { display:flex; align-items:center; gap:10px;
+                margin-bottom:1rem; margin-top:1.8rem; }
+.section-head:first-child { margin-top:0; }
+.section-num   { font-family:'DM Mono',monospace; font-size:10px;
+                 color:var(--ink-m); letter-spacing:0.1em; min-width:22px; }
+.section-label { font-size:10px; font-weight:600; letter-spacing:0.12em;
+                 text-transform:uppercase; color:var(--ink-m); white-space:nowrap; }
+.section-line  { flex:1; height:1px; background:var(--border); }
+/* KPI 指数行 */
+.kpi-row { display:grid; grid-template-columns:repeat(5,1fr);
+           gap:1px; background:var(--border); border:1px solid var(--border);
+           margin-bottom:1.8rem; }
+.kpi { background:var(--surface); padding:1rem 1.2rem; }
+.kpi.highlight { background:var(--accent-l); }
+.kpi .k-label  { font-size:9.5px; font-weight:600; letter-spacing:0.08em;
+                 text-transform:uppercase; color:var(--ink-m); margin-bottom:5px; }
+.kpi .k-val    { font-family:'DM Mono',monospace; font-size:20px;
+                 font-weight:500; color:var(--ink); line-height:1; }
+.kpi .k-chg    { font-size:11px; margin-top:4px; }
+.kpi .k-bar    { height:3px; border-radius:2px; margin-top:8px;
+                 background:var(--sf-mid); overflow:hidden; }
+.kpi .k-bar-fill { height:100%; border-radius:2px; }
+.up { color:var(--green); } .dn { color:var(--red); } .neu { color:var(--ink-m); }
+/* Two-col layout */
+.two-col { display:grid; grid-template-columns:1.15fr 1fr; gap:14px; margin-bottom:1.8rem; }
+.col-stack { display:flex; flex-direction:column; gap:14px; }
+/* Cards */
+.card { border:1px solid var(--border); overflow:hidden; margin-bottom:0; }
+.card-hd { padding:9px 14px; background:var(--sf-soft);
+           border-bottom:1.5px solid var(--border-s);
+           display:flex; align-items:center; justify-content:space-between; }
+.card-title { font-size:10px; font-weight:600; letter-spacing:0.12em;
+              text-transform:uppercase; color:var(--ink-m); }
+.card-body  { padding:0; }
+/* Route rows */
+.sec-lbl { font-size:9px; font-weight:700; letter-spacing:0.10em;
+           text-transform:uppercase; color:var(--ink-m);
+           padding:8px 14px 5px; border-bottom:1px solid var(--border);
+           background:var(--sf-soft); }
+.route-row { display:flex; align-items:center; gap:8px; padding:8px 14px;
+             border-bottom:1px solid var(--border); }
+.route-row:last-child { border-bottom:none; }
+.route-name { font-size:11.5px; color:var(--ink-2); flex:1; line-height:1.35; }
+.route-sub  { font-size:10px; color:var(--ink-m); display:block; }
+.route-val  { font-family:'DM Mono',monospace; font-size:13px;
+              font-weight:500; color:var(--ink); min-width:72px; text-align:right; }
+.route-chg  { font-size:11px; min-width:54px; text-align:right; }
+/* Trend */
+.trend-row { display:flex; align-items:center; gap:8px; padding:7px 14px;
+             border-bottom:1px solid var(--border); }
+.trend-row:last-child { border-bottom:none; }
+.tr-date { font-family:'DM Mono',monospace; font-size:10.5px; color:var(--ink-m); width:72px; }
+.tr-bdi  { font-family:'DM Mono',monospace; font-size:12px; font-weight:500; width:52px; }
+.tr-bci  { font-family:'DM Mono',monospace; font-size:12px; color:var(--accent-mid); width:52px; }
+.tr-bar-wrap { flex:1; height:4px; background:var(--sf-mid); border-radius:2px; overflow:hidden; }
+.tr-bar { height:100%; border-radius:2px; background:var(--accent-mid); }
+/* Week chg */
+.week-row { display:flex; justify-content:space-between; align-items:center;
+            padding:8px 14px; border-bottom:1px solid var(--border); }
+.week-row:last-child { border-bottom:none; }
+.week-label { font-size:12px; color:var(--ink-2); }
+.week-val   { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; text-align:right; }
+.week-note  { font-size:10px; color:var(--ink-m); text-align:right; margin-top:1px; }
+/* News */
+.news-item { padding:11px 14px; border-bottom:1px solid var(--border); }
+.news-item:last-child { border-bottom:none; }
+.ni-tag { display:inline-block; font-size:9px; font-weight:700; padding:2px 7px;
+          border-radius:2px; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase; }
+.nt-bull { background:var(--green-l); color:var(--green); border:1px solid #a0d4bc; }
+.nt-bear { background:var(--red-l);   color:var(--red);   border:1px solid #e8b4b0; }
+.nt-neu  { background:var(--amber-l); color:var(--amber); border:1px solid #e8c990; }
+.ni-text { font-size:12px; color:var(--ink-2); line-height:1.75; }
+/* Views */
+.views-grid { display:grid; grid-template-columns:repeat(3,1fr);
+              gap:1px; background:var(--border); border:1px solid var(--border);
+              margin-bottom:1.8rem; }
+.vc { background:var(--surface); padding:1.1rem 1.2rem; }
+.vc-seg { font-size:9.5px; font-weight:600; letter-spacing:0.10em;
+          text-transform:uppercase; color:var(--ink-m); margin-bottom:5px; }
+.vc-verdict { font-family:'DM Serif Display',serif; font-size:15px; margin-bottom:6px; }
+.vc-verdict.bull { color:var(--green); }
+.vc-verdict.bear { color:var(--red); }
+.vc-verdict.neu  { color:var(--amber); }
+.vc-text { font-size:11px; color:var(--ink-2); line-height:1.65; }
+/* Footer */
+.footer { border-top:1.5px solid var(--border-s); padding:1.1rem 2.8rem;
+          display:flex; justify-content:space-between; align-items:center;
+          background:var(--sf-soft); }
+.footer .f-left  { font-size:10.5px; color:var(--ink-m); line-height:1.6; }
+.footer .f-right { font-family:'DM Mono',monospace; font-size:10px;
+                   color:var(--ink-m); text-align:right; letter-spacing:0.05em; }
+@media(max-width:720px){
   .two-col{grid-template-columns:1fr;}
-  .view-row{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(3,1fr);}
+  .views-grid{grid-template-columns:1fr;}
+  .body{padding:1.5rem;}
 }
 </style>
 </head>
 <body>
-<div class="report">
-  <div class="header">
+<div class="page">
+
+<div class="header">
+  <div class="header-top">
     <div>
-      <div class="h-date">{{ date }}</div>
-      <div class="h-title">干散货市场日报</div>
-      <div class="h-sub">BDI {{ indices.BDI.val|int }} &nbsp;·&nbsp; {{ headline }}</div>
+      <div class="doc-label">Dry Bulk Market Intelligence · Daily Report</div>
+      <div class="doc-title">干散货市场日报<br><em>Baltic Exchange Daily Briefing</em></div>
     </div>
-    <span class="h-src">实时数据</span>
-  </div>
-
-  <div class="indices-row">
-    {% for key, label, color, width_pct in idx_display %}
-    <div class="idx {% if key == 'BDI' %}highlight{% endif %}">
-      <div class="idx-name">{{ label }}</div>
-      <div class="idx-val">{{ indices[key].val|int if indices[key].val else '—' }}</div>
-      <div class="idx-chg {{ indices[key].direction }}">
-        {% if indices[key].diff %}
-          {{ '↑' if indices[key].direction == 'up' else '↓' }}
-          {{ indices[key].diff|abs|int }} pts &nbsp;{{ indices[key].pct_str }}
-        {% else %}—{% endif %}
-      </div>
-      <div class="mini-bar">
-        <div class="mb-fill" style="width:{{ width_pct }}%;background:{{ color }};"></div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-
-  <div class="two-col">
-    <div class="card">
-      <div class="card-hd">
-        <span class="card-title">主要航线租金（TCE $/天）</span>
-        <span class="badge b-up">实时更新</span>
-      </div>
-      <div class="card-body">
-        <div class="sec-lbl">— 海岬型 Capesize —</div>
-        {% for key in ['C2-TCE','C3-TCE','C5-TCE','C17-TCE','C5TC'] %}
-        {% set r = routes[key] %}
-        <div class="route-row">
-          <div class="route-name">{{ r.label }}<br>
-            {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
-          </div>
-          <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
-          <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
-        </div>
-        {% endfor %}
-        <div class="sec-lbl">— 巴拿马型 Panamax —</div>
-        {% for key in ['P2A_82','P3A_82','P5TC'] %}
-        {% set r = routes[key] %}
-        <div class="route-row">
-          <div class="route-name">{{ r.label }}</div>
-          <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
-          <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
-        </div>
-        {% endfor %}
-        <div class="sec-lbl">— 灵便型 Supramax —</div>
-        {% for key in ['S2','S3TC_63'] %}
-        {% set r = routes[key] %}
-        <div class="route-row">
-          <div class="route-name">{{ r.label }}</div>
-          <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
-          <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div class="card">
-        <div class="card-hd"><span class="card-title">近 5 日走势（BDI / BCI / BPI）</span></div>
-        <div class="card-body">
-          {% set max_bdi = trend|map(attribute='BDI')|select('ne', None)|list|max %}
-          {% for t in trend %}
-          <div class="trend-row">
-            <span class="tr-date">{{ t.date[5:] }}</span>
-            <span class="tr-bdi">{{ t.BDI|int if t.BDI else '—' }}</span>
-            <span class="tr-bci">{{ t.BCI|int if t.BCI else '—' }}</span>
-            <div class="tr-bar-wrap">
-              <div class="tr-bar" style="width:{{ ((t.BDI or 0) / max_bdi * 100)|round }}%;"></div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-hd">
-          <span class="card-title">周环比（近 5 交易日对比）</span>
-          <span class="badge b-neu">实际数据</span>
-        </div>
-        <div class="card-body">
-          {% for key, label in [('BDI','BDI 综合'),('BCI','BCI 海岬'),('BPI','BPI 巴拿马'),('BSI','BSI 灵便'),('BHSI','BHSI 小灵便')] %}
-          {% set w = week_chg[key] %}
-          <div class="week-row">
-            <span class="week-label">{{ label }}</span>
-            <div style="text-align:right;">
-              <div class="week-val {{ 'up' if (w.pct or 0) >= 0 else 'dn' }}">
-                {{ ('↑' if (w.pct or 0) >= 0 else '↓') + ' ' + w.pct_str if w.pct_str != 'n/a' else '—' }}
-              </div>
-              <div class="week-note">vs 5 个交易日前</div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
+    <div class="doc-meta">
+      <div class="meta-date">{{ date }}</div>
+      <div class="meta-ref">BDI {{ indices.BDI.val|int if indices.BDI.val else '—' }}</div>
     </div>
   </div>
+  <div class="headline-strip">{{ headline }}</div>
+</div>
 
-  {% if market_analysis %}
-  <div class="card" style="margin-bottom:12px;">
+<div class="body">
+
+<!-- 01 市场指数 -->
+<div class="section-head">
+  <span class="section-num">01</span>
+  <span class="section-label">市场指数概览</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="kpi-row">
+  {% for key, label, color, width_pct in idx_display %}
+  <div class="kpi {% if key == 'BDI' %}highlight{% endif %}">
+    <div class="k-label">{{ label }}</div>
+    <div class="k-val">{{ indices[key].val|int if indices[key].val else '—' }}</div>
+    <div class="k-chg {{ indices[key].direction }}">
+      {% if indices[key].diff %}
+        {{ '↑' if indices[key].direction == 'up' else ('↓' if indices[key].direction == 'dn' else '→') }}
+        {{ indices[key].diff|abs|int }} pts &nbsp; {{ indices[key].pct_str }}
+      {% else %}—{% endif %}
+    </div>
+    <div class="k-bar"><div class="k-bar-fill" style="width:{{ width_pct }}%;background:{{ color }};"></div></div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- 02 航线租金 & 走势 -->
+<div class="section-head">
+  <span class="section-num">02</span>
+  <span class="section-label">主要航线租金 &amp; 近期走势</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="two-col">
+  <div class="card">
     <div class="card-hd">
-      <span class="card-title">今日市场驱动因素 — 新闻 & 分析</span>
-      <span class="badge b-up">综合解读</span>
+      <span class="card-title">主要航线租金（TCE $/天）</span>
+      <span class="badge b-info" style="margin-left:0;">实时更新</span>
     </div>
-    <div class="card-body" style="padding:0;">
-      {% for item in market_analysis %}
-      <div class="news-item">
-        <span class="ni-tag nt-{{ item.type }}">{{ item.tag }}</span>
-        <div class="ni-text">{{ item.text|safe }}</div>
+    <div class="card-body">
+      <div class="sec-lbl">海岬型 Capesize</div>
+      {% for key in ['C2-TCE','C3-TCE','C5-TCE','C17-TCE','C5TC'] %}
+      {% set r = routes[key] %}
+      <div class="route-row">
+        <div class="route-name">{{ r.label }}
+          {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
+        </div>
+        <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
+        <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
+      </div>
+      {% endfor %}
+      <div class="sec-lbl">巴拿马型 Panamax</div>
+      {% for key in ['P2A_82','P3A_82','P5TC'] %}
+      {% set r = routes[key] %}
+      <div class="route-row">
+        <div class="route-name">{{ r.label }}</div>
+        <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
+        <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
+      </div>
+      {% endfor %}
+      <div class="sec-lbl">灵便型 Supramax</div>
+      {% for key in ['S2','S3TC_63'] %}
+      {% set r = routes[key] %}
+      <div class="route-row">
+        <div class="route-name">{{ r.label }}</div>
+        <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
+        <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
       </div>
       {% endfor %}
     </div>
   </div>
-  {% endif %}
 
-  <div class="view-row">
-    <div class="view-card">
-      <div class="vc-seg">海岬型 Capesize</div>
-      <div class="vc-verdict verdict-{{ cape_view.direction }}">{{ cape_view.verdict }}</div>
-      <div class="vc-text">{{ cape_view.text }}</div>
+  <div class="col-stack">
+    <div class="card">
+      <div class="card-hd"><span class="card-title">近 5 日走势（BDI / BCI / BPI）</span></div>
+      <div class="card-body">
+        {% set max_bdi = trend|map(attribute='BDI')|select('ne', None)|list|max %}
+        {% for t in trend %}
+        <div class="trend-row">
+          <span class="tr-date">{{ t.date[5:] }}</span>
+          <span class="tr-bdi">{{ t.BDI|int if t.BDI else '—' }}</span>
+          <span class="tr-bci">{{ t.BCI|int if t.BCI else '—' }}</span>
+          <div class="tr-bar-wrap">
+            <div class="tr-bar" style="width:{{ ((t.BDI or 0) / max_bdi * 100)|round }}%;"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    <div class="view-card">
-      <div class="vc-seg">巴拿马型 Panamax</div>
-      <div class="vc-verdict verdict-{{ pmx_view.direction }}">{{ pmx_view.verdict }}</div>
-      <div class="vc-text">{{ pmx_view.text }}</div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">周环比（近 5 交易日对比）</span>
+        <span class="badge b-neu" style="margin-left:0;">实际数据</span>
+      </div>
+      <div class="card-body">
+        {% for key, label in [('BDI','BDI 综合'),('BCI','BCI 海岬'),('BPI','BPI 巴拿马'),('BSI','BSI 灵便'),('BHSI','BHSI 小灵便')] %}
+        {% set w = week_chg[key] %}
+        <div class="week-row">
+          <span class="week-label">{{ label }}</span>
+          <div>
+            <div class="week-val {{ 'up' if (w.pct or 0) >= 0 else 'dn' }}">
+              {{ ('↑' if (w.pct or 0) >= 0 else '↓') + ' ' + w.pct_str if w.pct_str != 'n/a' else '—' }}
+            </div>
+            <div class="week-note">vs 5 个交易日前</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    <div class="view-card">
-      <div class="vc-seg">灵便型 Supramax / Handysize</div>
-      <div class="vc-verdict verdict-{{ supra_view.direction }}">{{ supra_view.verdict }}</div>
-      <div class="vc-text">{{ supra_view.text }}</div>
-    </div>
-  </div>
-
-  <div class="footer">
-    <div>新闻来源：Hellenic Shipping News / Splash247</div>
-    <span>生成时间：{{ generated_at }}</span>
   </div>
 </div>
+
+<!-- 03 市场驱动因素 -->
+{% if market_analysis %}
+<div class="section-head">
+  <span class="section-num">03</span>
+  <span class="section-label">今日市场驱动因素</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="card" style="margin-bottom:1.8rem;">
+  <div class="card-hd">
+    <span class="card-title">新闻 &amp; 市场分析</span>
+    <span class="badge b-info" style="margin-left:0;">综合解读</span>
+  </div>
+  <div class="card-body">
+    {% for item in market_analysis %}
+    <div class="news-item">
+      <span class="ni-tag nt-{{ item.type }}">{{ item.tag }}</span>
+      <div class="ni-text">{{ item.text|safe }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- 04 分船型观点 -->
+<div class="section-head">
+  <span class="section-num">{{ '04' if market_analysis else '03' }}</span>
+  <span class="section-label">分船型市场观点</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="views-grid">
+  <div class="vc">
+    <div class="vc-seg">海岬型 Capesize</div>
+    <div class="vc-verdict {{ cape_view.direction }}">{{ cape_view.verdict }}</div>
+    <div class="vc-text">{{ cape_view.text }}</div>
+  </div>
+  <div class="vc">
+    <div class="vc-seg">巴拿马型 Panamax</div>
+    <div class="vc-verdict {{ pmx_view.direction }}">{{ pmx_view.verdict }}</div>
+    <div class="vc-text">{{ pmx_view.text }}</div>
+  </div>
+  <div class="vc">
+    <div class="vc-seg">灵便型 Supramax / Handysize</div>
+    <div class="vc-verdict {{ supra_view.direction }}">{{ supra_view.verdict }}</div>
+    <div class="vc-text">{{ supra_view.text }}</div>
+  </div>
+</div>
+
+</div><!-- /body -->
+
+<div class="footer">
+  <div class="f-left">
+    数据来源：NAVGreen Baltic Exchange API &nbsp;·&nbsp;
+    新闻：Hellenic Shipping News / Splash247<br>
+    <strong>本报告仅供参考，不构成投资建议</strong>
+  </div>
+  <div class="f-right">
+    DRY BULK DAILY<br>
+    {{ generated_at }}
+  </div>
+</div>
+
+</div><!-- /page -->
 </body>
 </html>"""
 

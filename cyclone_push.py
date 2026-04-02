@@ -1128,341 +1128,431 @@ CYCLONE_HTML = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>全球热带气旋预警 — {{ date }} | {{ brand }}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-     font-size:13px;color:#1a1a18;background:#f0f2f5;padding:20px;}
-.wrap{max-width:1060px;margin:0 auto;}
-
-/* ── header ── */
-.header{background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 60%,#0d2137 100%);
-        border-radius:14px;padding:20px 24px;margin-bottom:14px;
-        display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;}
-.h-left .h-date{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:5px;}
-.h-left .h-title{font-size:22px;font-weight:700;color:#fff;letter-spacing:.02em;}
-.h-left .h-sub{font-size:12px;color:rgba(255,255,255,.55);margin-top:4px;}
-.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
-.brand-tag{font-size:13px;font-weight:700;color:#fff;padding:4px 14px;
-           border-radius:6px;border:1px solid rgba(255,255,255,.25);
-           background:rgba(255,255,255,.1);}
-.h-stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
-.hst{font-size:10px;font-weight:600;padding:3px 9px;border-radius:4px;border:1px solid;}
-.hst-r{background:rgba(226,75,74,.25);color:#f09595;border-color:rgba(226,75,74,.35);}
-.hst-o{background:rgba(239,159,39,.25);color:#f2c666;border-color:rgba(239,159,39,.35);}
-.hst-g{background:rgba(29,158,117,.2);color:#5dcaa5;border-color:rgba(29,158,117,.3);}
-.hst-b{background:rgba(55,138,221,.2);color:#85b7eb;border-color:rgba(55,138,221,.3);}
-
-/* ── no storm ── */
-.no-storm{background:#fff;border-radius:12px;padding:32px;text-align:center;
-          border:1px solid #e0e6f0;margin-bottom:14px;}
-.no-storm-icon{font-size:48px;margin-bottom:12px;}
-.no-storm-title{font-size:18px;font-weight:600;color:#1a1a18;margin-bottom:8px;}
-.no-storm-text{font-size:13px;color:#6b7280;line-height:1.7;max-width:500px;margin:0 auto;}
-
-/* ── alert bar ── */
-.alert-bars{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
-.abar{border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:12px;}
-.abar-icon{font-size:20px;flex-shrink:0;}
-.abar-title{font-size:13px;font-weight:700;margin-bottom:3px;}
-.abar-text{font-size:11px;line-height:1.5;}
-.abar-danger{background:#2d0a0a;border:1px solid #a32d2d;}
-.abar-danger .abar-title{color:#f09595;} .abar-danger .abar-text{color:#d08080;}
-.abar-warn{background:#2a1900;border:1px solid #854f0b;}
-.abar-warn .abar-title{color:#f2c666;} .abar-warn .abar-text{color:#c9a050;}
-.abar-watch{background:#0a1a2a;border:1px solid #185fa5;}
-.abar-watch .abar-title{color:#85b7eb;} .abar-watch .abar-text{color:#6a9abf;}
-
-/* ── storm cards ── */
-.storms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));
-             gap:14px;margin-bottom:14px;}
-.scard{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e0e6f0;}
-.scard.impact-danger{border-color:#a32d2d;border-width:2px;}
-.scard.impact-warn{border-color:#854f0b;border-width:1.5px;}
-.scard.impact-watch{border-color:#185fa5;}
-
-/* card header */
-.sc-head{padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;
-         border-bottom:1px solid #f0f2f8;}
-.sc-head-left{display:flex;align-items:center;gap:10px;}
-.sc-intensity-badge{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;
-                    justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
-.sc-name{font-size:16px;font-weight:700;line-height:1.2;}
-.sc-sub{font-size:11px;color:#8a9db5;margin-top:2px;}
-.sc-impact-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;}
-.sit-danger{background:#feecec;color:#a32d2d;}
-.sit-warn{background:#fff3d6;color:#854f0b;}
-.sit-watch{background:#e8f2fb;color:#185fa5;}
-.sit-monitor{background:#f0f2f8;color:#6b7280;}
-
-/* main data grid */
-.sc-data{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:14px 0;border-bottom:1px solid #f0f2f8;}
-.sd-cell{padding:6px 18px;border-right:1px solid #f0f2f8;}
-.sd-cell:last-child{border-right:none;}
-.sd-label{font-size:10px;color:#8a9db5;font-weight:500;text-transform:uppercase;margin-bottom:3px;}
-.sd-val{font-size:20px;font-weight:700;line-height:1.1;}
-.sd-unit{font-size:10px;color:#8a9db5;margin-left:2px;}
-.sd-sub{font-size:10px;color:#aab8c8;margin-top:2px;}
-
-/* color coding for intensity */
-.wind-danger{color:#a32d2d;} .wind-warn{color:#854f0b;} .wind-ok{color:#0F6E56;} .wind-low{color:#185fa5;}
-
-/* detail rows */
-.sc-details{padding:10px 18px;display:grid;grid-template-columns:1fr 1fr;gap:6px;border-bottom:1px solid #f0f2f8;}
-.detail-row{display:flex;align-items:center;gap:6px;font-size:11px;}
-.dr-icon{width:16px;text-align:center;font-size:13px;flex-shrink:0;}
-.dr-label{color:#8a9db5;width:80px;flex-shrink:0;}
-.dr-val{color:#1a1a18;font-weight:500;}
-.dr-note{color:#aab8c8;margin-left:3px;font-size:10px;}
-
-/* shipping impact */
-.sc-impact{padding:12px 18px;background:#fafbfd;}
-.si-title{font-size:10px;font-weight:600;color:#8a9db5;text-transform:uppercase;
-          letter-spacing:.05em;margin-bottom:8px;}
-.si-routes{display:flex;flex-direction:column;gap:4px;}
-.si-route{display:flex;align-items:center;gap:8px;font-size:11px;}
-.si-dist-bar{flex:1;height:5px;background:#e8eef8;border-radius:3px;overflow:hidden;}
-.si-dist-fill{height:100%;border-radius:3px;}
-.si-route-name{width:120px;flex-shrink:0;color:#6b7280;}
-.si-dist-txt{width:60px;text-align:right;font-weight:500;flex-shrink:0;}
-.si-dist-danger{color:#a32d2d;} .si-dist-warn{color:#854f0b;} .si-dist-ok{color:#6b7280;}
-
-/* track mini-map (SVG) */
-.sc-track{padding:12px 18px;border-top:1px solid #f0f2f8;}
-.track-title{font-size:10px;font-weight:600;color:#8a9db5;text-transform:uppercase;margin-bottom:6px;}
-.track-svg{width:100%;height:80px;background:#f0f4fa;border-radius:8px;overflow:hidden;}
-
-/* summary table */
-.summary-card{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:14px;border:1px solid #e0e6f0;}
-.sc-hd{padding:10px 16px;background:#f5f7fc;border-bottom:1px solid #e8eef6;
-       display:flex;align-items:center;justify-content:space-between;}
-.sc-hd-title{font-size:12px;font-weight:600;}
-.sc-hd-badge{font-size:10px;padding:2px 8px;border-radius:4px;background:#e8f2fb;color:#0c447c;}
-table{width:100%;border-collapse:collapse;font-size:12px;}
-thead th{font-size:10px;font-weight:600;color:#8a9db5;padding:8px 12px;
-         text-align:right;border-bottom:1px solid #eef2f8;white-space:nowrap;}
-thead th:first-child{text-align:left;}
-tbody tr{border-bottom:1px solid #f5f7fc;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:#fafbff;}
-tbody tr.danger-row{background:#fff8f8;}
-td{padding:7px 12px;text-align:right;vertical-align:middle;}
-td:first-child{text-align:left;font-weight:600;}
-.impact-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-block;}
-.ip-danger{background:#feecec;color:#a32d2d;} .ip-warn{background:#fff3d6;color:#854f0b;}
-.ip-watch{background:#e8f2fb;color:#185fa5;} .ip-monitor{background:#f0f2f8;color:#6b7280;}
-
-/* footer */
-.footer{background:#fff;border-radius:10px;padding:10px 16px;font-size:11px;
-        color:#8a9db5;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;border:1px solid #e0e6f0;}
-.ft-brand{font-weight:700;color:#2d1b69;font-size:12px;}
-
-@media(max-width:700px){.storms-grid,.sc-data{grid-template-columns:1fr;}.sc-details{grid-template-columns:1fr;}}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --ink:#0f1217; --ink-2:#4a5261; --ink-m:#8a93a3;
+  --surface:#ffffff; --sf-soft:#f5f6f8; --sf-mid:#eceef2;
+  --accent:#1a0a2e; --accent-l:#ede8f5; --accent-mid:#4a2d96;
+  --red:#c0392b; --red-l:#fdf0ee; --amber:#b86c0a; --amber-l:#fdf5e8;
+  --green:#1e7f5a; --green-l:#e8f5f0;
+  --blue:#185fa5; --blue-l:#e8f2fb;
+  --border:#dde1e8; --border-s:#c4c9d4;
+}
+body { font-family:'Outfit','PingFang SC','Microsoft YaHei',sans-serif;
+       background:#eef0f4; color:var(--ink); padding:2.5rem 1.5rem;
+       -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.page { max-width:1060px; margin:0 auto; background:var(--surface);
+        border:1px solid var(--border); box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+/* Header — 台风用深紫色 */
+.header { background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 60%,#0d2137 100%);
+          padding:2rem 2.8rem 1.6rem; position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-70px; right:-70px;
+  width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,0.03); }
+.header::after  { content:''; position:absolute; bottom:-90px; left:200px;
+  width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.02); }
+.header-top { display:flex; justify-content:space-between;
+              align-items:flex-start; margin-bottom:1.2rem; }
+.doc-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em;
+             color:rgba(255,255,255,0.38); text-transform:uppercase; margin-bottom:0.4rem; }
+.doc-title { font-family:'DM Serif Display',serif; font-size:24px; color:#fff; line-height:1.3; }
+.doc-title em { font-style:italic; color:rgba(255,255,255,0.60); }
+.doc-meta { text-align:right; }
+.doc-meta .meta-date { font-family:'DM Mono',monospace; font-size:11px;
+                       color:rgba(255,255,255,0.45); letter-spacing:0.05em; }
+.doc-meta .meta-ref  { font-size:11px; color:rgba(255,255,255,0.28); margin-top:3px; }
+.status-strip { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.sb { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:500;
+      padding:4px 10px; border-radius:2px; letter-spacing:0.02em; }
+.sb-r { background:rgba(192,57,43,0.30); color:#f0a09a; outline:1px solid rgba(192,57,43,0.35); }
+.sb-o { background:rgba(184,108,10,0.30); color:#f5c76e; outline:1px solid rgba(184,108,10,0.35); }
+.sb-b { background:rgba(24,95,165,0.30);  color:#85b7eb; outline:1px solid rgba(24,95,165,0.35); }
+.sb-g { background:rgba(30,127,90,0.25);  color:#7de0b8; outline:1px solid rgba(30,127,90,0.30); }
+/* Body */
+.body { padding:2rem 2.8rem; }
+.section-head { display:flex; align-items:center; gap:10px;
+                margin-bottom:1rem; margin-top:1.8rem; }
+.section-head:first-child { margin-top:0; }
+.section-num   { font-family:'DM Mono',monospace; font-size:10px;
+                 color:var(--ink-m); letter-spacing:0.1em; min-width:22px; }
+.section-label { font-size:10px; font-weight:600; letter-spacing:0.12em;
+                 text-transform:uppercase; color:var(--ink-m); white-space:nowrap; }
+.section-line  { flex:1; height:1px; background:var(--border); }
+/* No storm */
+.no-storm { border:1px solid var(--border); padding:2.5rem; text-align:center; margin-bottom:1.8rem; }
+.no-storm-icon  { font-size:48px; margin-bottom:12px; }
+.no-storm-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--ink); margin-bottom:8px; }
+.no-storm-text  { font-size:12.5px; color:var(--ink-m); line-height:1.7; max-width:500px; margin:0 auto; }
+/* Alert bars */
+.alert-bars { display:flex; flex-direction:column; gap:6px; margin-bottom:1.8rem; }
+.abar { padding:10px 16px; display:flex; align-items:flex-start; gap:12px;
+         border-left:3px solid transparent; }
+.abar-icon  { font-size:18px; flex-shrink:0; margin-top:1px; }
+.abar-title { font-size:12px; font-weight:700; margin-bottom:3px; letter-spacing:0.02em; }
+.abar-text  { font-size:11px; line-height:1.55; }
+.abar-danger { background:#fff8f8; border-left-color:var(--red);   border:1px solid #f0c0bc; }
+.abar-danger .abar-title { color:var(--red); }
+.abar-danger .abar-text  { color:#7a2a24; }
+.abar-warn   { background:var(--amber-l); border-left-color:var(--amber); border:1px solid #e8c990; }
+.abar-warn   .abar-title { color:var(--amber); }
+.abar-warn   .abar-text  { color:#7a4a0a; }
+.abar-watch  { background:var(--blue-l); border-left-color:var(--blue); border:1px solid #b0cce4; }
+.abar-watch  .abar-title { color:var(--blue); }
+.abar-watch  .abar-text  { color:#184070; }
+/* Storm cards */
+.storms-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(460px,1fr));
+               gap:1px; background:var(--border); border:1px solid var(--border);
+               margin-bottom:1.8rem; }
+.scard { background:var(--surface); overflow:hidden; }
+.scard.impact-danger { outline:2px solid var(--red);   outline-offset:-2px; }
+.scard.impact-warn   { outline:1.5px solid var(--amber); outline-offset:-1.5px; }
+.scard.impact-watch  { outline:1px solid var(--blue); outline-offset:-1px; }
+/* Card head */
+.sc-head { padding:12px 16px; display:flex; justify-content:space-between;
+            align-items:flex-start; border-bottom:1px solid var(--border); }
+.sc-head-left { display:flex; align-items:center; gap:10px; }
+.sc-intensity-badge { width:42px; height:42px; border-radius:6px;
+                       display:flex; align-items:center; justify-content:center;
+                       font-family:'DM Mono',monospace; font-size:11px;
+                       font-weight:700; color:#fff; flex-shrink:0; }
+.sc-name { font-family:'DM Serif Display',serif; font-size:17px; line-height:1.2; }
+.sc-sub  { font-family:'DM Mono',monospace; font-size:9.5px; color:var(--ink-m); margin-top:2px; letter-spacing:0.04em; }
+.sc-impact-tag { font-size:9px; font-weight:700; padding:3px 9px; border-radius:2px;
+                  letter-spacing:0.06em; text-transform:uppercase; }
+.sit-danger  { background:var(--red-l);   color:var(--red);   border:1px solid #e8b4b0; }
+.sit-warn    { background:var(--amber-l); color:var(--amber); border:1px solid #e8c990; }
+.sit-watch   { background:var(--blue-l);  color:var(--blue);  border:1px solid #b0cce4; }
+.sit-monitor { background:var(--sf-mid);  color:var(--ink-m); border:1px solid var(--border); }
+/* Data grid */
+.sc-data { display:grid; grid-template-columns:repeat(4,1fr);
+            gap:1px; background:var(--border); border-bottom:1px solid var(--border); }
+.sd-cell  { background:var(--sf-soft); padding:8px 14px; }
+.sd-label { font-size:9.5px; font-weight:600; letter-spacing:0.08em;
+             text-transform:uppercase; color:var(--ink-m); margin-bottom:3px; }
+.sd-val   { font-family:'DM Mono',monospace; font-size:20px;
+             font-weight:500; color:var(--ink); line-height:1.1; }
+.sd-unit  { font-size:10px; color:var(--ink-m); margin-left:2px; }
+.sd-sub   { font-size:10px; color:var(--ink-m); margin-top:2px; }
+.wind-danger { color:var(--red); } .wind-warn { color:var(--amber); }
+.wind-ok { color:var(--green); } .wind-low { color:var(--blue); }
+/* Detail rows */
+.sc-details { padding:9px 16px; display:grid; grid-template-columns:1fr 1fr;
+               gap:5px; border-bottom:1px solid var(--border); }
+.detail-row { display:flex; align-items:center; gap:6px; font-size:11px; }
+.dr-icon  { width:16px; text-align:center; font-size:12px; flex-shrink:0; }
+.dr-label { color:var(--ink-m); width:78px; flex-shrink:0; font-size:10.5px; }
+.dr-val   { color:var(--ink); font-weight:500; font-family:'DM Mono',monospace; font-size:11.5px; }
+.dr-note  { color:var(--ink-m); margin-left:3px; font-size:10px; }
+/* Shipping impact */
+.sc-impact { padding:10px 16px; background:var(--sf-soft); }
+.si-title  { font-size:9.5px; font-weight:700; letter-spacing:0.10em;
+              text-transform:uppercase; color:var(--ink-m); margin-bottom:7px; }
+.si-routes { display:flex; flex-direction:column; gap:4px; }
+.si-route  { display:flex; align-items:center; gap:8px; font-size:11px; }
+.si-dist-bar  { flex:1; height:4px; background:var(--sf-mid); border-radius:2px; overflow:hidden; }
+.si-dist-fill { height:100%; border-radius:2px; }
+.si-route-name { width:110px; flex-shrink:0; color:var(--ink-2); }
+.si-dist-txt { width:58px; text-align:right; font-family:'DM Mono',monospace;
+                font-size:11.5px; font-weight:500; flex-shrink:0; }
+.si-dist-danger { color:var(--red); } .si-dist-warn { color:var(--amber); }
+.si-dist-ok { color:var(--ink-m); }
+/* Track SVG */
+.sc-track { padding:10px 16px; border-top:1px solid var(--border); }
+.track-title { font-size:9.5px; font-weight:700; letter-spacing:0.10em;
+               text-transform:uppercase; color:var(--ink-m); margin-bottom:5px; }
+/* Summary table */
+.tcard { border:1px solid var(--border); margin-bottom:1.8rem; }
+.tc-head { padding:9px 14px; background:var(--sf-soft);
+            border-bottom:1.5px solid var(--border-s);
+            display:flex; align-items:center; justify-content:space-between; }
+.tc-title { font-size:10px; font-weight:600; letter-spacing:0.12em;
+             text-transform:uppercase; color:var(--ink-m); }
+.tc-badge { font-family:'DM Mono',monospace; font-size:10px;
+             color:var(--ink-m); letter-spacing:0.04em; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead tr { background:var(--sf-soft); border-bottom:1.5px solid var(--border-s); }
+thead th { padding:8px 12px; font-size:9.5px; font-weight:600; letter-spacing:0.10em;
+            text-transform:uppercase; color:var(--ink-m); text-align:right; }
+thead th:first-child { text-align:left; }
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background:var(--sf-soft); }
+tbody tr.danger-row { background:#fff8f8; }
+td { padding:7px 12px; text-align:right; color:var(--ink-2); vertical-align:middle; }
+td:first-child { text-align:left; font-weight:600; color:var(--ink); }
+.impact-pill { font-size:9px; font-weight:700; padding:2px 8px; border-radius:2px;
+               display:inline-block; letter-spacing:0.05em; text-transform:uppercase; }
+.ip-danger  { background:var(--red-l);   color:var(--red);   border:1px solid #e8b4b0; }
+.ip-warn    { background:var(--amber-l); color:var(--amber); border:1px solid #e8c990; }
+.ip-watch   { background:var(--blue-l);  color:var(--blue);  border:1px solid #b0cce4; }
+.ip-monitor { background:var(--sf-mid);  color:var(--ink-m); border:1px solid var(--border); }
+/* Footer */
+.footer { border-top:1.5px solid var(--border-s); padding:1.1rem 2.8rem;
+          display:flex; justify-content:space-between; align-items:center;
+          background:var(--sf-soft); }
+.footer .f-left  { font-size:10.5px; color:var(--ink-m); line-height:1.6; }
+.footer .f-left strong { color:var(--ink-2); font-weight:600; }
+.footer .f-right { font-family:'DM Mono',monospace; font-size:10px;
+                   color:var(--ink-m); text-align:right; letter-spacing:0.05em; }
+@media(max-width:700px){
+  .storms-grid,.sc-data{grid-template-columns:1fr;}
+  .sc-details{grid-template-columns:1fr;}
+  .body{padding:1.5rem;}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="page">
 
-<!-- Header -->
 <div class="header">
-  <div class="h-left">
-    <div class="h-date">{{ generated_at }} UTC · 全球多源气象数据融合 · 实时监测</div>
-    <div class="h-title"><img src="data:image/png;base64,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" alt="ISOWAY" style="height:28px;vertical-align:middle;margin-right:8px;"> 全球热带气旋预警报告</div>
-    <div class="h-sub">西太平洋 / 印度洋 / 南太平洋 / 大西洋 · 实时监测 · 航运影响评估</div>
-  </div>
-  <div class="h-right">
-    <span class="brand-tag">{{ brand }}</span>
-    <div class="h-stats">
-      {% for cls, label in stat_badges %}
-      <span class="hst {{ cls }}">{{ label }}</span>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-
-<!-- Alert bars (only for warn/danger) -->
-{% if alert_storms %}
-<div class="alert-bars">
-  {% for s in alert_storms %}
-  {% set cls = 'abar-danger' if s.impact == 'danger' else 'abar-warn' %}
-  {% set icon = '🚨' if s.impact == 'danger' else '⚠️' %}
-  <div class="abar {{ cls }}">
-    <span class="abar-icon">{{ icon }}</span>
+  <div class="header-top">
     <div>
-      <div class="abar-title">
-        {{ s.intensity.name }} {{ s.name }} ({{ s.basin_name }}) — 距 {{ s.nearest_route_name }} 约 {{ s.nearest_route_dist }} 海里
-      </div>
-      <div class="abar-text">
-        当前位置 {{ '%.1f'|format(s.lat) }}°{{ 'N' if s.lat >= 0 else 'S' }} /
-        {{ '%.1f'|format(s.lon|abs) }}°{{ 'E' if s.lon >= 0 else 'W' }} ·
-        风速 {{ s.wind_kn|int if s.wind_kn else '—' }}kn · 气压 {{ s.pres_mb|int if s.pres_mb else '—' }}hPa ·
-        移动方向 {{ s.mov_dir or '—' }} · 移动速度 {{ s.mov_speed or '—' }}kn。
-        {% if s.impact == 'danger' %}
-        ⚠ 该系统当前位于主要航线 {{ Config_CLOSE_DIST_NM }} 海里范围内，建议相关船舶立即关注并做好绕航准备。
-        {% else %}
-        建议密切关注该系统动向，适时调整航线计划。
-        {% endif %}
-      </div>
+      <div class="doc-label">Tropical Cyclone Warning System · Global Monitor</div>
+      <div class="doc-title">🌀 全球热带气旋预警报告<br><em>Global Tropical Cyclone Alert</em></div>
+    </div>
+    <div class="doc-meta">
+      <div class="meta-date">{{ generated_at }} UTC</div>
+      <div class="meta-ref">{{ brand }} · 西太平洋 / 印度洋 / 大西洋</div>
     </div>
   </div>
-  {% endfor %}
-</div>
-{% endif %}
-
-<!-- No storm placeholder -->
-{% if not storms %}
-<div class="no-storm">
-  <div class="no-storm-icon">✅</div>
-  <div class="no-storm-title">当前全球无活跃热带气旋</div>
-  <div class="no-storm-text">
-    全球各大洋当前未监测到活跃热带气旋系统（含热带低压及以上级别）。<br>
-    ISOWAY 气象导航系统将持续每 6 小时轮询全球台风数据，<br>
-    一旦有新系统形成或达到热带低压强度，将立即推送预警。
+  <div class="status-strip">
+    {{ storms_by_impact.danger | length }} 个危险系统
+    {%- if storms_by_impact.danger -%}
+    <span class="sb sb-r">🚨 危险 {{ storms_by_impact.danger|length }}</span>
+    {%- endif -%}
+    {%- if storms_by_impact.warn -%}
+    <span class="sb sb-o">⚠️ 预警 {{ storms_by_impact.warn|length }}</span>
+    {%- endif -%}
+    {%- if storms_by_impact.watch -%}
+    <span class="sb sb-b">👁 关注 {{ storms_by_impact.watch|length }}</span>
+    {%- endif -%}
+    {%- if storms_by_impact.monitor -%}
+    <span class="sb sb-g">📡 监测 {{ storms_by_impact.monitor|length }}</span>
+    {%- endif -%}
   </div>
 </div>
-{% endif %}
 
-<!-- Storm cards -->
-{% if storms %}
+<div class="body">
+
+{%- if not storms %}
+<!-- 无活跃气旋 -->
+<div class="section-head">
+  <span class="section-num">01</span>
+  <span class="section-label">系统状态</span>
+  <span class="section-line"></span>
+</div>
+<div class="no-storm">
+  <div class="no-storm-icon">🌊</div>
+  <div class="no-storm-title">当前无活跃热带气旋</div>
+  <div class="no-storm-text">
+    全球各大洋盆地目前未监测到达到热带气旋强度的活跃系统。
+    监测范围覆盖西太平洋、印度洋（北部/南部）、大西洋及南太平洋。
+    下次更新：6 小时后。
+  </div>
+</div>
+{%- else %}
+<!-- 预警横幅 -->
+{%- if alert_bars %}
+<div class="section-head">
+  <span class="section-num">01</span>
+  <span class="section-label">重点预警</span>
+  <span class="section-line"></span>
+</div>
+<div class="alert-bars">
+  {%- for a in alert_bars %}
+  <div class="abar abar-{{ a.level }}">
+    <div class="abar-icon">{{ a.icon }}</div>
+    <div>
+      <div class="abar-title">{{ a.title }}</div>
+      <div class="abar-text">{{ a.text }}</div>
+    </div>
+  </div>
+  {%- endfor %}
+</div>
+{%- endif %}
+
+<!-- 气旋详情 -->
+<div class="section-head">
+  <span class="section-num">{{ '02' if alert_bars else '01' }}</span>
+  <span class="section-label">活跃气旋系统详情</span>
+  <span class="section-line"></span>
+</div>
+
 <div class="storms-grid">
-{% for s in storms %}
-{% set ic = s.intensity.color %}
-{% set wc = 'wind-danger' if (s.wind_kn or 0) >= 64 else ('wind-warn' if (s.wind_kn or 0) >= 34 else 'wind-low') %}
-{% set impact_sit = 'sit-' + s.impact %}
+{%- for s in storms %}
+{%- set ic = s.intensity %}
 <div class="scard impact-{{ s.impact }}">
-  <!-- Card Head -->
   <div class="sc-head">
     <div class="sc-head-left">
-      <div class="sc-intensity-badge" style="background:{{ ic }};">{{ s.intensity.abbr }}</div>
+      <div class="sc-intensity-badge" style="background:{{ ic.color }};letter-spacing:0.04em;">
+        {{ ic.abbr }}
+      </div>
       <div>
         <div class="sc-name">{{ s.name }}</div>
-        <div class="sc-sub">{{ s.basin_name }} · {{ s.sid }} · 最后更新 {{ s.last_time[5:16] if s.last_time else '—' }} UTC</div>
+        <div class="sc-sub">{{ s.basin_name }} · {{ s.sid }} · 最后更新 {{ s.last_update or '—' }} UTC</div>
       </div>
     </div>
-    {% set impact_labels = {'danger': '危险', 'warn': '预警', 'watch': '关注', 'monitor': '监测'} %}
-    <span class="sc-impact-tag {{ impact_sit }}">{{ impact_labels[s.impact] }}</span>
+    <span class="sc-impact-tag sit-{{ s.impact }}">
+      {{ '🚨 危险' if s.impact=='danger' else ('⚠️ 预警' if s.impact=='warn' else ('👁 关注' if s.impact=='watch' else '📡 监测')) }}
+    </span>
   </div>
 
-  <!-- Main data -->
   <div class="sc-data">
     <div class="sd-cell">
       <div class="sd-label">最大风速</div>
-      <div class="sd-val {{ wc }}">{{ s.wind_kn|int if s.wind_kn else '—' }}<span class="sd-unit">kn</span></div>
-      <div class="sd-sub">{{ s.intensity.name }}</div>
+      <div class="sd-val wind-{{ 'danger' if (s.wind_kn or 0)>=64 else ('warn' if (s.wind_kn or 0)>=48 else ('ok' if (s.wind_kn or 0)>=34 else 'low')) }}">
+        {{ s.wind_kn|int if s.wind_kn else '—' }}<span class="sd-unit">kn</span>
+      </div>
+      <div class="sd-sub">{{ ic.name }}</div>
     </div>
     <div class="sd-cell">
       <div class="sd-label">中心气压</div>
       <div class="sd-val">{{ s.pres_mb|int if s.pres_mb else '—' }}<span class="sd-unit">hPa</span></div>
-      <div class="sd-sub">{{ s.sshs_text or '—' }}</div>
+      <div class="sd-sub">{{ '热带低压' if (s.pres_mb or 1020) > 1000 else '气压较低' }}</div>
     </div>
     <div class="sd-cell">
       <div class="sd-label">当前位置</div>
-      <div class="sd-val" style="font-size:14px;">{{ '%.1f'|format(s.lat) }}°{{ 'N' if s.lat >= 0 else 'S' }}</div>
-      <div class="sd-sub">{{ '%.1f'|format(s.lon|abs) }}°{{ 'E' if s.lon >= 0 else 'W' }}</div>
+      <div class="sd-val" style="font-size:15px;">
+        {{ '%.1f'|format(s.lat|abs) }}°{{ 'N' if s.lat>=0 else 'S' }}
+      </div>
+      <div class="sd-sub">{{ '%.1f'|format(s.lon|abs) }}°{{ 'E' if s.lon>=0 else 'W' }}</div>
     </div>
     <div class="sd-cell">
       <div class="sd-label">距最近海岸</div>
-      <div class="sd-val">{{ s.dist2land_nm|int if s.dist2land_nm else '—' }}<span class="sd-unit">nm</span></div>
-      <div class="sd-sub">{{ '向陆地靠近' if s.dist2land_nm and s.dist2land_nm < 200 else '在海上' }}</div>
+      <div class="sd-val" style="font-size:15px;">
+        {{ s.dist2land_nm|int if s.dist2land_nm else '—' }}<span class="sd-unit">nm</span>
+      </div>
+      <div class="sd-sub">{{ '在海上' if (s.dist2land_nm or 0)>50 else '近海' }}</div>
     </div>
   </div>
 
-  <!-- Detail rows -->
   <div class="sc-details">
     <div class="detail-row">
       <span class="dr-icon">🧭</span>
-      <span class="dr-label">移动方向/速度</span>
-      <span class="dr-val">{{ s.mov_dir or '—' }} / {{ s.mov_speed or '—' }}kn</span>
+      <span class="dr-label">移动方向/速</span>
+      <span class="dr-val">{{ s.mov_dir or '—' }} / {{ s.mov_speed or '—' }} kn</span>
     </div>
     <div class="detail-row">
-      <span class="dr-icon">🌀</span>
-      <span class="dr-label">34kn 风圈半径</span>
-      <span class="dr-val">{{ s.r34_avg_nm or '—' }}<span class="dr-note">nm 平均</span></span>
+      <span class="dr-icon">🌪</span>
+      <span class="dr-label">34kn风圈</span>
+      <span class="dr-val">{{ s.r34_avg_nm or '—' }} nm<span class="dr-note">均值</span></span>
     </div>
     <div class="detail-row">
-      <span class="dr-icon">📡</span>
+      <span class="dr-icon">🌍</span>
       <span class="dr-label">所在海盆</span>
       <span class="dr-val">{{ s.basin_name }}</span>
     </div>
     <div class="detail-row">
       <span class="dr-icon">⚠️</span>
-      <span class="dr-label">最近影响航线</span>
-      <span class="dr-val">{{ s.nearest_route_name }}<span class="dr-note">{{ s.nearest_route_dist }}nm</span></span>
+      <span class="dr-label">最近航线</span>
+      <span class="dr-val" style="color:{{ '#c0392b' if s.nearest_route_dist<=300 else ('#b86c0a' if s.nearest_route_dist<=500 else 'inherit') }};">
+        {{ s.nearest_route_name or '—' }} {{ s.nearest_route_dist|int if s.nearest_route_dist else '' }} nm
+      </span>
     </div>
   </div>
 
-  <!-- Shipping lane impact -->
   <div class="sc-impact">
-    <div class="si-title">🚢 主要航运航线影响评估</div>
+    <div class="si-title">🚢 主要航运航线影响（距离）</div>
     <div class="si-routes">
-      {% for dist, rname in s.nearby_routes %}
-      {% set bar_w = [100 - (dist / 10), 5]|max|int %}
-      {% set dist_cls = 'si-dist-danger' if dist <= 300 else ('si-dist-warn' if dist <= 500 else 'si-dist-ok') %}
-      {% set bar_c = '#a32d2d' if dist <= 300 else ('#ef9f27' if dist <= 500 else '#8a9db5') %}
+      {%- for dist, rname in s.nearby_routes[:5] %}
       <div class="si-route">
         <span class="si-route-name">{{ rname }}</span>
-        <div class="si-dist-bar"><div class="si-dist-fill" style="width:{{ bar_w }}%;background:{{ bar_c }};"></div></div>
-        <span class="si-dist-txt {{ dist_cls }}">{{ dist }} nm</span>
+        <div class="si-dist-bar">
+          <div class="si-dist-fill" style="width:{{ [100-(dist/20),5]|max|int }}%;
+            background:{{ '#c0392b' if dist<=300 else ('#b86c0a' if dist<=500 else '#2d5f96') }};"></div>
+        </div>
+        <span class="si-dist-txt {{ 'si-dist-danger' if dist<=300 else ('si-dist-warn' if dist<=500 else 'si-dist-ok') }}">
+          {{ dist|int }} nm
+        </span>
       </div>
-      {% endfor %}
+      {%- endfor %}
     </div>
   </div>
-  <!-- 轨迹地图 -->
-  {% if s.track_svg %}
-  <div style="padding:12px 14px;border-top:1px solid #f0f2f8;">
-    <div style="font-size:10px;font-weight:600;color:#8a9db5;text-transform:uppercase;
-                letter-spacing:.05em;margin-bottom:8px;">📍 历史轨迹 & 当前位置</div>
+
+  {%- if s.track_svg %}
+  <div class="sc-track">
+    <div class="track-title">历史轨迹 &amp; 当前位置</div>
     {{ s.track_svg|safe }}
   </div>
-  {% endif %}
+  {%- endif %}
 </div>
-{% endfor %}
+{%- endfor %}
 </div>
-{% endif %}
 
-<!-- Summary table (only shown when ≥2 storms) -->
-{% if storms|length >= 2 %}
-<div class="summary-card">
-  <div class="sc-hd">
-    <span class="sc-hd-title">全球活跃系统汇总</span>
-    <span class="sc-hd-badge">{{ generated_at[:10] }} UTC</span>
+<!-- 全球活跃系统汇总 -->
+<div class="section-head">
+  <span class="section-num">{{ '03' if alert_bars else '02' }}</span>
+  <span class="section-label">全球活跃系统汇总</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="tcard">
+  <div class="tc-head">
+    <span class="tc-title">Active Systems Summary</span>
+    <span class="tc-badge">{{ generated_at }} UTC</span>
   </div>
   <table>
-    <thead><tr>
-      <th style="text-align:left;">名称</th>
-      <th>海盆</th><th>风速(kn)</th><th>气压(hPa)</th>
-      <th>纬度</th><th>经度</th><th>最近航线(nm)</th><th>影响</th>
-    </tr></thead>
+    <thead>
+      <tr>
+        <th>系统名称</th>
+        <th style="text-align:right;">海盆</th>
+        <th style="text-align:right;">风速(kn)</th>
+        <th style="text-align:right;">气压(hPa)</th>
+        <th style="text-align:right;">纬度</th>
+        <th style="text-align:right;">经度</th>
+        <th style="text-align:right;">最近航线(nm)</th>
+        <th style="text-align:right;">影响等级</th>
+      </tr>
+    </thead>
     <tbody>
-    {% for s in storms %}
-    {% set ip_cls = 'ip-' + s.impact %}
-    {% set il = {'danger':'危险','warn':'预警','watch':'关注','monitor':'监测'} %}
-    <tr {% if s.impact == 'danger' %}class="danger-row"{% endif %}>
-      <td>{{ s.intensity.abbr }} {{ s.name }}</td>
-      <td>{{ s.basin_name }}</td>
-      <td>{{ s.wind_kn|int if s.wind_kn else '—' }}</td>
-      <td>{{ s.pres_mb|int if s.pres_mb else '—' }}</td>
-      <td>{{ '%.1f'|format(s.lat) }}°{{ 'N' if s.lat >= 0 else 'S' }}</td>
-      <td>{{ '%.1f'|format(s.lon|abs) }}°{{ 'E' if s.lon >= 0 else 'W' }}</td>
-      <td>{{ s.nearest_route_name }} {{ s.nearest_route_dist }}nm</td>
-      <td><span class="impact-pill {{ ip_cls }}">{{ il[s.impact] }}</span></td>
-    </tr>
-    {% endfor %}
+      {%- for s in storms %}
+      <tr {{ 'class="danger-row"' if s.impact=='danger' }}>
+        <td>{{ s.intensity.abbr }} {{ s.name }}</td>
+        <td style="text-align:right;color:var(--ink-m);font-size:11px;">{{ s.basin_name }}</td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;
+          color:{{ '#c0392b' if (s.wind_kn or 0)>=64 else ('#b86c0a' if (s.wind_kn or 0)>=48 else 'inherit') }};">
+          {{ s.wind_kn|int if s.wind_kn else '—' }}
+        </td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-size:12px;">
+          {{ s.pres_mb|int if s.pres_mb else '—' }}
+        </td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-size:12px;">
+          {{ '%.1f'|format(s.lat) }}°{{ 'N' if s.lat>=0 else 'S' }}
+        </td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-size:12px;">
+          {{ '%.1f'|format(s.lon|abs) }}°{{ 'E' if s.lon>=0 else 'W' }}
+        </td>
+        <td style="text-align:right;font-family:'DM Mono',monospace;font-size:12px;
+          color:{{ '#c0392b' if (s.nearest_route_dist or 9999)<=300 else ('#b86c0a' if (s.nearest_route_dist or 9999)<=500 else 'inherit') }};">
+          {{ s.nearest_route_dist|int if s.nearest_route_dist else '—' }}
+        </td>
+        <td style="text-align:right;">
+          <span class="impact-pill ip-{{ s.impact }}">
+            {{ '危险' if s.impact=='danger' else ('预警' if s.impact=='warn' else ('关注' if s.impact=='watch' else '监测')) }}
+          </span>
+        </td>
+      </tr>
+      {%- endfor %}
     </tbody>
   </table>
 </div>
-{% endif %}
+{%- endif %}
 
-<!-- Footer -->
+</div><!-- /body -->
+
 <div class="footer">
-  <div>
-    <span class="ft-brand">{{ brand }}</span>
-    &nbsp;气象导航 · 全球实时气象监测 · 预报路径为虚线
-    · 更新频率：每 6 小时 · 仅供参考，请以官方气象机构公告为准
+  <div class="f-left">
+    数据来源：NOAA IBTrACS NRT · NAVGreen 气旋追踪 · NOAA NHC<br>
+    <strong>{{ brand }}</strong> 气象导航服务 · 仅供参考，以官方气象机构公告为准
   </div>
-  <span>生成：{{ generated_at }} UTC</span>
+  <div class="f-right">
+    CYCLONE ALERT REPORT<br>
+    {{ brand }} · {{ generated_at }} UTC
+  </div>
 </div>
 
-</div>
+</div><!-- /page -->
 </body>
 </html>"""
 
