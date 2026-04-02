@@ -1066,136 +1066,271 @@ FUEL_HTML_TEMPLATE = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>燃油价格日报 — {{ date }}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-     font-size:13px;color:#1a1a18;background:#f5f5f3;padding:20px;}
-.wrap{max-width:980px;margin:0 auto;}
-.header{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;padding:16px 20px;
-        margin-bottom:12px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.h-date{font-size:11px;color:#6b6b65;margin-bottom:4px;}
-.h-title{font-size:20px;font-weight:500;}
-.h-sub{font-size:12px;color:#6b6b65;margin-top:3px;}
-.h-badges{display:flex;gap:6px;flex-wrap:wrap;}
-.badge{font-size:10px;padding:3px 8px;border-radius:4px;}
-.bg-blue{background:#E6F1FB;color:#0C447C;}
-.bg-green{background:#E1F5EE;color:#085041;}
-.bg-amber{background:#FAEEDA;color:#633806;}
-.bg-gray{background:#f0f0ec;color:#6b6b65;}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
-.sc{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;padding:13px 16px;}
-.sc-label{font-size:10px;color:#6b6b65;font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
-.sc-val{font-size:26px;font-weight:500;}
-.sc-meta{font-size:11px;color:#6b6b65;margin-top:6px;}
-.sc-range{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
-.r-low{font-size:10px;padding:2px 7px;border-radius:8px;background:#E1F5EE;color:#085041;}
-.r-high{font-size:10px;padding:2px 7px;border-radius:8px;background:#FCEBEB;color:#A32D2D;}
-.r-mid{font-size:10px;padding:2px 7px;border-radius:8px;background:#f0f0ec;color:#6b6b65;}
-.note-box{background:#FAEEDA;border:0.5px solid #f0d090;border-radius:8px;
-          padding:9px 13px;font-size:11px;color:#633806;margin-bottom:12px;line-height:1.6;}
-.two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-bottom:12px;}
-.card{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;overflow:hidden;}
-.card-hd{padding:10px 14px;background:#f8f8f5;border-bottom:0.5px solid #e8e8e3;
-         display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:12px;font-weight:500;}
-table{width:100%;border-collapse:collapse;font-size:12px;}
-thead th{font-size:10px;font-weight:500;color:#6b6b65;padding:7px 10px;
-         border-bottom:0.5px solid #e8e8e3;text-align:right;white-space:nowrap;}
-thead th:first-child{text-align:left;}
-tbody tr{border-bottom:0.5px solid #f0f0ec;}
-tbody tr:last-child{border-bottom:none;}
-tbody tr:hover{background:#fafaf8;}
-td{padding:6px 10px;vertical-align:middle;text-align:right;}
-td:first-child{text-align:left;}
-.rg-hd{padding:5px 10px;font-size:10px;font-weight:500;color:#6b6b65;
-        background:#f8f8f5;border-bottom:0.5px solid #e8e8e3;}
-.port-name{font-weight:500;}
-.port-dist{font-size:10px;color:#aaa;}
-.ifo-val{color:#185FA5;font-weight:500;}
-.vls-val{color:#0F6E56;font-weight:500;}
-.lsm-val{color:#854F0B;font-weight:500;}
-.spd-val{font-size:11px;}
-.spd-high{color:#A32D2D;font-weight:500;}
-.spd-mid{color:#854F0B;}
-.spd-low{color:#0F6E56;}
-.upd-val{font-size:10px;color:#aaa;}
-.spread-bar-wrap{padding:12px 14px;}
-.si{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.si:last-child{margin-bottom:0;}
-.si-label{font-size:11px;color:#6b6b65;width:140px;flex-shrink:0;}
-.si-bar-outer{flex:1;height:8px;background:#f0f0ec;border-radius:4px;overflow:hidden;}
-.si-bar-inner{height:100%;border-radius:4px;}
-.si-val{font-size:11px;font-weight:500;min-width:44px;text-align:right;}
-.views-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
-.vc{background:#fff;border:0.5px solid #e0dfd7;border-radius:12px;padding:12px 14px;}
-.vc-seg{font-size:10px;font-weight:500;color:#6b6b65;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
-.vc-verdict{font-size:13px;font-weight:500;color:#854F0B;margin-bottom:5px;}
-.vc-text{font-size:11px;color:#6b6b65;line-height:1.6;}
-.footer{background:#f8f8f5;border-radius:8px;padding:10px 14px;font-size:11px;
-        color:#6b6b65;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;}
-.nv{font-weight:500;color:#0F6E56;}
-@media(max-width:700px){.stats-row,.two-col,.views-row{grid-template-columns:1fr;}}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --ink:#0f1217; --ink-2:#4a5261; --ink-m:#8a93a3;
+  --surface:#ffffff; --sf-soft:#f5f6f8; --sf-mid:#eceef2;
+  --accent:#1a3a5c; --accent-l:#e8eef5; --accent-mid:#2d5f96;
+  --blue:#185fa5; --blue-l:#e8f2fb;
+  --green:#1e7f5a; --green-l:#e8f5f0;
+  --amber:#b86c0a; --amber-l:#fdf5e8;
+  --red:#c0392b; --red-l:#fdf0ee;
+  --border:#dde1e8; --border-s:#c4c9d4;
+}
+body {
+  font-family:'Outfit','PingFang SC','Microsoft YaHei',sans-serif;
+  background:#eef0f4; color:var(--ink);
+  padding:2.5rem 1.5rem;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+.page { max-width:1000px; margin:0 auto; background:var(--surface);
+        border:1px solid var(--border); box-shadow:0 8px 40px rgba(0,0,0,0.08); }
+
+/* ── Header ── */
+.header { background:var(--accent); padding:2rem 2.8rem 1.6rem;
+          position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-70px; right:-70px;
+  width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,0.04); }
+.header::after  { content:''; position:absolute; bottom:-90px; left:200px;
+  width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.03); }
+.header-top { display:flex; justify-content:space-between;
+              align-items:flex-start; margin-bottom:1.2rem; }
+.doc-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em;
+             color:rgba(255,255,255,0.40); text-transform:uppercase; margin-bottom:0.4rem; }
+.doc-title { font-family:'DM Serif Display',serif; font-size:26px; color:#fff; line-height:1.25; }
+.doc-title em { font-style:italic; color:rgba(255,255,255,0.65); }
+.doc-meta { text-align:right; }
+.doc-meta .meta-date { font-family:'DM Mono',monospace; font-size:11px;
+                       color:rgba(255,255,255,0.48); letter-spacing:0.05em; }
+.doc-meta .meta-ref  { font-size:11px; color:rgba(255,255,255,0.30); margin-top:3px; }
+.price-strip { display:flex; gap:8px; flex-wrap:wrap; }
+.ps { font-size:11px; font-weight:500; padding:4px 11px; border-radius:2px; }
+.ps-blue  { background:rgba(24,95,165,0.30); color:#85b7eb; outline:1px solid rgba(24,95,165,0.35); }
+.ps-green { background:rgba(30,127,90,0.28);  color:#7de0b8; outline:1px solid rgba(30,127,90,0.30); }
+.ps-amber { background:rgba(184,108,10,0.28); color:#f5c76e; outline:1px solid rgba(184,108,10,0.30); }
+
+/* ── Body ── */
+.body { padding:2rem 2.8rem; }
+.section-head { display:flex; align-items:center; gap:10px;
+                margin-bottom:1rem; margin-top:1.8rem; }
+.section-head:first-child { margin-top:0; }
+.section-num   { font-family:'DM Mono',monospace; font-size:10px;
+                 color:var(--ink-m); letter-spacing:0.1em; min-width:22px; }
+.section-label { font-size:10px; font-weight:600; letter-spacing:0.12em;
+                 text-transform:uppercase; color:var(--ink-m); white-space:nowrap; }
+.section-line  { flex:1; height:1px; background:var(--border); }
+
+/* ── KPI 三格（燃油均价）── */
+.kpi-row { display:grid; grid-template-columns:repeat(3,1fr);
+           gap:1px; background:var(--border); border:1px solid var(--border);
+           margin-bottom:1.8rem; }
+.kpi { background:var(--surface); padding:1.2rem 1.4rem; }
+.kpi.hl-blue  { background:var(--blue-l); }
+.kpi.hl-green { background:var(--green-l); }
+.kpi.hl-amber { background:var(--amber-l); }
+.kpi .k-label { font-size:9.5px; font-weight:600; letter-spacing:0.08em;
+                text-transform:uppercase; color:var(--ink-m); margin-bottom:5px; }
+.kpi .k-val   { font-family:'DM Mono',monospace; font-size:26px;
+                font-weight:500; line-height:1; }
+.kpi .k-val.blue  { color:var(--blue); }
+.kpi .k-val.green { color:var(--green); }
+.kpi .k-val.amber { color:var(--amber); }
+.kpi .k-unit  { font-size:11px; color:var(--ink-m); margin-left:3px; }
+.kpi .k-meta  { font-size:10.5px; color:var(--ink-m); margin-top:5px; }
+.kpi .k-range { display:flex; gap:5px; margin-top:7px; flex-wrap:wrap; }
+.r-lo  { font-size:9.5px; padding:2px 7px; border-radius:2px;
+          background:var(--green-l); color:var(--green); border:1px solid #a0d4bc; }
+.r-hi  { font-size:9.5px; padding:2px 7px; border-radius:2px;
+          background:var(--red-l);   color:var(--red);   border:1px solid #e8b4b0; }
+.r-mid { font-size:9.5px; padding:2px 7px; border-radius:2px;
+          background:var(--sf-mid);  color:var(--ink-m); border:1px solid var(--border); }
+
+/* ── Scrubber 提示框 ── */
+.scrubber-note {
+  background:var(--amber-l); border:1px solid #e8c990;
+  padding:1rem 1.4rem; margin-bottom:1.8rem;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.sn-icon  { font-size:16px; flex-shrink:0; }
+.sn-title { font-size:10.5px; font-weight:700; color:var(--amber);
+            letter-spacing:0.06em; text-transform:uppercase; margin-bottom:4px; }
+.sn-text  { font-size:11.5px; color:var(--ink-2); line-height:1.7; }
+.sn-text strong { color:var(--ink); }
+
+/* ── 两列布局 ── */
+.two-col { display:grid; grid-template-columns:1.55fr 1fr;
+           gap:14px; margin-bottom:1.8rem; }
+.col-stack { display:flex; flex-direction:column; gap:14px; }
+
+/* ── Card ── */
+.card { border:1px solid var(--border); overflow:hidden; }
+.card-hd { padding:9px 14px; background:var(--sf-soft);
+           border-bottom:1.5px solid var(--border-s);
+           display:flex; align-items:center; justify-content:space-between; }
+.card-title { font-size:10px; font-weight:600; letter-spacing:0.12em;
+              text-transform:uppercase; color:var(--ink-m); }
+.badge { display:inline-block; font-size:9px; font-weight:600; letter-spacing:0.06em;
+         text-transform:uppercase; padding:2px 7px; border-radius:2px;
+         margin-left:5px; vertical-align:middle; }
+.b-blue  { background:var(--blue-l);  color:var(--blue);  border:1px solid #b0cce4; }
+.b-green { background:var(--green-l); color:var(--green); border:1px solid #a0d4bc; }
+.b-amber { background:var(--amber-l); color:var(--amber); border:1px solid #e8c990; }
+.b-gray  { background:var(--sf-mid);  color:var(--ink-m); border:1px solid var(--border); }
+
+/* ── 港口报价表 ── */
+table { width:100%; border-collapse:collapse; font-size:12px; }
+thead tr { background:var(--sf-soft); border-bottom:1.5px solid var(--border-s); }
+thead th { padding:7px 10px; font-size:9.5px; font-weight:600; letter-spacing:0.08em;
+           text-transform:uppercase; color:var(--ink-m); text-align:right; white-space:nowrap; }
+thead th:first-child { text-align:left; }
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background:var(--sf-soft); }
+td { padding:7px 10px; vertical-align:middle; text-align:right; color:var(--ink-2); }
+td:first-child { text-align:left; }
+.rg-hd { padding:5px 10px; font-size:9px; font-weight:700; letter-spacing:0.10em;
+          text-transform:uppercase; color:var(--ink-m);
+          background:var(--sf-soft); border-bottom:1px solid var(--border); }
+.port-name { font-weight:600; color:var(--ink); font-size:12.5px; }
+.port-dist { font-size:9.5px; color:var(--ink-m); margin-top:1px; }
+.mono { font-family:'DM Mono',monospace; font-size:12px; font-weight:500; }
+.ifo-val { color:var(--blue);  font-family:'DM Mono',monospace; font-size:12px; font-weight:500; }
+.vls-val { color:var(--green); font-family:'DM Mono',monospace; font-size:12px; font-weight:500; }
+.lsm-val { color:var(--amber); font-family:'DM Mono',monospace; font-size:12px; font-weight:500; }
+.spd-val { font-family:'DM Mono',monospace; font-size:11.5px; }
+.spd-high { color:var(--red);   font-weight:600; }
+.spd-mid  { color:var(--amber); font-weight:500; }
+.spd-low  { color:var(--green); font-weight:500; }
+.upd-val  { font-size:10px; color:var(--ink-m); font-family:'DM Mono',monospace; }
+
+/* ── 价差排行条 ── */
+.spread-body { padding:12px 14px; }
+.si { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.si:last-child { margin-bottom:0; }
+.si-label { font-size:11px; color:var(--ink-2); width:130px; flex-shrink:0;
+            font-weight:500; }
+.si-bar-outer { flex:1; height:5px; background:var(--sf-mid); border-radius:2px; overflow:hidden; }
+.si-bar-inner { height:100%; border-radius:2px; }
+.si-val { font-family:'DM Mono',monospace; font-size:12px; font-weight:500;
+          min-width:48px; text-align:right; }
+.spread-note { font-family:'DM Mono',monospace; font-size:10px; color:var(--ink-m);
+               margin-top:10px; padding-top:8px; border-top:1px solid var(--border); }
+
+/* ── 分析观点 ── */
+.views-grid { display:grid; grid-template-columns:repeat(3,1fr);
+              gap:1px; background:var(--border); border:1px solid var(--border);
+              margin-bottom:1.8rem; }
+.vc { background:var(--surface); padding:1.1rem 1.2rem; }
+.vc-seg { font-size:9.5px; font-weight:600; letter-spacing:0.10em;
+          text-transform:uppercase; color:var(--ink-m); margin-bottom:5px; }
+.vc-verdict { font-family:'DM Serif Display',serif;
+              font-size:15px; margin-bottom:6px; color:var(--amber); }
+.vc-text { font-size:11px; color:var(--ink-2); line-height:1.65; }
+
+/* ── Footer ── */
+.footer { border-top:1.5px solid var(--border-s); padding:1.1rem 2.8rem;
+          display:flex; justify-content:space-between; align-items:center;
+          background:var(--sf-soft); }
+.footer .f-left  { font-size:10.5px; color:var(--ink-m); line-height:1.6; }
+.footer .f-right { font-family:'DM Mono',monospace; font-size:10px;
+                   color:var(--ink-m); text-align:right; letter-spacing:0.05em; }
+@media(max-width:720px){
+  .kpi-row,.two-col,.views-grid{grid-template-columns:1fr;}
+  .body{padding:1.5rem;}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="page">
 
+<!-- ── Header ── -->
 <div class="header">
-  <div>
-    <div class="h-date">{{ date }} · {{ fresh_count }} 港口实时数据</div>
-    <div class="h-title">全球船用燃油价格日报</div>
-    <div class="h-sub">IFO 380 · VLSFO · LSMGO · 覆盖 {{ total }} 条报价</div>
+  <div class="header-top">
+    <div>
+      <div class="doc-label">Bunker Intelligence · Global Fuel Price Monitor</div>
+      <div class="doc-title">全球船用燃油价格日报<br><em>Global Bunker Price Report</em></div>
+    </div>
+    <div class="doc-meta">
+      <div class="meta-date">{{ date }}</div>
+      <div class="meta-ref">{{ fresh_count }} 港口实时数据 · {{ total }} 条报价</div>
+    </div>
   </div>
-  <div class="h-badges">
-    <span class="badge bg-blue">IFO 380 均价 ${{ gs.ifo380.avg }}/吨</span>
-    <span class="badge bg-green">VLSFO 均价 ${{ gs.vlsfo.avg }}/吨</span>
-    <span class="badge bg-amber">LSMGO 均价 ${{ gs.lsmgo.avg }}/吨</span>
+  <div class="price-strip">
+    <span class="ps ps-blue">IFO 380 均价 ${{ gs.ifo380.avg }}/吨</span>
+    <span class="ps ps-green">VLSFO 均价 ${{ gs.vlsfo.avg }}/吨</span>
+    <span class="ps ps-amber">LSMGO 均价 ${{ gs.lsmgo.avg }}/吨</span>
   </div>
 </div>
 
-<div class="stats-row">
-  <div class="sc" style="border-color:#185FA5;border-width:1.5px;">
-    <div class="sc-label">IFO 380 · 高硫重油（HSFO）</div>
-    <div class="sc-val" style="color:#185FA5;">${{ gs.ifo380.avg }}<span style="font-size:14px;font-weight:400;color:#6b6b65;"> /吨</span></div>
-    <div class="sc-meta">{{ gs.ifo380.count }} 港口均价</div>
-    <div class="sc-range">
-      <span class="r-low">最低 ${{ gs.ifo380.min }}</span>
+<!-- ── Body ── -->
+<div class="body">
+
+<!-- 01 全球均价 -->
+<div class="section-head">
+  <span class="section-num">01</span>
+  <span class="section-label">全球燃油均价概览</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi hl-blue">
+    <div class="k-label">IFO 380 · 高硫重油（HSFO）</div>
+    <div class="k-val blue">${{ gs.ifo380.avg }}<span class="k-unit">/吨</span></div>
+    <div class="k-meta">{{ gs.ifo380.count }} 港口均价</div>
+    <div class="k-range">
+      <span class="r-lo">最低 ${{ gs.ifo380.min }}</span>
       <span class="r-mid">P25–P75: ${{ gs.ifo380.p25 }}–${{ gs.ifo380.p75 }}</span>
-      <span class="r-high">最高 ${{ gs.ifo380.max }}</span>
+      <span class="r-hi">最高 ${{ gs.ifo380.max }}</span>
     </div>
   </div>
-  <div class="sc" style="border-color:#1D9E75;border-width:1.5px;">
-    <div class="sc-label">VLSFO · 极低硫燃油（IMO2020）</div>
-    <div class="sc-val" style="color:#0F6E56;">${{ gs.vlsfo.avg }}<span style="font-size:14px;font-weight:400;color:#6b6b65;"> /吨</span></div>
-    <div class="sc-meta">{{ gs.vlsfo.count }} 港口均价</div>
-    <div class="sc-range">
-      <span class="r-low">最低 ${{ gs.vlsfo.min }}</span>
+  <div class="kpi hl-green">
+    <div class="k-label">VLSFO · 极低硫燃油（IMO2020）</div>
+    <div class="k-val green">${{ gs.vlsfo.avg }}<span class="k-unit">/吨</span></div>
+    <div class="k-meta">{{ gs.vlsfo.count }} 港口均价</div>
+    <div class="k-range">
+      <span class="r-lo">最低 ${{ gs.vlsfo.min }}</span>
       <span class="r-mid">P25–P75: ${{ gs.vlsfo.p25 }}–${{ gs.vlsfo.p75 }}</span>
-      <span class="r-high">最高 ${{ gs.vlsfo.max }}</span>
+      <span class="r-hi">最高 ${{ gs.vlsfo.max }}</span>
     </div>
   </div>
-  <div class="sc" style="border-color:#BA7517;border-width:1.5px;">
-    <div class="sc-label">LSMGO · 低硫船用柴油（ECA）</div>
-    <div class="sc-val" style="color:#854F0B;">${{ gs.lsmgo.avg }}<span style="font-size:14px;font-weight:400;color:#6b6b65;"> /吨</span></div>
-    <div class="sc-meta">{{ gs.lsmgo.count }} 港口均价</div>
-    <div class="sc-range">
-      <span class="r-low">最低 ${{ gs.lsmgo.min }}</span>
+  <div class="kpi hl-amber">
+    <div class="k-label">LSMGO · 低硫船用柴油（ECA）</div>
+    <div class="k-val amber">${{ gs.lsmgo.avg }}<span class="k-unit">/吨</span></div>
+    <div class="k-meta">{{ gs.lsmgo.count }} 港口均价</div>
+    <div class="k-range">
+      <span class="r-lo">最低 ${{ gs.lsmgo.min }}</span>
       <span class="r-mid">P25–P75: ${{ gs.lsmgo.p25 }}–${{ gs.lsmgo.p75 }}</span>
-      <span class="r-high">最高 ${{ gs.lsmgo.max }}</span>
+      <span class="r-hi">最高 ${{ gs.lsmgo.max }}</span>
     </div>
   </div>
 </div>
 
-<div class="note-box">
-  ⚠️ <strong>高低硫价差（VLSFO − IFO380）</strong>说明：全球均价差约 <strong>${{ avg_spread }}/吨</strong>。
-  价差 ≥ $150 时安装脱硫塔（Scrubber）经济性合理；价差 &lt; $100 时 Scrubber 优势很小，直接加 VLSFO 更划算。
+<!-- Scrubber 说明 -->
+<div class="scrubber-note">
+  <div class="sn-icon">⚠️</div>
+  <div>
+    <div class="sn-title">高低硫价差说明（VLSFO − IFO380）</div>
+    <div class="sn-text">
+      全球均价差约 <strong>${{ avg_spread }}/吨</strong>。
+      价差 ≥ $150 时安装脱硫塔（Scrubber）经济性合理；价差 &lt; $100 时 Scrubber 优势很小，直接加 VLSFO 更划算。
+    </div>
+  </div>
+</div>
+
+<!-- 02 港口报价 & 价差排行 -->
+<div class="section-head">
+  <span class="section-num">02</span>
+  <span class="section-label">主要港口燃油报价</span>
+  <span class="section-line"></span>
 </div>
 
 <div class="two-col">
   <div class="card">
     <div class="card-hd">
-      <span class="card-title">主要干散货港口燃油报价（$/吨）</span>
-      <span class="badge bg-gray">V-H差=VLSFO−IFO380</span>
+      <span class="card-title">主要干散货港口报价（$/吨）</span>
+      <span class="badge b-gray" style="margin-left:0;">V-H差 = VLSFO − IFO380</span>
     </div>
     <table>
       <thead><tr>
@@ -1205,19 +1340,21 @@ td:first-child{text-align:left;}
       </tr></thead>
       <tbody>
         {% set regions = [
-          ('── 亚太 ──',      ['SINGAPORE','SHANGHAI','TIANJIN','QINGDAO','HONG KONG','BUSAN','TOKYO','MUMBAI','COLOMBO']),
-          ('── 中东 ──',      ['FUJAIRAH','ABU DHABI']),
-          ('── 欧洲 ──',      ['ROTTERDAM','ANTWERP','HAMBURG','PIRAEUS','ISTANBUL']),
-          ('── 美洲/非洲 ──', ['HOUSTON','SANTOS','DURBAN']),
+          ('亚太',      ['SINGAPORE','SHANGHAI','TIANJIN','QINGDAO','HONG KONG','BUSAN','TOKYO','MUMBAI','COLOMBO']),
+          ('中东',      ['FUJAIRAH','ABU DHABI']),
+          ('欧洲',      ['ROTTERDAM','ANTWERP','HAMBURG','PIRAEUS','ISTANBUL']),
+          ('美洲/非洲', ['HOUSTON','SANTOS','DURBAN']),
         ] %}
         {% for region_label, port_list in regions %}
-        <tr><td colspan="6" class="rg-hd">{{ region_label }}</td></tr>
+        <tr><td colspan="6" class="rg-hd">── {{ region_label }} ──</td></tr>
         {% for name in port_list %}
         {% set p = key_ports_map[name] if name in key_ports_map else {} %}
         {% if p and (p.ifo380 or p.vlsfo) %}
         <tr>
-          <td><div class="port-name">{{ p.flag }} {{ p.port|title }}</div>
-              <div class="port-dist">{{ p.district }}</div></td>
+          <td>
+            <div class="port-name">{{ p.flag }} {{ p.port|title }}</div>
+            <div class="port-dist">{{ p.district }}</div>
+          </td>
           <td class="ifo-val">{% if p.ifo380 %}${{ '{:,.0f}'.format(p.ifo380) }}{% else %}—{% endif %}</td>
           <td class="vls-val">{% if p.vlsfo %}${{ '{:,.0f}'.format(p.vlsfo) }}{% else %}—{% endif %}</td>
           <td class="lsm-val">{% if p.lsmgo %}${{ '{:,.0f}'.format(p.lsmgo) }}{% else %}—{% endif %}</td>
@@ -1233,36 +1370,45 @@ td:first-child{text-align:left;}
     </table>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:10px;">
+  <div class="col-stack">
+    <!-- 价差排行 -->
     <div class="card">
       <div class="card-hd">
         <span class="card-title">VLSFO − IFO380 价差排行</span>
-        <span class="badge bg-amber">Scrubber 经济性</span>
+        <span class="badge b-amber" style="margin-left:0;">Scrubber 经济性</span>
       </div>
-      <div class="spread-bar-wrap">
-        <div style="font-size:10px;color:#6b6b65;margin-bottom:8px;">🔴≥$180 🟡$120–$180 🟢&lt;$120</div>
+      <div class="spread-body">
+        <div style="font-size:9.5px;color:var(--ink-m);margin-bottom:9px;letter-spacing:0.04em;">
+          🔴 ≥$180 &nbsp; 🟡 $120–$180 &nbsp; 🟢 &lt;$120
+        </div>
         {% set max_sp = spread_list[0].spread if spread_list else 1 %}
         {% for s in spread_list[:8] %}
         {% set pct = (s.spread / max_sp * 100)|round %}
-        {% set color = '#A32D2D' if s.spread >= 180 else ('#BA7517' if s.spread >= 120 else '#1D9E75') %}
+        {% set color = '#c0392b' if s.spread >= 180 else ('#b86c0a' if s.spread >= 120 else '#1e7f5a') %}
         <div class="si">
           <div class="si-label">{{ s.port|title }}</div>
-          <div class="si-bar-outer"><div class="si-bar-inner" style="width:{{ pct }}%;background:{{ color }};"></div></div>
+          <div class="si-bar-outer">
+            <div class="si-bar-inner" style="width:{{ pct }}%;background:{{ color }};"></div>
+          </div>
           <div class="si-val" style="color:{{ color }};">${{ '{:,.0f}'.format(s.spread) }}</div>
         </div>
         {% endfor %}
-        <div style="font-size:10px;color:#aaa;margin-top:8px;">全球均价差：${{ avg_spread }}/吨</div>
+        <div class="spread-note">全球均价差：${{ avg_spread }}/吨</div>
       </div>
     </div>
 
     {% if china_ports %}
+    <!-- 中国主要港口 -->
     <div class="card">
       <div class="card-hd">
         <span class="card-title">🇨🇳 中国主要港口</span>
-        <span class="badge bg-blue">IFO380 $/吨</span>
+        <span class="badge b-blue" style="margin-left:0;">IFO380 $/吨</span>
       </div>
       <table>
-        <thead><tr><th style="text-align:left;">港口</th><th>IFO380</th><th>VLSFO</th><th>V-H差</th></tr></thead>
+        <thead><tr>
+          <th style="text-align:left;">港口</th>
+          <th>IFO380</th><th>VLSFO</th><th>V-H差</th>
+        </tr></thead>
         <tbody>
         {% for p in china_ports[:8] %}
         <tr>
@@ -1270,7 +1416,9 @@ td:first-child{text-align:left;}
           <td class="ifo-val">{% if p.ifo380 %}${{ '{:,.0f}'.format(p.ifo380) }}{% else %}—{% endif %}</td>
           <td class="vls-val">{% if p.vlsfo %}${{ '{:,.0f}'.format(p.vlsfo) }}{% else %}—{% endif %}</td>
           <td class="spd-val {% if p.get('spread_vh') and p.spread_vh >= 150 %}spd-high{% else %}spd-mid{% endif %}">
-            {% if p.get('spread_vh') %}+${{ '{:,.0f}'.format(p.spread_vh) }}{% elif p.vlsfo and p.ifo380 %}+${{ '{:,.0f}'.format(p.vlsfo - p.ifo380) }}{% else %}—{% endif %}
+            {% if p.get('spread_vh') %}+${{ '{:,.0f}'.format(p.spread_vh) }}
+            {% elif p.vlsfo and p.ifo380 %}+${{ '{:,.0f}'.format(p.vlsfo - p.ifo380) }}
+            {% else %}—{% endif %}
           </td>
         </tr>
         {% endfor %}
@@ -1281,7 +1429,14 @@ td:first-child{text-align:left;}
   </div>
 </div>
 
-<div class="views-row">
+<!-- 03 分析观点 -->
+<div class="section-head">
+  <span class="section-num">03</span>
+  <span class="section-label">市场观点与分析</span>
+  <span class="section-line"></span>
+</div>
+
+<div class="views-grid">
   <div class="vc">
     <div class="vc-seg">价格水平</div>
     <div class="vc-verdict">{{ views.price_level.verdict }}</div>
@@ -1299,11 +1454,19 @@ td:first-child{text-align:left;}
   </div>
 </div>
 
+</div><!-- /body -->
+
 <div class="footer">
-  <div>燃油价格数据 · 仅供参考</div>
-  <span>生成时间：{{ generated_at }}</span>
+  <div class="f-left">
+    燃油价格数据 · 仅供参考 · 数据来源：NAVGreen Fuel Price API
+  </div>
+  <div class="f-right">
+    BUNKER PRICE REPORT<br>
+    {{ generated_at }}
+  </div>
 </div>
-</div>
+
+</div><!-- /page -->
 </body>
 </html>"""
 
