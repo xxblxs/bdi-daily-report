@@ -21,3 +21,9 @@ playwright>=1.40.0
 
 # 定时调度（使用 --schedule 模式时需要）
 schedule>=1.2.0
+
+# PNG 截图转 PDF（自动推送 PDF 文件到企微群）
+img2pdf>=0.4.0
+
+# 图片处理（处理 Playwright 截图 RGBA 透明通道）
+Pillow>=10.0.0

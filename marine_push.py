@@ -1707,6 +1707,15 @@ def push_marine_wecom(routes: list[dict], views: dict, html_path: str = "") -> b
             if result.get("errcode") == 0:
                 log.info("✅ 企业微信海况截图推送成功")
                 img_ok = True
+                # ── PDF 转换 + 推送 ──
+                try:
+                    from utils import convert_and_push_pdf
+                    import datetime as _dt
+                    _today = _dt.datetime.now().strftime("%Y-%m-%d")
+                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                         "全球主要航线海况日报", _today)
+                except Exception as pdf_e:
+                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
             else:
                 log.warning(f"企业微信海况截图推送失败: {result}")
         except Exception as e:
