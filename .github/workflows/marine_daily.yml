@@ -43,7 +43,7 @@ jobs:
       - name: 安装依赖
         run: |
           pip install --upgrade pip
-          pip install requests jinja2 python-dotenv playwright schedule
+          pip install -r requirements.txt
           playwright install chromium --with-deps
 
       - name: 执行海况日报脚本

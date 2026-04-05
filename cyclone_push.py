@@ -1720,6 +1720,15 @@ def push_wecom(storms: list, html_path: str, generated_at: str) -> bool:
             if result.get("errcode") == 0:
                 log.info("✅ 截图推送成功")
                 img_ok = True
+                # ── PDF 转换 + 推送 ──
+                try:
+                    from utils import convert_and_push_pdf
+                    import datetime as _dt
+                    _today = _dt.datetime.now().strftime("%Y-%m-%d")
+                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                         "台风路径追踪日报", _today)
+                except Exception as pdf_e:
+                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
             else:
                 log.warning(f"截图推送失败: {result}")
         except Exception as e:

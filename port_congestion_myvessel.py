@@ -914,7 +914,18 @@ def push_wecom(port_results: list, html_path: str, generated_at: str) -> bool:
             img = html_to_image(html_path)
             b64 = __import__('base64').b64encode(img).decode()
             res = _post({"msgtype":"image","image":{"base64":b64,"md5":_hl.md5(img).hexdigest()}})
-            if res.get("errcode") == 0: img_ok = True; log.info("✅ 截图推送成功")
+            if res.get("errcode") == 0:
+                img_ok = True
+                log.info("✅ 截图推送成功")
+                # ── PDF 转换 + 推送 ──
+                try:
+                    from utils import convert_and_push_pdf
+                    import datetime as _dt
+                    _today = _dt.datetime.now().strftime("%Y-%m-%d")
+                    convert_and_push_pdf(img, Config.WECOM_WEBHOOK,
+                                         "散货全球港口拥堵日报", _today)
+                except Exception as pdf_e:
+                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
         except Exception as e: log.warning(f"截图推送失败: {e}")
     try:
         res = _post(build_wecom_card(port_results, generated_at))

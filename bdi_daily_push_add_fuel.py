@@ -1645,6 +1645,13 @@ def push_wecom(data: dict, report_url: str = "", html_path: str = "",
             if result.get("errcode") == 0:
                 log.info("✅ 企业微信图片推送成功")
                 img_ok = True
+                # ── PDF 转换 + 推送 ──
+                try:
+                    from utils import convert_and_push_pdf
+                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                         "干散货市场日报", data["date"])
+                except Exception as pdf_e:
+                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
             else:
                 log.warning(f"企业微信图片推送失败: {result}")
         except Exception as e:
@@ -1760,6 +1767,13 @@ def push_fuel_wecom(fuel: dict, html_path: str = "") -> bool:
             if result.get("errcode") == 0:
                 log.info("✅ 燃油日报图片推送成功")
                 img_ok = True
+                # ── PDF 转换 + 推送 ──
+                try:
+                    from utils import convert_and_push_pdf
+                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                         "全球船用燃油日报", fuel.get("date", ""))
+                except Exception as pdf_e:
+                    log.warning(f"燃油 PDF 推送失败（不影响主流程）: {pdf_e}")
             else:
                 log.warning(f"燃油日报图片推送失败: {result}")
         except Exception as e:
