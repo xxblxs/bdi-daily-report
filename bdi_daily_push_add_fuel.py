@@ -1632,44 +1632,42 @@ def push_wecom(data: dict, report_url: str = "", html_path: str = "",
         r = requests.post(Config.WECOM_WEBHOOK, json=payload, timeout=30)
         return r.json()
 
-    img_ok = False
-
-    # ── 1. 图片消息 ────────────────────────────────────────────────────────
+    # ── 1. 截图 → PDF 推送 ──────────────────────────────────────────────────
     if html_path:
         try:
-            import base64, hashlib
             img_bytes = html_to_image(html_path)
-            b64 = base64.b64encode(img_bytes).decode()
-            md5 = hashlib.md5(img_bytes).hexdigest()
-            result = _post({"msgtype": "image", "image": {"base64": b64, "md5": md5}})
-            if result.get("errcode") == 0:
-                log.info("✅ 企业微信图片推送成功")
-                img_ok = True
-                # ── PDF 转换 + 推送 ──
-                try:
-                    from utils import convert_and_push_pdf
-                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
-                                         "干散货市场日报", data["date"])
-                except Exception as pdf_e:
-                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
-            else:
-                log.warning(f"企业微信图片推送失败: {result}")
-        except Exception as e:
-            log.warning(f"截图失败，跳过图片消息: {e}")
+            # ── 图片消息（暂时关闭，后续可能恢复） ──
+            # import base64, hashlib
+            # b64 = base64.b64encode(img_bytes).decode()
+            # md5 = hashlib.md5(img_bytes).hexdigest()
+            # result = _post({"msgtype": "image", "image": {"base64": b64, "md5": md5}})
+            # if result.get("errcode") == 0:
+            #     log.info("✅ 企业微信图片推送成功")
+            # else:
+            #     log.warning(f"企业微信图片推送失败: {result}")
 
-    # ── 2. 完整文字消息（无论图片是否成功，都发送） ───────────────────────
-    try:
-        result = _post(build_wecom_card(data, report_url,
-                                        market_analysis=market_analysis, views=views))
-        if result.get("errcode") == 0:
-            log.info("✅ 企业微信文字推送成功")
-            return True
-        else:
-            log.error(f"企业微信文字推送失败: {result}")
-            return img_ok  # 图片成功也算部分成功
-    except Exception as e:
-        log.error(f"企业微信推送异常: {e}")
-        return img_ok
+            # ── PDF 转换 + 推送 ──
+            try:
+                from utils import convert_and_push_pdf
+                convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                     "干散货市场日报", data["date"])
+            except Exception as pdf_e:
+                log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
+        except Exception as e:
+            log.warning(f"截图失败: {e}")
+
+    # ── 2. 完整文字消息（暂时关闭，后续可能恢复） ─────────────────────────
+    # try:
+    #     result = _post(build_wecom_card(data, report_url,
+    #                                     market_analysis=market_analysis, views=views))
+    #     if result.get("errcode") == 0:
+    #         log.info("✅ 企业微信文字推送成功")
+    #     else:
+    #         log.error(f"企业微信文字推送失败: {result}")
+    # except Exception as e:
+    #     log.error(f"企业微信推送异常: {e}")
+
+    return True
 
 
 
@@ -1754,43 +1752,41 @@ def push_fuel_wecom(fuel: dict, html_path: str = "") -> bool:
         r = requests.post(Config.WECOM_WEBHOOK, json=payload, timeout=30)
         return r.json()
 
-    img_ok = False
-
-    # 1. 图片（如果能截图）
+    # 1. 截图 → PDF 推送
     if html_path:
         try:
-            import base64, hashlib
             img_bytes = html_to_image(html_path)
-            b64 = base64.b64encode(img_bytes).decode()
-            md5 = hashlib.md5(img_bytes).hexdigest()
-            result = _post({"msgtype": "image", "image": {"base64": b64, "md5": md5}})
-            if result.get("errcode") == 0:
-                log.info("✅ 燃油日报图片推送成功")
-                img_ok = True
-                # ── PDF 转换 + 推送 ──
-                try:
-                    from utils import convert_and_push_pdf
-                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
-                                         "全球船用燃油日报", fuel.get("date", ""))
-                except Exception as pdf_e:
-                    log.warning(f"燃油 PDF 推送失败（不影响主流程）: {pdf_e}")
-            else:
-                log.warning(f"燃油日报图片推送失败: {result}")
-        except Exception as e:
-            log.warning(f"燃油日报截图失败，跳过图片: {e}")
+            # ── 图片消息（暂时关闭，后续可能恢复） ──
+            # import base64, hashlib
+            # b64 = base64.b64encode(img_bytes).decode()
+            # md5 = hashlib.md5(img_bytes).hexdigest()
+            # result = _post({"msgtype": "image", "image": {"base64": b64, "md5": md5}})
+            # if result.get("errcode") == 0:
+            #     log.info("✅ 燃油日报图片推送成功")
+            # else:
+            #     log.warning(f"燃油日报图片推送失败: {result}")
 
-    # 2. 文字 markdown（始终发送）
-    try:
-        result = _post(build_fuel_wecom_card(fuel))
-        if result.get("errcode") == 0:
-            log.info("✅ 燃油日报文字推送成功")
-            return True
-        else:
-            log.error(f"燃油日报文字推送失败: {result}")
-            return img_ok
-    except Exception as e:
-        log.error(f"燃油日报推送异常: {e}")
-        return img_ok
+            # ── PDF 转换 + 推送 ──
+            try:
+                from utils import convert_and_push_pdf
+                convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                     "全球船用燃油日报", fuel.get("date", ""))
+            except Exception as pdf_e:
+                log.warning(f"燃油 PDF 推送失败（不影响主流程）: {pdf_e}")
+        except Exception as e:
+            log.warning(f"燃油日报截图失败: {e}")
+
+    # 2. 文字 markdown（暂时关闭，后续可能恢复）
+    # try:
+    #     result = _post(build_fuel_wecom_card(fuel))
+    #     if result.get("errcode") == 0:
+    #         log.info("✅ 燃油日报文字推送成功")
+    #     else:
+    #         log.error(f"燃油日报文字推送失败: {result}")
+    # except Exception as e:
+    #     log.error(f"燃油日报推送异常: {e}")
+
+    return True
 
 def push_dingtalk(data: dict, report_url: str = "") -> bool:
     """推送到钉钉群机器人（text 类型）。"""

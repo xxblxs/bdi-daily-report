@@ -907,32 +907,38 @@ def push_wecom(port_results: list, html_path: str, generated_at: str) -> bool:
         log.warning("WECOM_WEBHOOK 未配置，跳过推送"); return False
     def _post(payload):
         return requests.post(Config.WECOM_WEBHOOK, json=payload, timeout=30).json()
-    img_ok = False
+    # 1. 截图 → PDF 推送
     if html_path:
         try:
-            import hashlib as _hl
             img = html_to_image(html_path)
-            b64 = __import__('base64').b64encode(img).decode()
-            res = _post({"msgtype":"image","image":{"base64":b64,"md5":_hl.md5(img).hexdigest()}})
-            if res.get("errcode") == 0:
-                img_ok = True
-                log.info("✅ 截图推送成功")
-                # ── PDF 转换 + 推送 ──
-                try:
-                    from utils import convert_and_push_pdf
-                    import datetime as _dt
-                    _today = _dt.datetime.now().strftime("%Y-%m-%d")
-                    convert_and_push_pdf(img, Config.WECOM_WEBHOOK,
-                                         "散货全球港口拥堵日报", _today)
-                except Exception as pdf_e:
-                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
-        except Exception as e: log.warning(f"截图推送失败: {e}")
-    try:
-        res = _post(build_wecom_card(port_results, generated_at))
-        if res.get("errcode") == 0: log.info("✅ 文字推送成功"); return True
-        log.error(f"文字推送失败: {res}")
-        return img_ok
-    except Exception as e: log.error(f"推送异常: {e}"); return img_ok
+            # ── 图片消息（暂时关闭，后续可能恢复） ──
+            # import hashlib as _hl
+            # b64 = __import__('base64').b64encode(img).decode()
+            # res = _post({"msgtype":"image","image":{"base64":b64,"md5":_hl.md5(img).hexdigest()}})
+            # if res.get("errcode") == 0:
+            #     log.info("✅ 截图推送成功")
+            # else:
+            #     log.warning(f"截图推送失败: {res}")
+
+            # ── PDF 转换 + 推送 ──
+            try:
+                from utils import convert_and_push_pdf
+                import datetime as _dt
+                _today = _dt.datetime.now().strftime("%Y-%m-%d")
+                convert_and_push_pdf(img, Config.WECOM_WEBHOOK,
+                                     "散货全球港口拥堵日报", _today)
+            except Exception as pdf_e:
+                log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
+        except Exception as e: log.warning(f"截图失败: {e}")
+
+    # 2. 文字消息（暂时关闭，后续可能恢复）
+    # try:
+    #     res = _post(build_wecom_card(port_results, generated_at))
+    #     if res.get("errcode") == 0: log.info("✅ 文字推送成功")
+    #     else: log.error(f"文字推送失败: {res}")
+    # except Exception as e: log.error(f"推送异常: {e}")
+
+    return True
 
 
 # ══════════════════════════════════════════════════════════════════════════════

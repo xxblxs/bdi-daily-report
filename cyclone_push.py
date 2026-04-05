@@ -1708,46 +1708,44 @@ def push_wecom(storms: list, html_path: str, generated_at: str) -> bool:
         r = requests.post(Config.WECOM_WEBHOOK, json=payload, timeout=30)
         return r.json()
 
-    img_ok = False
-
-    # 1. 截图
+    # 1. 截图 → PDF 推送
     if html_path:
         try:
             img_bytes = html_to_image(html_path)
-            b64 = base64.b64encode(img_bytes).decode()
-            md5 = hashlib.md5(img_bytes).hexdigest()
-            result = _post({"msgtype": "image", "image": {"base64": b64, "md5": md5}})
-            if result.get("errcode") == 0:
-                log.info("✅ 截图推送成功")
-                img_ok = True
-                # ── PDF 转换 + 推送 ──
-                try:
-                    from utils import convert_and_push_pdf
-                    import datetime as _dt
-                    _today = _dt.datetime.now().strftime("%Y-%m-%d")
-                    convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
-                                         "台风路径追踪日报", _today)
-                except Exception as pdf_e:
-                    log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
-            else:
-                log.warning(f"截图推送失败: {result}")
-        except Exception as e:
-            log.warning(f"截图失败，跳过: {e}")
+            # ── 图片消息（暂时关闭，后续可能恢复） ──
+            # b64 = base64.b64encode(img_bytes).decode()
+            # md5 = hashlib.md5(img_bytes).hexdigest()
+            # result = _post({"msgtype": "image", "image": {"base64": b64, "md5": md5}})
+            # if result.get("errcode") == 0:
+            #     log.info("✅ 截图推送成功")
+            # else:
+            #     log.warning(f"截图推送失败: {result}")
 
-    # 2. 文字 markdown
-    try:
-        payload = (build_wecom_card_storms(storms, generated_at)
-                   if storms else build_wecom_card_no_storm(generated_at))
-        result  = _post(payload)
-        if result.get("errcode") == 0:
-            log.info("✅ 文字推送成功")
-            return True
-        else:
-            log.error(f"文字推送失败: {result}")
-            return img_ok
-    except Exception as e:
-        log.error(f"推送异常: {e}")
-        return img_ok
+            # ── PDF 转换 + 推送 ──
+            try:
+                from utils import convert_and_push_pdf
+                import datetime as _dt
+                _today = _dt.datetime.now().strftime("%Y-%m-%d")
+                convert_and_push_pdf(img_bytes, Config.WECOM_WEBHOOK,
+                                     "台风路径追踪日报", _today)
+            except Exception as pdf_e:
+                log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
+        except Exception as e:
+            log.warning(f"截图失败: {e}")
+
+    # 2. 文字 markdown（暂时关闭，后续可能恢复）
+    # try:
+    #     payload = (build_wecom_card_storms(storms, generated_at)
+    #                if storms else build_wecom_card_no_storm(generated_at))
+    #     result  = _post(payload)
+    #     if result.get("errcode") == 0:
+    #         log.info("✅ 文字推送成功")
+    #     else:
+    #         log.error(f"文字推送失败: {result}")
+    # except Exception as e:
+    #     log.error(f"推送异常: {e}")
+
+    return True
 
 
 # ══════════════════════════════════════════════════════════════════════════════
