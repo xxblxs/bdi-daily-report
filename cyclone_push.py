@@ -330,7 +330,34 @@ def fetch_navgreen_storms() -> list[dict]:
             }
 
         positions  = [fmt_pt(p) for p in history_raw]
-        forecasts  = [fmt_pt(p, True) for p in forecast_raw]
+
+        # 解析预报数据：NAVGreen forecast 是嵌套结构 forecast[].records[]
+        # 每个元素是一个模型预报集合（reftime + modelIdentifier + records）
+        # 优先 ECMWF（精度高），fallback 到第一个可用模型
+        forecasts = []
+        model_runs = forecast_raw if isinstance(forecast_raw, list) else []
+        is_nested = any(isinstance(mr, dict) and "records" in mr for mr in model_runs) if model_runs else False
+
+        if is_nested:
+            target_model = None
+            for mr in model_runs:
+                mid = (mr.get("modelIdentifier") or "").lower()
+                if mid == "ecmwf":
+                    target_model = mr
+                    break  # ECMWF 优先，直接用
+                elif target_model is None:
+                    target_model = mr  # fallback
+            if target_model and target_model.get("records"):
+                # records 按时间倒序，反转为正序
+                records = list(reversed(target_model["records"]))
+                for r in records:
+                    forecasts.append(fmt_pt(r, True))
+                # 限制最多 120h（~20 个 6h 步长），避免地图范围过大
+                if len(forecasts) > 20:
+                    forecasts = forecasts[:20]
+        else:
+            # 兼容旧版平面格式
+            forecasts = [fmt_pt(p, True) for p in model_runs]
 
         # 推断移动方向（最后两个历史点）
         mov_dir   = movement_direction(positions) if len(positions) >= 2 else None
