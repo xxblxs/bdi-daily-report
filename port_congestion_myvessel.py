@@ -45,6 +45,7 @@ class Config:
     MV_CLIENT_ID     = os.getenv("MYVESSEL_APP_ID",     "wxjfkjyxgs_api01")
     MV_CLIENT_SECRET = os.getenv("MYVESSEL_APP_SECRET",  "14c7c4fdd6cdaef0b1674fc0ae083e6f")
     WECOM_WEBHOOK    = os.getenv("WECOM_WEBHOOK", "")
+    WECOM_WEBHOOK_CUSTOM = os.getenv("WECOM_WEBHOOK_CUSTOM", "")  # 定制报告推送，未配则用 WECOM_WEBHOOK
     OUTPUT_DIR       = Path(os.getenv("OUTPUT_DIR", "./reports"))
     STATE_FILE       = Path(os.getenv("STATE_FILE", "./reports/.port_state.json"))
     TIMEOUT          = 30
@@ -158,6 +159,38 @@ class Config:
          "bdi":"P2A_82",         "note":"东海岸重要散货港"},
     ]
 
+    # ── 定制港口清单（客户专属）────────────────────────────────────────────────
+    CUSTOM_PORTS = [
+        {"id":"nauru",          "port_code":"NRNRI", "name":"Nauru",
+         "name_cn":"瑙鲁",       "flag":"🇳🇷", "country":"瑙鲁",
+         "cargo":"综合",          "group":"太平洋岛国",
+         "bdi":"—",              "note":"太平洋岛国港口"},
+        {"id":"tarawa",         "port_code":"KITAI", "name":"Tarawa",
+         "name_cn":"塔拉瓦",     "flag":"🇰🇮", "country":"基里巴斯",
+         "cargo":"综合",          "group":"太平洋岛国",
+         "bdi":"—",              "note":"基里巴斯首都港"},
+        {"id":"suva",           "port_code":"FJSUV", "name":"Suva",
+         "name_cn":"苏瓦",       "flag":"🇫🇯", "country":"斐济",
+         "cargo":"综合",          "group":"太平洋岛国",
+         "bdi":"—",              "note":"斐济首都港，南太主要中转"},
+        {"id":"port_vila",      "port_code":"VUPVI", "name":"Port Vila",
+         "name_cn":"维拉港",     "flag":"🇻🇺", "country":"瓦努阿图",
+         "cargo":"综合",          "group":"太平洋岛国",
+         "bdi":"—",              "note":"瓦努阿图首都港"},
+        {"id":"dar_es_salaam",  "port_code":"TZDRS", "name":"Dar es Salaam",
+         "name_cn":"达累斯萨拉姆","flag":"🇹🇿", "country":"坦桑尼亚",
+         "cargo":"综合",          "group":"东非",
+         "bdi":"—",              "note":"坦桑尼亚最大港口"},
+        {"id":"tanga",          "port_code":"TZTAN", "name":"Tanga",
+         "name_cn":"坦噶",       "flag":"🇹🇿", "country":"坦桑尼亚",
+         "cargo":"综合",          "group":"东非",
+         "bdi":"—",              "note":"坦桑尼亚北部港口"},
+        {"id":"lae",            "port_code":"PGLAE", "name":"Lae",
+         "name_cn":"莱城",       "flag":"🇵🇬", "country":"巴布亚新几内亚",
+         "cargo":"综合",          "group":"太平洋岛国",
+         "bdi":"—",              "note":"巴新第二大城市港口"},
+    ]
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 2. 船视宝 API 认证（OAuth2 Bearer Token）
@@ -214,14 +247,16 @@ def mv_post(endpoint: str, payload: dict) -> dict:
 # ══════════════════════════════════════════════════════════════════════════════
 # 3. 数据采集
 # ══════════════════════════════════════════════════════════════════════════════
-def fetch_port_dynamics() -> list:
+def fetch_port_dynamics(ports=None) -> list:
     """
     调用 /sdc/v1/ports/analytics/dynamic/current/count 获取所有港口实时动态。
     返回字段：moor（锚泊-港口）、moorHalfway（锚泊-途中）、berth（靠泊）、
               estimate（预抵）、repair（修理）
     注意：不传 vesselType 限制，否则返回空。
+    ports: 可选港口列表，默认用 Config.PORTS
     """
-    port_codes = [p["port_code"] for p in Config.PORTS]
+    port_list = ports or Config.PORTS
+    port_codes = [p["port_code"] for p in port_list]
     log.info(f"查询 {len(port_codes)} 个港口动态（船视宝 API）...")
 
     payload = {
@@ -275,13 +310,18 @@ def save_state(state: dict):
     Config.STATE_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False))
 
 
-def analyze_ports(api_data: list) -> list:
+def analyze_ports(api_data: list, ports=None, history_prefix: str = "") -> list:
+    """分析港口拥堵数据。
+    ports: 可选港口列表，默认用 Config.PORTS
+    history_prefix: 历史数据 key 前缀（定制报告用 "custom_" 避免污染主报告）
+    """
+    port_list = ports or Config.PORTS
     api_index = {item.get("portCode", "").upper(): item for item in api_data}
     state     = load_state()
     history   = state.get("port_history", {})
     results   = []
 
-    for port_cfg in Config.PORTS:
+    for port_cfg in port_list:
         pc   = port_cfg["port_code"].upper()
         item = api_index.get(pc, {})
 
@@ -293,7 +333,8 @@ def analyze_ports(api_data: list) -> list:
         n_repair    = item.get("repair",       0) or 0
         data_fresh  = bool(item)
 
-        hist = history.get(port_cfg["id"], [])
+        hist_key = f"{history_prefix}{port_cfg['id']}"
+        hist = history.get(hist_key, [])
         avg7 = round(sum(h["anchored"] for h in hist[-7:]) / len(hist[-7:]), 1) if hist else None
 
         if avg7 is not None and avg7 > 0:
@@ -324,16 +365,16 @@ def analyze_ports(api_data: list) -> list:
 
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
     for r in results:
-        pid = r["id"]
-        if pid not in history: history[pid] = []
-        history[pid].append({"date": today, "anchored": r["n_anchored"], "moored": r["n_moored"]})
-        if len(history[pid]) > 30: history[pid] = history[pid][-30:]
+        hk = f"{history_prefix}{r['id']}"
+        if hk not in history: history[hk] = []
+        history[hk].append({"date": today, "anchored": r["n_anchored"], "moored": r["n_moored"]})
+        if len(history[hk]) > 30: history[hk] = history[hk][-30:]
 
     state["port_history"] = history
     save_state(state)
 
     for r in results:
-        r["history_7d"] = history.get(r["id"], [])[-7:]
+        r["history_7d"] = history.get(f"{history_prefix}{r['id']}", [])[-7:]
 
     # 按拥堵等级排序，同级按锚泊数降序
     impact_order = {"high": 0, "mod": 1, "normal": 2, "low": 3}
@@ -902,11 +943,13 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
     return {"msgtype":"markdown","markdown":{"content":content}}
 
 
-def push_wecom(port_results: list, html_path: str, generated_at: str) -> bool:
-    if not Config.WECOM_WEBHOOK:
+def push_wecom(port_results: list, html_path: str, generated_at: str,
+               webhook_url: str = "", pdf_title: str = "散货全球港口拥堵日报") -> bool:
+    wh = webhook_url or Config.WECOM_WEBHOOK
+    if not wh:
         log.warning("WECOM_WEBHOOK 未配置，跳过推送"); return False
     def _post(payload):
-        return requests.post(Config.WECOM_WEBHOOK, json=payload, timeout=30).json()
+        return requests.post(wh, json=payload, timeout=30).json()
     # 1. 截图 → PDF 推送
     if html_path:
         try:
@@ -925,8 +968,7 @@ def push_wecom(port_results: list, html_path: str, generated_at: str) -> bool:
                 from utils import convert_and_push_pdf
                 import datetime as _dt
                 _today = _dt.datetime.now().strftime("%Y-%m-%d")
-                convert_and_push_pdf(img, Config.WECOM_WEBHOOK,
-                                     "散货全球港口拥堵日报", _today)
+                convert_and_push_pdf(img, wh, pdf_title, _today)
             except Exception as pdf_e:
                 log.warning(f"PDF 推送失败（不影响主流程）: {pdf_e}")
         except Exception as e: log.warning(f"截图失败: {e}")
@@ -976,6 +1018,32 @@ def run_once(demo: bool = False) -> bool:
 
     ok = push_wecom(port_results, str(html_file.resolve()), now_utc)
     log.info(f"推送结果: {'✅ 成功' if ok else '❌ 失败/未配置'}")
+
+    # ── 定制港口报告（独立流程，失败不影响主报告）──────────────────────────────
+    if Config.CUSTOM_PORTS and not demo:
+        try:
+            log.info("-" * 65)
+            log.info(f"定制港口报告 — 开始（{len(Config.CUSTOM_PORTS)} 个港口）")
+            import time as _time; _time.sleep(3)  # 避免 API 频率限制
+
+            custom_api = fetch_port_dynamics(Config.CUSTOM_PORTS)
+            if custom_api:
+                custom_results = analyze_ports(custom_api, Config.CUSTOM_PORTS,
+                                               history_prefix="custom_")
+                custom_html = render_html(custom_results, now_utc)
+                custom_file = Config.OUTPUT_DIR / f"port_congestion_custom_{today}.html"
+                custom_file.write_text(custom_html, encoding="utf-8")
+                log.info(f"✅ 定制 HTML 已保存: {custom_file}")
+
+                custom_wh = Config.WECOM_WEBHOOK_CUSTOM or Config.WECOM_WEBHOOK
+                push_wecom(custom_results, str(custom_file.resolve()), now_utc,
+                           webhook_url=custom_wh, pdf_title="定制港口拥堵日报")
+                log.info("✅ 定制港口报告推送完成")
+            else:
+                log.warning("定制港口 API 无数据，跳过")
+        except Exception as e:
+            log.warning(f"定制港口报告失败（不影响主报告）: {e}")
+
     log.info("=" * 65)
     return ok
 
