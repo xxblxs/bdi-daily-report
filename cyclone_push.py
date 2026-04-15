@@ -967,6 +967,32 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
 
     # ── 绘制预报轨迹（不确定性锥体 + 粗虚线 + 圆形标记）────────────────────────
     forecast_pts = storm.get("forecasts", [])
+
+    # 如果没有预报数据，基于轨迹移动方向自动生成合成预报（+24/48/72/96h）
+    if (not forecast_pts or len(forecast_pts) == 0) and len(track) >= 2:
+        p_prev, p_cur = track[-2], track[-1]
+        dlat = p_cur["lat"] - p_prev["lat"]
+        dlon = p_cur["lon"] - p_prev["lon"]
+        dist_step = math.sqrt(dlat**2 + dlon**2)
+        if dist_step > 0.01:  # 有明显移动才生成预报
+            cur_wind_val = float(latest.get("wind") or storm.get("wind_kn") or 0)
+            cur_r34 = latest.get("r34")
+            cur_r50 = latest.get("r50")
+            cur_r64 = latest.get("r64")
+            forecast_pts = []
+            for hours in [24, 48, 72, 96]:
+                steps = hours / 6.0  # 每步约6h
+                fc_lat = p_cur["lat"] + dlat * steps
+                fc_lon = p_cur["lon"] + dlon * steps
+                # 风速保持不变（保守估计）
+                forecast_pts.append({
+                    "lat": str(round(fc_lat, 2)),
+                    "lon": str(round(fc_lon, 2)),
+                    "windSpeed": None,
+                    "usa_wind": str(int(cur_wind_val)),
+                    "pressure": None,
+                })
+
     if forecast_pts and track:
         fc_track = [{"lat": latest["lat"], "lon": latest["lon"],
                      "wind": safe_float(latest.get("usa_wind") or latest.get("wind"))}]
@@ -1012,8 +1038,8 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
             pts_str = " ".join(f"{x:.1f},{y:.1f}" for x, y in points)
             lines.append(
                 f'<polygon points="{pts_str}" '
-                f'fill="rgba(255,255,255,0.06)" '
-                f'stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>'
+                f'fill="rgba(255,255,255,0.08)" '
+                f'stroke="rgba(255,255,255,0.20)" stroke-width="1"/>'
             )
 
             # ── 预报中心线（粗虚线）─────────────────────────────────────────────
@@ -1024,18 +1050,45 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
                 fc_color = _wind_to_color(p2.get("wind") or 0)
                 lines.append(
                     f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" '
-                    f'stroke="{fc_color}" stroke-width="3.5" stroke-linecap="round" '
-                    f'stroke-dasharray="8,6" opacity="0.8"/>'
+                    f'stroke="{fc_color}" stroke-width="4.5" stroke-linecap="round" '
+                    f'stroke-dasharray="10,7" opacity="0.85"/>'
                 )
 
-            # ── 预报位置标记（圆形，白色描边）─────────────────────────────────────
+            # ── 预报位置标记 + 预报风圈 ──────────────────────────────────────────
+            # 用最新位置的风圈数据绘制每个预报点的风圈
+            cur_r34 = latest.get("r34")
+            cur_r50 = latest.get("r50")
+            cur_r64 = latest.get("r64")
             for i in range(1, len(fc_track)):
                 fp = fc_track[i]
                 fx, fy = sv(fp["lat"], fp["lon"])
                 fc_color = _wind_to_color(fp.get("wind") or 0)
+                # 预报风圈（逐渐扩大，模拟不确定性增长）
+                scale = 1.0 + i * 0.15
+                fc_wind_circles = [
+                    (cur_r34, "#FFD700", "rgba(255,215,0,0.06)"),
+                    (cur_r50, "#FF8C00", "rgba(255,140,0,0.07)"),
+                    (cur_r64, "#FF1493", "rgba(255,20,147,0.08)"),
+                ]
+                for r_nm, stroke_c, fill_c in fc_wind_circles:
+                    if r_nm:
+                        r_px = _nm_to_px(float(r_nm) * scale, bbox, W)
+                        lines.append(
+                            f'<ellipse cx="{fx}" cy="{fy}" '
+                            f'rx="{r_px:.1f}" ry="{r_px*0.8:.1f}" '
+                            f'fill="{fill_c}" '
+                            f'stroke="{stroke_c}" stroke-width="1" opacity="0.6"/>'
+                        )
+                # 预报位置标记
                 lines.append(
                     f'<circle cx="{fx}" cy="{fy}" r="5" '
-                    f'fill="{fc_color}" stroke="white" stroke-width="1" opacity="0.85"/>'
+                    f'fill="{fc_color}" stroke="white" stroke-width="1.5" opacity="0.9"/>'
+                )
+                # 预报时间标注
+                hours_ahead = i * 24
+                lines.append(
+                    f'<text x="{fx}" y="{fy-9}" text-anchor="middle" '
+                    f'fill="rgba(255,255,255,0.7)" font-size="8" font-weight="600">+{hours_ahead}h</text>'
                 )
 
     # ── 当前位置：更大的脉冲标记 ──────────────────────────────────────────────
@@ -1085,7 +1138,10 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
         ("#FFD700", "34kt gale"),
         ("#FF8C00", "50kt storm"),
         ("#FF1493", "64kt hurricane"),
+        (None, "--- forecast"),
     ]
+    all_legend = legend_items + [(None, None)] * max(0, len(wind_circle_legend) - len(legend_items))
+    all_wc = wind_circle_legend + [(None, None)] * max(0, len(legend_items) - len(wind_circle_legend))
     lx, ly = 6, H - 8 - max(len(legend_items), len(wind_circle_legend)) * 14
     legend_h = max(len(legend_items), len(wind_circle_legend)) * 14 + 8
     legend_w = 280
@@ -1098,13 +1154,18 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
                      f'rx="2" fill="{lcolor}"/>')
         lines.append(f'<text x="{lx+18}" y="{yl+5}" fill="rgba(255,255,255,0.75)" '
                      f'font-size="8.5">{ltext}</text>')
-    # 右列：风圈颜色
+    # 右列：风圈颜色 + 预报线型
     rc_x = 130
     for j, (lcolor, ltext) in enumerate(wind_circle_legend):
         yl = ly + j * 14
-        lines.append(f'<circle cx="{rc_x+4}" cy="{yl+3}" r="4" '
-                     f'fill="none" stroke="{lcolor}" stroke-width="1.5"/>')
-        lines.append(f'<text x="{rc_x+12}" y="{yl+5}" fill="rgba(255,255,255,0.75)" '
+        if lcolor and "forecast" not in ltext:
+            lines.append(f'<circle cx="{rc_x+4}" cy="{yl+3}" r="4" '
+                         f'fill="none" stroke="{lcolor}" stroke-width="1.5"/>')
+        else:
+            # 预报虚线图例
+            lines.append(f'<line x1="{rc_x-2}" y1="{yl+3}" x2="{rc_x+10}" y2="{yl+3}" '
+                         f'stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-dasharray="4,3"/>')
+        lines.append(f'<text x="{rc_x+14}" y="{yl+5}" fill="rgba(255,255,255,0.75)" '
                      f'font-size="8.5">{ltext}</text>')
 
     # ── 数据来源标注 ──────────────────────────────────────────────────────────
