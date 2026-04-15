@@ -45,6 +45,7 @@ jobs:
           python port_congestion_myvessel.py --output-dir ./reports $ARGS
         env:
           WECOM_WEBHOOK:         ${{ secrets.WECOM_WEBHOOK }}
+          WECOM_WEBHOOK_CUSTOM:  ${{ secrets.WECOM_WEBHOOK_CUSTOM }}
           MYVESSEL_APP_ID:       ${{ secrets.MYVESSEL_APP_ID }}
           MYVESSEL_APP_SECRET:   ${{ secrets.MYVESSEL_APP_SECRET }}
 
