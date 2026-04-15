@@ -818,28 +818,86 @@ def _nm_to_px(radius_nm: float, bbox: list, W: int) -> float:
     return radius_nm / nm_per_deg * px_per_deg
 
 
-def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
+def generate_track_svg(storm: dict, W: int = 680, H: int = 480) -> str:
     """
     为单个风暴生成带轨迹的 SVG 地图（嵌入HTML）
-    
+    自动聚焦到轨迹+预报范围，确保完整显示。
+
     storm 字段要求：
       basin, lat, lon, positions (list of dicts with lat/lon/wind/time)
     """
-    basin    = storm.get("basin", "DEFAULT")
-    bbox     = BASIN_BBOX.get(basin, BASIN_BBOX["DEFAULT"])
+    basin     = storm.get("basin", "DEFAULT")
     positions = storm.get("positions", [])
-    
-    # 根据当前位置自动调整 bbox 中心（确保风暴在视野内）
+
+    # ── 先收集所有有效坐标点（历史+预报+合成预报），计算聚焦范围 ──────────
+    all_lats, all_lons = [], []
     cur_lat = storm.get("lat", 0) or 0
     cur_lon = storm.get("lon", 0) or 0
-    lon_mid = (bbox[0] + bbox[2]) / 2
-    lat_mid = (bbox[1] + bbox[3]) / 2
-    lon_half = (bbox[2] - bbox[0]) / 2
-    lat_half = (bbox[3] - bbox[1]) / 2
-    # 如果当前位置偏离bbox中心太多，重新居中
-    if abs(cur_lon - lon_mid) > lon_half * 0.6 or abs(cur_lat - lat_mid) > lat_half * 0.6:
-        bbox = [cur_lon - lon_half, cur_lat - lat_half,
-                cur_lon + lon_half, cur_lat + lat_half]
+
+    for p in positions:
+        try:
+            lat = float(p.get("lat", "") or 0)
+            lon = float(p.get("lon", "") or 0)
+            if lat != 0 or lon != 0:
+                all_lats.append(lat)
+                all_lons.append(lon)
+        except Exception:
+            continue
+
+    # 收集预报点坐标
+    forecast_pts_raw = storm.get("forecasts", [])
+    for fp in forecast_pts_raw:
+        try:
+            flat = safe_float(fp.get("lat"))
+            flon = safe_float(fp.get("lon"))
+            if flat is not None and flon is not None and (abs(flat) > 0.01 or abs(flon) > 0.01):
+                all_lats.append(flat)
+                all_lons.append(flon)
+        except Exception:
+            continue
+
+    # 如果预报为空，基于轨迹移动方向生成合成预报并收集坐标
+    if not forecast_pts_raw and len(all_lats) >= 2:
+        p_prev_lat, p_cur_lat = all_lats[-2], all_lats[-1]
+        p_prev_lon, p_cur_lon = all_lons[-2], all_lons[-1]
+        dlat = p_cur_lat - p_prev_lat
+        dlon = p_cur_lon - p_prev_lon
+        if math.sqrt(dlat**2 + dlon**2) > 0.01:
+            for hours in [24, 48, 72, 96]:
+                steps = hours / 6.0
+                all_lats.append(p_cur_lat + dlat * steps)
+                all_lons.append(p_cur_lon + dlon * steps)
+
+    # ── 计算聚焦 bbox ─────────────────────────────────────────────────────
+    if all_lats and all_lons:
+        data_lat_min, data_lat_max = min(all_lats), max(all_lats)
+        data_lon_min, data_lon_max = min(all_lons), max(all_lons)
+        data_lat_span = data_lat_max - data_lat_min
+        data_lon_span = data_lon_max - data_lon_min
+        # 上下左右留 35% 余白
+        pad_lat = max(data_lat_span * 0.35, 3.0)  # 至少 3°
+        pad_lon = max(data_lon_span * 0.35, 3.0)  # 至少 3°
+        bbox = [
+            data_lon_min - pad_lon,
+            data_lat_min - pad_lat,
+            data_lon_max + pad_lon,
+            data_lat_max + pad_lat,
+        ]
+    else:
+        # 无轨迹数据，以当前位置为中心
+        bbox = [cur_lon - 15, cur_lat - 10, cur_lon + 15, cur_lat + 10]
+
+    # 确保最小范围（至少 20° × 15°）
+    lon_span = bbox[2] - bbox[0]
+    lat_span = bbox[3] - bbox[1]
+    if lon_span < 20:
+        cx = (bbox[0] + bbox[2]) / 2
+        bbox[0] = cx - 10
+        bbox[2] = cx + 10
+    if lat_span < 15:
+        cy = (bbox[1] + bbox[3]) / 2
+        bbox[1] = cy - 7.5
+        bbox[3] = cy + 7.5
 
     def sv(lat, lon):
         return latlon_to_svg(lat, lon, bbox, W, H)
@@ -853,12 +911,6 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
             wind = float(p.get("usa_wind") or p.get("wmo_wind") or 0) or None
             t    = (p.get("time") or "")[:16]
             if lat == 0 and lon == 0:
-                continue
-            # 只保留 bbox 范围内 ± 20% 的点
-            margin_lon = (bbox[2] - bbox[0]) * 0.2
-            margin_lat = (bbox[3] - bbox[1]) * 0.2
-            if not (bbox[0]-margin_lon <= lon <= bbox[2]+margin_lon and
-                    bbox[1]-margin_lat <= lat <= bbox[3]+margin_lat):
                 continue
             track.append({"lat": lat, "lon": lon, "wind": wind, "time": t,
                            "r34": p.get("r34_avg"),
@@ -1002,9 +1054,12 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
                 flon = safe_float(fp.get("lon"))
                 if flat is None or flon is None: continue
                 if abs(flat) < 0.01 and abs(flon) < 0.01: continue
-                fw = safe_float(fp.get("usa_wind") or fp.get("windSpeed"))
-                if fw and fw > 5:  # m/s → kn
-                    fw = fw * 1.94384
+                fw = safe_float(fp.get("usa_wind"))
+                if fw is None or fw == 0:
+                    # usa_wind 为空时，尝试 windSpeed（m/s 需要转 kn）
+                    fw = safe_float(fp.get("windSpeed"))
+                    if fw and fw > 5:
+                        fw = fw * 1.94384
                 fc_track.append({"lat": flat, "lon": flon, "wind": fw})
             except Exception:
                 continue
@@ -1408,6 +1463,7 @@ body { font-family:'Outfit','PingFang SC','Microsoft YaHei',sans-serif;
 .si-dist-ok { color:var(--ink-m); }
 /* Track SVG */
 .sc-track { padding:10px 16px; border-top:1px solid var(--border); }
+.sc-track svg { width:100%; height:auto; display:block; }
 .track-title { font-size:9.5px; font-weight:700; letter-spacing:0.10em;
                text-transform:uppercase; color:var(--ink-m); margin-bottom:5px; }
 /* Summary table */
