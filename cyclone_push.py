@@ -324,6 +324,8 @@ def fetch_navgreen_storms() -> list[dict]:
                 "wmo_wind": "",
                 "usa_pres": str(p.get("pressure", "") or ""),
                 "r34_avg":  None,
+                "r50_avg":  None,
+                "r64_avg":  None,
                 "is_forecast": is_forecast,
             }
 
@@ -349,6 +351,8 @@ def fetch_navgreen_storms() -> list[dict]:
             "sshs_text":   "",
             "dist2land_nm": None,
             "r34_avg_nm":  None,     # 后面从 IBTrACS 补
+            "r50_avg_nm":  None,     # 后面从 IBTrACS 补
+            "r64_avg_nm":  None,     # 后面从 IBTrACS 补
             "intensity":   wind_to_intensity(wind_kn),
             "last_time":   positions[-1]["time"] if positions else "",
             "mov_dir":     mov_dir,
@@ -420,6 +424,8 @@ def merge_storm_data(ng_storms: list, ibt_storms: list) -> list:
             storm["sshs"]       = ibt_match.get("sshs")
             storm["sshs_text"]  = ibt_match.get("sshs_text", "")
             storm["r34_avg_nm"] = ibt_match.get("r34_avg_nm")
+            storm["r50_avg_nm"] = ibt_match.get("r50_avg_nm")
+            storm["r64_avg_nm"] = ibt_match.get("r64_avg_nm")
             storm["dist2land_nm"] = ibt_match.get("dist2land_nm")
             # IBTrACS 的 SID 留作参考
             storm["ibt_sid"]    = ibt_match.get("sid", "")
@@ -517,6 +523,18 @@ def fetch_ibtracs() -> list[dict]:
             v = safe_float(col(row, q))
             if v and v > 0:
                 r34_vals.append(v)
+        # R50 风圈半径（四象限，海里）
+        r50_vals = []
+        for q in ("USA_R50_NE", "USA_R50_SE", "USA_R50_SW", "USA_R50_NW"):
+            v = safe_float(col(row, q))
+            if v and v > 0:
+                r50_vals.append(v)
+        # R64 风圈半径（四象限，海里）
+        r64_vals = []
+        for q in ("USA_R64_NE", "USA_R64_SE", "USA_R64_SW", "USA_R64_NW"):
+            v = safe_float(col(row, q))
+            if v and v > 0:
+                r64_vals.append(v)
 
         storms[sid]["positions"].append({
             "time":       col(row, "ISO_TIME"),
@@ -532,6 +550,8 @@ def fetch_ibtracs() -> list[dict]:
             "dist2land":  col(row, "DIST2LAND"),
             "track_type": col(row, "TRACK_TYPE"),
             "r34_avg":    round(sum(r34_vals) / len(r34_vals)) if r34_vals else None,
+            "r50_avg":    round(sum(r50_vals) / len(r50_vals)) if r50_vals else None,
+            "r64_avg":    round(sum(r64_vals) / len(r64_vals)) if r64_vals else None,
         })
 
     # 汇总每个风暴的关键信息
@@ -594,6 +614,8 @@ def fetch_ibtracs() -> list[dict]:
             "sshs_text":    sshs_to_text(latest["usa_sshs"]),
             "dist2land_nm": dist2land,
             "r34_avg_nm":   latest["r34_avg"],
+            "r50_avg_nm":   latest["r50_avg"],
+            "r64_avg_nm":   latest["r64_avg"],
             "intensity":    intensity,
             "last_time":    latest["time"],
             "mov_dir":      mov_dir,
@@ -786,14 +808,14 @@ def _wind_to_color(wind_kn: float) -> str:
     return "#7b241c"       # 暗红  超强台风
 
 
-def _r34_to_px(r34_nm: float, bbox: list, W: int) -> float:
-    """34kn风圈半径（海里）→ SVG像素大小"""
-    if not r34_nm:
+def _nm_to_px(radius_nm: float, bbox: list, W: int) -> float:
+    """海里半径 → SVG像素大小"""
+    if not radius_nm:
         return 0
     lon_span = bbox[2] - bbox[0]
     px_per_deg = W / lon_span
     nm_per_deg = 60.0
-    return r34_nm / nm_per_deg * px_per_deg
+    return radius_nm / nm_per_deg * px_per_deg
 
 
 def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
@@ -839,14 +861,17 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
                     bbox[1]-margin_lat <= lat <= bbox[3]+margin_lat):
                 continue
             track.append({"lat": lat, "lon": lon, "wind": wind, "time": t,
-                           "r34": p.get("r34_avg")})
+                           "r34": p.get("r34_avg"),
+                           "r50": p.get("r50_avg"),
+                           "r64": p.get("r64_avg")})
         except Exception:
             continue
 
     if len(track) < 2:
         # 至少用当前位置造一个点
         track = [{"lat": cur_lat, "lon": cur_lon,
-                  "wind": storm.get("wind_kn"), "time": "", "r34": None}]
+                  "wind": storm.get("wind_kn"), "time": "",
+                  "r34": None, "r50": None, "r64": None}]
 
     # ── SVG 开始 ──────────────────────────────────────────────────────────────
     lines = [
@@ -897,19 +922,27 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
                          f'fill="rgba(255,255,255,0.3)" font-size="9">'
                          f'{abs(lon)}°{"E" if lon>=0 else "W"}</text>')
 
-    # ── 绘制34kn风圈（最新位置）─────────────────────────────────────────────────
+    # ── 绘制多层同心风圈（最新位置）Windy 风格 ────────────────────────────────
     latest = track[-1]
-    r34_nm = latest.get("r34")
     cur_x, cur_y = sv(latest["lat"], latest["lon"])
-    if r34_nm:
-        r34_px = _r34_to_px(float(r34_nm), bbox, W)
-        lines.append(
-            f'<ellipse cx="{cur_x}" cy="{cur_y}" rx="{r34_px}" ry="{r34_px*0.8}" '
-            f'fill="rgba(226,75,74,0.12)" stroke="rgba(226,75,74,0.35)" '
-            f'stroke-width="1" stroke-dasharray="4,3"/>'
-        )
 
-    # ── 绘制轨迹线（颜色按风速渐变）─────────────────────────────────────────────
+    WIND_CIRCLE_DEFS = [
+        ("r34", "#FFD700", "rgba(255,215,0,0.10)"),    # 34kt 大风圈 — 金黄色
+        ("r50", "#FF8C00", "rgba(255,140,0,0.12)"),    # 50kt 暴风圈 — 橙色
+        ("r64", "#FF1493", "rgba(255,20,147,0.14)"),   # 64kt 飓风圈 — 深粉色
+    ]
+    for rkey, stroke_color, fill_color in WIND_CIRCLE_DEFS:
+        r_nm = latest.get(rkey)
+        if r_nm:
+            r_px = _nm_to_px(float(r_nm), bbox, W)
+            lines.append(
+                f'<ellipse cx="{cur_x}" cy="{cur_y}" '
+                f'rx="{r_px:.1f}" ry="{r_px*0.8:.1f}" '
+                f'fill="{fill_color}" '
+                f'stroke="{stroke_color}" stroke-width="1.5" opacity="0.85"/>'
+            )
+
+    # ── 绘制轨迹线（颜色按风速渐变，加粗）──────────────────────────────────────
     for i in range(len(track) - 1):
         p1, p2 = track[i], track[i+1]
         x1, y1 = sv(p1["lat"], p1["lon"])
@@ -917,22 +950,22 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
         color = _wind_to_color(p2.get("wind") or 0)
         lines.append(
             f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" '
-            f'stroke="{color}" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>'
+            f'stroke="{color}" stroke-width="4.5" stroke-linecap="round" opacity="1.0"/>'
         )
 
-    # ── 绘制轨迹点（每隔2个画一个，节省空间）──────────────────────────────────────
+    # ── 绘制轨迹点（每个点都画，增大标记）─────────────────────────────────────────
     for i, p in enumerate(track):
+        if i == len(track) - 1:
+            continue  # 最后一个点（当前位置）单独画
         x, y = sv(p["lat"], p["lon"])
         wind = p.get("wind") or 0
         color = _wind_to_color(wind)
-        r = 3 if i < len(track) - 1 else 0  # 非当前位置小圆点
-        if i % 2 == 0 and i < len(track) - 1:
-            lines.append(
-                f'<circle cx="{x}" cy="{y}" r="{r}" '
-                f'fill="{color}" opacity="0.8"/>'
-            )
+        lines.append(
+            f'<circle cx="{x}" cy="{y}" r="4" '
+            f'fill="{color}" stroke="rgba(0,0,0,0.3)" stroke-width="0.5" opacity="0.9"/>'
+        )
 
-    # ── 绘制预报轨迹（虚线，来自 NAVGreen forecast[]）────────────────────────────
+    # ── 绘制预报轨迹（不确定性锥体 + 粗虚线 + 圆形标记）────────────────────────
     forecast_pts = storm.get("forecasts", [])
     if forecast_pts and track:
         fc_track = [{"lat": latest["lat"], "lon": latest["lon"],
@@ -950,48 +983,87 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
             except Exception:
                 continue
 
-        for i in range(len(fc_track) - 1):
-            p1, p2 = fc_track[i], fc_track[i+1]
-            x1, y1 = sv(p1["lat"], p1["lon"])
-            x2, y2 = sv(p2["lat"], p2["lon"])
-            fc_color = _wind_to_color(p2.get("wind") or 0)
+        if len(fc_track) >= 2:
+            # ── 不确定性锥体 ──────────────────────────────────────────────────
+            spread_per_step_nm = 25
+            cone_left = []
+            cone_right = []
+            for i, fp in enumerate(fc_track):
+                fx, fy = sv(fp["lat"], fp["lon"])
+                if i == 0:
+                    cone_left.append((fx, fy))
+                    cone_right.append((fx, fy))
+                    continue
+                prev = fc_track[i-1]
+                dx = fx - sv(prev["lat"], prev["lon"])[0]
+                dy = fy - sv(prev["lat"], prev["lon"])[1]
+                d = math.sqrt(dx**2 + dy**2)
+                if d < 0.5:
+                    cone_left.append((fx, fy))
+                    cone_right.append((fx, fy))
+                    continue
+                px, py = -dy/d, dx/d  # 垂直方向
+                spread_px = _nm_to_px(spread_per_step_nm * i, bbox, W)
+                spread_px = max(spread_px, 3)
+                cone_left.append((fx + px * spread_px, fy + py * spread_px))
+                cone_right.append((fx - px * spread_px, fy - py * spread_px))
+
+            points = cone_left + list(reversed(cone_right))
+            pts_str = " ".join(f"{x:.1f},{y:.1f}" for x, y in points)
             lines.append(
-                f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" '
-                f'stroke="{fc_color}" stroke-width="2.5" stroke-linecap="round" '
-                f'stroke-dasharray="7,5" opacity="0.7"/>'
-            )
-            mx, my = sv(p2["lat"], p2["lon"])
-            lines.append(
-                f'<polygon points="{mx},{my-5} {mx+4},{my} {mx},{my+5} {mx-4},{my}" '
-                f'fill="{fc_color}" opacity="0.75"/>'
+                f'<polygon points="{pts_str}" '
+                f'fill="rgba(255,255,255,0.06)" '
+                f'stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>'
             )
 
-    # ── 当前位置：脉冲动画大圆 ─────────────────────────────────────────────────
+            # ── 预报中心线（粗虚线）─────────────────────────────────────────────
+            for i in range(len(fc_track) - 1):
+                p1, p2 = fc_track[i], fc_track[i+1]
+                x1, y1 = sv(p1["lat"], p1["lon"])
+                x2, y2 = sv(p2["lat"], p2["lon"])
+                fc_color = _wind_to_color(p2.get("wind") or 0)
+                lines.append(
+                    f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" '
+                    f'stroke="{fc_color}" stroke-width="3.5" stroke-linecap="round" '
+                    f'stroke-dasharray="8,6" opacity="0.8"/>'
+                )
+
+            # ── 预报位置标记（圆形，白色描边）─────────────────────────────────────
+            for i in range(1, len(fc_track)):
+                fp = fc_track[i]
+                fx, fy = sv(fp["lat"], fp["lon"])
+                fc_color = _wind_to_color(fp.get("wind") or 0)
+                lines.append(
+                    f'<circle cx="{fx}" cy="{fy}" r="5" '
+                    f'fill="{fc_color}" stroke="white" stroke-width="1" opacity="0.85"/>'
+                )
+
+    # ── 当前位置：更大的脉冲标记 ──────────────────────────────────────────────
     cur_wind  = latest.get("wind") or storm.get("wind_kn") or 0
     cur_color = _wind_to_color(float(cur_wind))
     lines += [
-        # 外圈脉冲
-        f'<circle cx="{cur_x}" cy="{cur_y}" r="16" fill="none" '
-        f'stroke="{cur_color}" stroke-width="1.5" opacity="0.4">',
-        f'  <animate attributeName="r" values="14;22;14" dur="2.5s" repeatCount="indefinite"/>',
-        f'  <animate attributeName="opacity" values="0.4;0;0.4" dur="2.5s" repeatCount="indefinite"/>',
+        # 外圈脉冲（更大）
+        f'<circle cx="{cur_x}" cy="{cur_y}" r="20" fill="none" '
+        f'stroke="{cur_color}" stroke-width="2" opacity="0.5">',
+        f'  <animate attributeName="r" values="16;28;16" dur="2s" repeatCount="indefinite"/>',
+        f'  <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite"/>',
         f'</circle>',
         # 中圈
-        f'<circle cx="{cur_x}" cy="{cur_y}" r="8" fill="{cur_color}" opacity="0.35"/>',
-        # 实心中心
-        f'<circle cx="{cur_x}" cy="{cur_y}" r="5" fill="{cur_color}" '
-        f'stroke="white" stroke-width="1.5" filter="url(#glow)"/>',
-        # 台风符号 🌀 (用文字)
-        f'<text x="{cur_x}" y="{cur_y - 13}" text-anchor="middle" '
-        f'font-size="14" fill="{cur_color}" filter="url(#glow)">🌀</text>',
+        f'<circle cx="{cur_x}" cy="{cur_y}" r="12" fill="{cur_color}" opacity="0.3"/>',
+        # 实心中心（更大）
+        f'<circle cx="{cur_x}" cy="{cur_y}" r="7" fill="{cur_color}" '
+        f'stroke="white" stroke-width="2" filter="url(#glow)"/>',
+        # 台风符号
+        f'<text x="{cur_x}" y="{cur_y - 18}" text-anchor="middle" '
+        f'font-size="16" fill="white" filter="url(#glow)">&#x1F300;</text>',
     ]
 
     # ── 风暴名标签 ─────────────────────────────────────────────────────────────
     name     = storm.get("name", "")
     abbr     = storm.get("intensity", {}).get("abbr", "")
     wind_kn  = storm.get("wind_kn")
-    label_x  = min(W - 10, max(10, cur_x + 12))
-    label_y  = max(20, cur_y - 8)
+    label_x  = min(W - 10, max(10, cur_x + 14))
+    label_y  = max(20, cur_y - 10)
     lines += [
         f'<rect x="{label_x-4}" y="{label_y-12}" width="{len(name)*7+55}" height="28" '
         f'rx="4" fill="rgba(0,0,0,0.65)" stroke="{cur_color}" stroke-width="1"/>',
@@ -1001,23 +1073,39 @@ def generate_track_svg(storm: dict, W: int = 680, H: int = 360) -> str:
         f'{int(wind_kn) if wind_kn else "—"}kn · {storm.get("intensity",{}).get("name","")}</text>',
     ]
 
-    # ── 图例 ──────────────────────────────────────────────────────────────────
+    # ── 图例（双列：强度色标 + 风圈颜色）───────────────────────────────────────
     legend_items = [
-        ("#378ADD", "热带低压 <34kn"),
-        ("#1D9E75", "热带风暴 34-48kn"),
-        ("#ef9f27", "强热带风暴 48-64kn"),
-        ("#e24b4a", "台风/飓风 64-96kn"),
-        ("#7b241c", "超强台风 ≥114kn"),
+        ("#378ADD", "TD <34kn"),
+        ("#1D9E75", "TS 34-48kn"),
+        ("#ef9f27", "STS 48-64kn"),
+        ("#e24b4a", "TY 64-96kn"),
+        ("#7b241c", "SuperTY 114+kn"),
     ]
-    lx, ly = 6, H - 8 - len(legend_items) * 13
-    lines.append(f'<rect x="4" y="{ly-4}" width="150" height="{len(legend_items)*13+8}" '
-                 f'rx="4" fill="rgba(0,0,0,0.5)"/>')
+    wind_circle_legend = [
+        ("#FFD700", "34kt gale"),
+        ("#FF8C00", "50kt storm"),
+        ("#FF1493", "64kt hurricane"),
+    ]
+    lx, ly = 6, H - 8 - max(len(legend_items), len(wind_circle_legend)) * 14
+    legend_h = max(len(legend_items), len(wind_circle_legend)) * 14 + 8
+    legend_w = 280
+    lines.append(f'<rect x="4" y="{ly-4}" width="{legend_w}" height="{legend_h}" '
+                 f'rx="4" fill="rgba(0,0,0,0.55)"/>')
+    # 左列：强度色标
     for j, (lcolor, ltext) in enumerate(legend_items):
-        yl = ly + j * 13
-        lines.append(f'<rect x="{lx}" y="{yl}" width="10" height="4" '
+        yl = ly + j * 14
+        lines.append(f'<rect x="{lx}" y="{yl}" width="14" height="5" '
                      f'rx="2" fill="{lcolor}"/>')
-        lines.append(f'<text x="{lx+14}" y="{yl+4}" fill="rgba(255,255,255,0.7)" '
-                     f'font-size="8">{ltext}</text>')
+        lines.append(f'<text x="{lx+18}" y="{yl+5}" fill="rgba(255,255,255,0.75)" '
+                     f'font-size="8.5">{ltext}</text>')
+    # 右列：风圈颜色
+    rc_x = 130
+    for j, (lcolor, ltext) in enumerate(wind_circle_legend):
+        yl = ly + j * 14
+        lines.append(f'<circle cx="{rc_x+4}" cy="{yl+3}" r="4" '
+                     f'fill="none" stroke="{lcolor}" stroke-width="1.5"/>')
+        lines.append(f'<text x="{rc_x+12}" y="{yl+5}" fill="rgba(255,255,255,0.75)" '
+                     f'font-size="8.5">{ltext}</text>')
 
     # ── 数据来源标注 ──────────────────────────────────────────────────────────
     lines.append(
@@ -1432,6 +1520,16 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
       <span class="dr-val">{{ s.r34_avg_nm or '—' }} nm<span class="dr-note">均值</span></span>
     </div>
     <div class="detail-row">
+      <span class="dr-icon">🌪</span>
+      <span class="dr-label">50kn风圈</span>
+      <span class="dr-val">{{ s.r50_avg_nm or '—' }} nm<span class="dr-note">均值</span></span>
+    </div>
+    <div class="detail-row">
+      <span class="dr-icon">🌪</span>
+      <span class="dr-label">64kn风圈</span>
+      <span class="dr-val">{{ s.r64_avg_nm or '—' }} nm<span class="dr-note">均值</span></span>
+    </div>
+    <div class="detail-row">
       <span class="dr-icon">🌍</span>
       <span class="dr-label">所在海盆</span>
       <span class="dr-val">{{ s.basin_name }}</span>
@@ -1465,7 +1563,7 @@ td:first-child { text-align:left; font-weight:600; color:var(--ink); }
 
   {%- if s.track_svg %}
   <div class="sc-track">
-    <div class="track-title">历史轨迹 &amp; 当前位置</div>
+    <div class="track-title">历史轨迹 &amp; 预报路径 &amp; 风圈范围</div>
     {{ s.track_svg|safe }}
   </div>
   {%- endif %}
@@ -1649,6 +1747,8 @@ def build_wecom_card_storms(storms: list, generated_at: str) -> dict:
             f"| 当前位置 | {s['lat']:.1f}°{'N' if s['lat']>=0 else 'S'} / {abs(s['lon']):.1f}°{'E' if s['lon']>=0 else 'W'} |",
             f"| 移动方向/速 | {s['mov_dir'] or '—'} / {s['mov_speed'] or '—'} kn |",
             f"| 34kn风圈 | {s['r34_avg_nm'] or '—'} nm（均值） |",
+            f"| 50kn风圈 | {s['r50_avg_nm'] or '—'} nm（均值） |",
+            f"| 64kn风圈 | {s['r64_avg_nm'] or '—'} nm（均值） |",
             f"| 距最近海岸 | {int(s['dist2land_nm']) if s['dist2land_nm'] else '—'} nm |",
             "",
         ]
