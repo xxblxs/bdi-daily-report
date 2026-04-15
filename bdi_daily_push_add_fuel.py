@@ -1521,7 +1521,7 @@ def html_to_image(html_path: str) -> bytes:
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page(viewport={"width": 980, "height": 800})
+        page = browser.new_page(viewport={"width": 980, "height": 800}, device_scale_factor=2)
         page.goto(f"file://{html_path}")
         page.wait_for_load_state("networkidle")
         img = page.screenshot(full_page=True)
