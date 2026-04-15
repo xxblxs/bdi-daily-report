@@ -678,7 +678,7 @@ td:first-child { font-weight:600; color:var(--ink); }
 <div class="pcard cong-{{ cong }}">
   <div class="pc-head">
     <div>
-      <div class="pc-name">{{ p.flag }}{{ p.name_cn }}</div>
+      <div class="pc-name">{{ p.flag }}{{ p.name_cn }} <span style="font-weight:400;font-size:.85em;color:#666">{{ p.name }}</span></div>
       <div class="pc-sub">{{ p.country }} · {{ p.cargo }}</div>
     </div>
     <span class="pc-badge pb-{{ cong }}">
@@ -780,7 +780,7 @@ td:first-child { font-weight:600; color:var(--ink); }
       {% for p in ports | sort(attribute='n_anchored', reverse=True) %}
       {% set cong = p.congestion %}
       <tr {% if cong=='high' %}class="high-row"{% endif %}>
-        <td>{{ p.flag }}{{ p.name_cn }}</td>
+        <td>{{ p.flag }}{{ p.name_cn }} <span style="color:#888;font-size:10.5px;">{{ p.name }}</span></td>
         <td style="color:var(--ink-m);font-size:10.5px;">{{ p.group }}</td>
         <td style="color:var(--ink-m);font-size:10.5px;">{{ p.cargo }}</td>
         <td class="{{ 'td-high' if (p.n_anchored or 0)>=30 else ('td-mod' if (p.n_anchored or 0)>=15 else '') }}"
@@ -844,7 +844,7 @@ def render_html(port_results: list, generated_at: str, demo_mode: bool = False) 
             if p["avg7"] and p["avg7"] > 0:
                 pct = int((p["n_anchored"] - p["avg7"]) / p["avg7"] * 100)
                 dev = f"（+{pct}%均值）"
-            dem_parts.append(f"**{p['name_cn']}** {p['n_anchored']}艘{dev}，估等 {p['est_wait_days']} 天")
+            dem_parts.append(f"**{p['name_cn']} {p['name']}** {p['n_anchored']}艘{dev}，估等 {p['est_wait_days']} 天")
     dem_alerts = "；\n".join(dem_parts) + "\n\n建议关注 NOR 递交时间窗口，提前做好 Laytime 计算准备。" if dem_parts else ""
 
     ctx = dict(
@@ -858,7 +858,7 @@ def render_html(port_results: list, generated_at: str, demo_mode: bool = False) 
     if HAS_JINJA2:
         return Template(PORT_HTML).render(**ctx)
     return f"<html><body><h2>{Config.BRAND} 港口拥堵日报 {today}</h2>" + \
-           "".join(f"<p>{p['flag']}{p['name_cn']}: 锚泊{p['n_anchored']}</p>" for p in port_results) + \
+           "".join(f"<p>{p['flag']}{p['name_cn']} {p['name']}: 锚泊{p['n_anchored']}</p>" for p in port_results) + \
            "</body></html>"
 
 
@@ -890,7 +890,7 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
         "> 全球23个核心干散货装卸港 · 实时锚泊统计 · Demurrage 风险预警",
         "",
         f"**全港锚泊合计：<font color=\"warning\">{total_anchored} 艘</font>**　"
-        + (f"⚠️ 高拥堵：{'、'.join(p['name_cn'] for p in high)}" if high else "✅ 无高拥堵港口"),
+        + (f"⚠️ 高拥堵：{'、'.join(p['name_cn'] + ' ' + p['name'] for p in high)}" if high else "✅ 无高拥堵港口"),
         "",
     ]
 
@@ -902,7 +902,7 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
                 pct = int((p["n_anchored"] - p["avg7"]) / p["avg7"] * 100)
                 dev = f" | {'↑' if pct>0 else '↓'}{abs(pct)}%均值"
             lines.append(
-                f"> {cong_emoji[p['congestion']]} **{p['flag']}{p['name_cn']}**（{p['cargo']}）　"
+                f"> {cong_emoji[p['congestion']]} **{p['flag']}{p['name_cn']} {p['name']}**（{p['cargo']}）　"
                 f"锚泊 **{p['n_anchored']}** 艘 | 靠泊 {p['n_moored']} 艘{dev}　"
                 f"预抵 {p['n_estimate']} 艘　估等 **{p['est_wait_days']}天**"
             )
@@ -915,7 +915,7 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
     lines.append("|:---|---:|---:|---:|:---:|")
     for p in top_ports:
         lines.append(
-            f"| {p['flag']}{p['name_cn']} | **{p['n_anchored']}** | "
+            f"| {p['flag']}{p['name_cn']} {p['name']} | **{p['n_anchored']}** | "
             f"{p['n_moored']} | {p['n_estimate']} | "
             f"{cong_emoji[p['congestion']]} {cong_label[p['congestion']]} |"
         )
@@ -924,7 +924,7 @@ def build_wecom_card(port_results: list, generated_at: str) -> dict:
         "", "## 💡 操作建议",
     ]
     if high:
-        hnames = "、".join(p["name_cn"] for p in high)
+        hnames = "、".join(p["name_cn"] + " " + p["name"] for p in high)
         lines += [
             f"> **{hnames}** 拥堵显著偏高：",
             "> · 确认 NOR 递交时间，做好 Demurrage 预案",
