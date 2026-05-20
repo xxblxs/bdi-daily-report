@@ -67,11 +67,11 @@ class Config:
     NAVGREEN_API = "https://miniapi.navgreen.cn/api/data/baltic_exchange_index"
     API_LIMIT    = 10           # 拉取最近 N 条（取前两条算涨跌幅）
 
-    # NAVGreen API — 燃油价格（需要登录 token）
-    # token 获取：登录 vip.navgreen.cn → DevTools → Application → LocalStorage → 复制 "token" 字段
-    # 存入 GitHub Secrets: NAVGREEN_TOKEN；有效期约 30 天，过期后重新登录复制
-    FUEL_API       = "https://miniapi.navgreen.cn/api/vessel/bunkers/prices"
-    FUEL_LIMIT     = 200        # 单批请求上限（total≈1097，自动分批）
+    # NAVGreen API — 燃油价格（公开接口，数据源 shipandbunker）
+    # 返回约 200 个港口 + 14 条 region 平均；记录形如 {portName, prices:{vlsfo,mgo,ifo380,scrubber_spread}, ...}
+    # NAVGREEN_TOKEN 留作兼容（新接口不需要），如有则作为 header 一并传
+    FUEL_API       = "https://miniapi.navgreen.cn/api/data/shipandbunker_apac_prices"
+    FUEL_LIMIT     = 500        # 单次拉取上限（实际 ~206 条，一次返回）
     NAVGREEN_TOKEN = os.getenv("NAVGREEN_TOKEN", "")
 
     # 推送渠道 webhook（留空则跳过对应渠道）
@@ -268,48 +268,44 @@ _FUEL_FLAGS = {
 
 
 def fetch_fuel_data() -> dict | None:
-    """分批拉取全量燃油价格，返回分析数据字典。token 未配置时返回 None。
+    """拉取全球燃油价格，返回分析数据字典。
 
-    API: GET /api/vessel/bunkers/prices?limit=N&skip=N
-    Header: token = NAVGREEN_TOKEN
-    每条记录: {portName, grade(ifo380/vlsfo/lsmgo), price, portDistrict, lastUpdated}
+    API: GET /api/data/shipandbunker_apac_prices?limit=N （公开接口，无需 token）
+    数据源：shipandbunker.com（APAC/EMEA/Americas 三大区共 ~200 港口）
+    每条记录形如：
+      {
+        portName, region, area, portCountry, countryCode, itemType('port'|'world'),
+        priceDate, dataTime, sourceUpdatedAt,
+        prices: {
+          vlsfo:        {price, movement, movementDirection, rawPriceText},
+          mgo:          {price, ...},
+          ifo380:       {price, ...},
+          scrubber_spread: {price, ...}  # 可能缺失
+        }
+      }
     """
-    if not Config.NAVGREEN_TOKEN:
-        log.warning("⚠️  NAVGREEN_TOKEN 未配置，跳过燃油数据。请将 token 加入环境变量。")
-        return None
-
-    headers  = {"token": Config.NAVGREEN_TOKEN}
-    all_recs = []
+    headers = {}
+    if Config.NAVGREEN_TOKEN:
+        headers["token"] = Config.NAVGREEN_TOKEN
 
     try:
-        # 首批：获取 total
-        r0 = requests.get(Config.FUEL_API,
-                          params={"limit": Config.FUEL_LIMIT, "skip": 0},
-                          headers=headers, timeout=15)
-        r0.raise_for_status()
-        j0 = r0.json()
-        if j0.get("code") != 200:
-            log.error(f"燃油 API 错误: {j0.get('msg')}")
+        resp = requests.get(Config.FUEL_API,
+                            params={"limit": Config.FUEL_LIMIT},
+                            headers=headers, timeout=20)
+        resp.raise_for_status()
+        j = resp.json()
+        if j.get("code") != 200:
+            log.error(f"燃油 API 错误: {j.get('msg')}")
             return None
-        total = j0.get("total", 0)
-        all_recs.extend(j0.get("data", []))
-
-        # 分批拉余量
-        skip = Config.FUEL_LIMIT
-        while skip < total:
-            rn = requests.get(Config.FUEL_API,
-                              params={"limit": Config.FUEL_LIMIT, "skip": skip},
-                              headers=headers, timeout=15)
-            rn.raise_for_status()
-            all_recs.extend(rn.json().get("data", []))
-            skip += Config.FUEL_LIMIT
-
-        log.info(f"✅ 燃油数据: {len(all_recs)} 条 / total={total}")
+        recs = j.get("data", []) or []
+        log.info(f"✅ 燃油数据: 拉取 {len(recs)} 条记录")
     except Exception as e:
         log.error(f"燃油数据拉取失败: {e}")
         return None
 
-    return _analyze_fuel(all_recs)
+    if not recs:
+        return None
+    return _analyze_fuel(recs)
 
 
 def _safe_price(val) -> float | None:
@@ -320,32 +316,83 @@ def _safe_price(val) -> float | None:
         return None
 
 
+def _safe_movement(val) -> float | None:
+    """movement 字段允许任意数值（含 0 / 负数 / 字符串）。"""
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return None
+
+
+def _parse_price_date(s: str) -> datetime.date | None:
+    """解析新接口的 priceDate / sourceUpdatedAt 字符串为 date。"""
+    if not s:
+        return None
+    for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M:%S"):
+        try:
+            return datetime.datetime.strptime(s, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+# 新接口 grade key → 报告内部 key（保持下游模板/推送代码不变）
+_GRADE_MAP = {"ifo380": "ifo380", "vlsfo": "vlsfo", "mgo": "lsmgo"}
+
+
 def _analyze_fuel(records: list) -> dict:
-    """聚合原始记录 → 返回报告所需分析结构。"""
-    now_ts = int(datetime.datetime.now().timestamp())
+    """聚合原始记录 → 返回报告所需分析结构（与旧版输出 schema 完全兼容）。"""
+    today = datetime.date.today()
 
     # ── 按港口聚合三种油品 ──────────────────────────────────────────────────
+    # 注意：新接口把 Singapore/Rotterdam/Fujairah/Houston/Santos/Hong Kong 等核心标杆港
+    # 标为 itemType='world'（作为各区代表价），需保留；仅排除真正的"区域平均"行
     pm: dict[str, dict] = {}
     for d in records:
-        name  = (d.get("portName") or "").strip().upper()
-        grade = (d.get("grade")    or "").lower()
-        price = _safe_price(d.get("price"))
-        ts    = d.get("lastUpdated")
-        if not name or grade not in ("ifo380", "vlsfo", "lsmgo") or not price:
+        name = (d.get("portName") or "").strip()
+        if not name or "average" in name.lower():
             continue
-        if name not in pm:
-            pm[name] = {"portName": name,
-                        "district": (d.get("portDistrict") or "").strip().upper()}
-        pm[name][grade]         = price
-        pm[name][f"{grade}_ts"] = ts
+        name = name.upper()
+
+        # 用 countryCode 推 district，CN→CHINA，便于复用旧的中国港口过滤
+        cc = (d.get("countryCode") or "").strip().upper()
+        district = "CHINA" if cc == "CN" else cc or (d.get("region") or "").strip().upper()
+
+        prices = d.get("prices") or {}
+        price_date = _parse_price_date(d.get("priceDate") or d.get("sourceUpdatedAt") or "")
+
+        rec = pm.setdefault(name, {"portName": name, "district": district})
+        for api_grade, internal_grade in _GRADE_MAP.items():
+            block = prices.get(api_grade) or {}
+            v = _safe_price(block.get("price"))
+            if v is None:
+                continue
+            rec[internal_grade]                  = v
+            rec[f"{internal_grade}_date"]        = price_date
+            rec[f"{internal_grade}_ts"]          = (
+                int(datetime.datetime.combine(price_date, datetime.time()).timestamp())
+                if price_date else None
+            )
+            rec[f"{internal_grade}_move"]        = _safe_movement(block.get("movement"))
+            rec[f"{internal_grade}_move_dir"]    = block.get("movementDirection") or ""
+
+        # API 自带的 scrubber 价差（VLSFO − IFO380），有就用；没有后面会从两者算
+        sp_block = prices.get("scrubber_spread") or {}
+        sp_v = _safe_price(sp_block.get("price"))
+        if sp_v is not None:
+            rec["scrubber_api"] = sp_v
 
     ports = list(pm.values())
 
-    # ── 近 30 天有效港口 ────────────────────────────────────────────────────
-    fresh = [p for p in ports if any(
-        p.get(f"{g}_ts") and (now_ts - p[f"{g}_ts"]) < 30 * 86400
-        for g in ("ifo380", "vlsfo", "lsmgo")
-    )]
+    # ── 近 30 天有效港口（priceDate 距今 < 30 天）────────────────────────────
+    def is_fresh(p: dict) -> bool:
+        for g in ("ifo380", "vlsfo", "lsmgo"):
+            dt = p.get(f"{g}_date")
+            if dt and (today - dt).days < 30:
+                return True
+        return False
+
+    fresh = [p for p in ports if is_fresh(p)]
 
     def stats(grade: str) -> dict:
         vals = sorted(p[grade] for p in fresh if p.get(grade))
@@ -363,9 +410,10 @@ def _analyze_fuel(records: list) -> dict:
 
     # ── 关键港口详情 ─────────────────────────────────────────────────────────
     def ts_fmt(ts) -> str:
+        # 新接口 priceDate 仅有日精度，统一展示为 MM-DD
         if not ts:
             return "—"
-        return datetime.datetime.fromtimestamp(ts).strftime("%m-%d %H:%M")
+        return datetime.datetime.fromtimestamp(ts).strftime("%m-%d")
 
     key_ports = []
     for name in _FUEL_KEY_PORTS:
