@@ -150,27 +150,40 @@ def fetch_bdi_data() -> dict:
             "direction": ("up" if (pct_val or 0) >= 0 else "dn") if pct_val is not None else "neu",
         }
 
-    # 航线 TCE
+    # 航线租金 —— 新数据结构：期租 TCE 为 $/天，现货航线为 $/吨
     route_map = {
-        "C2-TCE":  ("C2 图巴朗→鹿特丹", "铁矿石 大西洋线"),
-        "C3-TCE":  ("C3 图巴朗→青岛",   "铁矿石 巴西→中国"),
-        "C5-TCE":  ("C5 西澳→青岛",     "铁矿石 太平洋线"),
-        "C17-TCE": ("C17 萨尔达尼亚→青岛", "铁矿石 南非→中国"),
-        "C5TC":    ("5TC 平均 (Cape综合)", ""),
-        "P2A_82":  ("P2A 欧洲大陆→远东", ""),
-        "P3A_82":  ("P3A 日本太平洋轮回", ""),
-        "P5TC":    ("P5TC Panamax综合",   ""),
-        "S2":      ("S2 欧洲大陆→远东",  ""),
-        "S3TC_63": ("S3TC 63K综合",      ""),
+        # —— 期租 TCE（$/天）——
+        "C5TC":    ("5TC 平均 (Cape综合)", "海岬型综合期租",        "day"),
+        "C8":      ("C8 跨大西洋往返",      "鹿特丹/直布罗陀 round", "day"),
+        "C9":      ("C9 大陆→远东",        "单程至中国/日本",       "day"),
+        "C10":     ("C10 太平洋往返",       "中国/日本 round",       "day"),
+        "C14":     ("C14 中国→巴西往返",    "China-Brazil round",    "day"),
+        "C16":     ("C16 远东→大陆回程",    "backhaul",              "day"),
+        "P5TC":    ("P5TC Panamax综合",     "巴拿马型综合期租",      "day"),
+        "P4TC":    ("P4TC Panamax综合",     "",                      "day"),
+        "P5_82":   ("P5 航线 (82K)",        "",                      "day"),
+        "S3TC_63": ("S3TC 63K综合",         "灵便型综合期租",        "day"),
+        "S10TC":   ("S10TC Supramax综合",   "",                      "day"),
+        "S2":      ("S2 航线",              "",                      "day"),
+        "S8":      ("S8 航线",              "",                      "day"),
+        "S10":     ("S10 航线",             "",                      "day"),
+        "HS7TC":   ("HS7TC Handysize综合",  "小灵便型综合期租",      "day"),
+        # —— 现货航线运价（$/吨）——
+        "C2":      ("C2 图巴朗→鹿特丹",     "铁矿石 大西洋线",       "ton"),
+        "C3":      ("C3 图巴朗→青岛",       "铁矿石 巴西→中国",      "ton"),
+        "C5":      ("C5 西澳→青岛",         "铁矿石 太平洋线",       "ton"),
+        "C7":      ("C7 玻利瓦尔→鹿特丹",   "煤炭航线",              "ton"),
+        "C17":     ("C17 萨尔达尼亚→青岛",  "铁矿石 南非→中国",      "ton"),
     }
     routes = {}
-    for api_key, (label, sublabel) in route_map.items():
+    for api_key, (label, sublabel, unit) in route_map.items():
         cur = safe(today_raw.get(api_key))
         pre = safe(prev_raw.get(api_key))
         pct_val, pct_str = chg_pct(cur, pre)
         routes[api_key] = {
             "label": label,
             "sublabel": sublabel,
+            "unit": unit,
             "val": cur,
             "pct": pct_val,
             "pct_str": pct_str,
@@ -709,36 +722,63 @@ body {
 <div class="two-col">
   <div class="card">
     <div class="card-hd">
-      <span class="card-title">主要航线租金（TCE $/天）</span>
+      <span class="card-title">主要航线租金</span>
       <span class="badge b-info" style="margin-left:0;">实时更新</span>
     </div>
     <div class="card-body">
-      <div class="sec-lbl">海岬型 Capesize</div>
-      {% for key in ['C2-TCE','C3-TCE','C5-TCE','C17-TCE','C5TC'] %}
+      {% macro route_val(r) %}{% if r.val %}{% if r.unit == 'ton' %}${{ '%.1f'|format(r.val) }}<span class="route-sub" style="display:inline;">/吨</span>{% else %}${{ '{:,.0f}'.format(r.val) }}{% endif %}{% else %}—{% endif %}{% endmacro %}
+      <div class="sec-lbl">海岬型 Capesize — 期租 TCE（$/天）</div>
+      {% for key in ['C5TC','C8','C9','C10','C14','C16'] %}
       {% set r = routes[key] %}
       <div class="route-row">
         <div class="route-name">{{ r.label }}
           {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
         </div>
-        <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
+        <div class="route-val">{{ route_val(r) }}</div>
         <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
       </div>
       {% endfor %}
-      <div class="sec-lbl">巴拿马型 Panamax</div>
-      {% for key in ['P2A_82','P3A_82','P5TC'] %}
+      <div class="sec-lbl">巴拿马型 Panamax — 期租 TCE（$/天）</div>
+      {% for key in ['P5TC','P4TC','P5_82'] %}
       {% set r = routes[key] %}
       <div class="route-row">
-        <div class="route-name">{{ r.label }}</div>
-        <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
+        <div class="route-name">{{ r.label }}
+          {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
+        </div>
+        <div class="route-val">{{ route_val(r) }}</div>
         <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
       </div>
       {% endfor %}
-      <div class="sec-lbl">灵便型 Supramax</div>
-      {% for key in ['S2','S3TC_63'] %}
+      <div class="sec-lbl">灵便型 Supramax — 期租 TCE（$/天）</div>
+      {% for key in ['S3TC_63','S10TC','S2','S8','S10'] %}
       {% set r = routes[key] %}
       <div class="route-row">
-        <div class="route-name">{{ r.label }}</div>
-        <div class="route-val">{% if r.val %}${{ '{:,.0f}'.format(r.val) }}{% else %}—{% endif %}</div>
+        <div class="route-name">{{ r.label }}
+          {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
+        </div>
+        <div class="route-val">{{ route_val(r) }}</div>
+        <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
+      </div>
+      {% endfor %}
+      <div class="sec-lbl">小灵便型 Handysize — 期租 TCE（$/天）</div>
+      {% for key in ['HS7TC'] %}
+      {% set r = routes[key] %}
+      <div class="route-row">
+        <div class="route-name">{{ r.label }}
+          {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
+        </div>
+        <div class="route-val">{{ route_val(r) }}</div>
+        <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
+      </div>
+      {% endfor %}
+      <div class="sec-lbl">现货航线运价（$/吨）</div>
+      {% for key in ['C2','C3','C5','C7','C17'] %}
+      {% set r = routes[key] %}
+      <div class="route-row">
+        <div class="route-name">{{ r.label }}
+          {% if r.sublabel %}<span class="route-sub">{{ r.sublabel }}</span>{% endif %}
+        </div>
+        <div class="route-val">{{ route_val(r) }}</div>
         <div class="route-chg {{ r.direction }}">{{ r.pct_str }}</div>
       </div>
       {% endfor %}
@@ -880,12 +920,12 @@ def generate_market_analysis(data: dict, news: list) -> list:
     items = []
 
     # ── 1. Capesize 主驱动：找最大涨跌航线 ───────────────────────────────
-    cape_keys = ["C3-TCE", "C5-TCE", "C2-TCE", "C17-TCE", "C5TC"]
+    cape_keys = ["C3", "C5", "C2", "C17", "C5TC"]
     cape_movers = [(k, routes[k]) for k in cape_keys if routes.get(k, {}).get("pct") is not None]
     if cape_movers:
         bk, br = max(cape_movers, key=lambda x: abs(x[1]["pct"]))
-        c3_pct = routes.get("C3-TCE", {}).get("pct") or 0
-        c5_pct = routes.get("C5-TCE", {}).get("pct") or 0
+        c3_pct = routes.get("C3", {}).get("pct") or 0
+        c5_pct = routes.get("C5", {}).get("pct") or 0
         if c3_pct > c5_pct + 3:
             direction_note = f"大西洋线显著强于太平洋线（C3 {s(c3_pct)}{c3_pct:.1f}% vs C5 {s(c5_pct)}{c5_pct:.1f}%），关注巴西发货量及中国补库需求。"
         elif c5_pct > c3_pct + 3:
@@ -999,8 +1039,8 @@ def generate_views(data: dict) -> tuple:
     bpi_week = week_chg.get("BPI", {}).get("pct") or 0
 
     # ── Cape 观点（仅基于 BCI 日涨跌 + 周涨跌 + C3/C5 方向）──────────────
-    c3_pct = routes.get("C3-TCE", {}).get("pct") or 0
-    c5_pct = routes.get("C5-TCE", {}).get("pct") or 0
+    c3_pct = routes.get("C3", {}).get("pct") or 0
+    c5_pct = routes.get("C5", {}).get("pct") or 0
 
     if bci_pct > 2 or (bci_pct > 0 and bci_week > 3):
         cape_dir, cape_v = "bull", "短期偏多"
@@ -1585,8 +1625,13 @@ def build_wecom_card(data: dict, report_url: str = "",
     week_chg = data.get("week_chg", {})
     trend  = data.get("trend", [])
 
-    def fmt(v):
-        return f"${v:,.0f}" if v else "—"
+    def rfmt(key):
+        """按航线单位格式化租金：$/天 取整，$/吨 保留 1 位小数。"""
+        r = routes.get(key, {})
+        v = r.get("val")
+        if v is None:
+            return "—"
+        return f"${v:.1f}/吨" if r.get("unit") == "ton" else f"${v:,.0f}"
 
     def chg(r):
         if not r or r.get("pct") is None:
@@ -1617,22 +1662,36 @@ def build_wecom_card(data: dict, report_url: str = "",
         idx_row("BSI",  "BSI 灵便型"),
         idx_row("BHSI", "BHSI 小灵便"),
         "",
-        "## 🛳 主要航线 TCE（$/天）",
+        "## 🛳 主要航线期租 TCE（$/天）",
         "**— 海岬型 Capesize —**",
-        f"- C2 图巴朗→鹿特丹　{fmt(routes.get('C2-TCE',{}).get('val'))}　{chg(routes.get('C2-TCE'))}",
-        f"- C3 图巴朗→青岛　　{fmt(routes.get('C3-TCE',{}).get('val'))}　{chg(routes.get('C3-TCE'))}",
-        f"- C5 西澳→青岛　　　{fmt(routes.get('C5-TCE',{}).get('val'))}　{chg(routes.get('C5-TCE'))}",
-        f"- C17 南非→青岛　　 {fmt(routes.get('C17-TCE',{}).get('val'))}　{chg(routes.get('C17-TCE'))}",
-        f"- 5TC 综合平均　　　{fmt(routes.get('C5TC',{}).get('val'))}　{chg(routes.get('C5TC'))}",
+        f"- 5TC 综合平均　　　{rfmt('C5TC')}　{chg(routes.get('C5TC'))}",
+        f"- C8 跨大西洋往返　 {rfmt('C8')}　{chg(routes.get('C8'))}",
+        f"- C9 大陆→远东　　 {rfmt('C9')}　{chg(routes.get('C9'))}",
+        f"- C10 太平洋往返　　{rfmt('C10')}　{chg(routes.get('C10'))}",
+        f"- C14 中国→巴西往返 {rfmt('C14')}　{chg(routes.get('C14'))}",
+        f"- C16 远东→大陆回程 {rfmt('C16')}　{chg(routes.get('C16'))}",
         "",
         "**— 巴拿马型 Panamax —**",
-        f"- P2A 欧洲→远东　　{fmt(routes.get('P2A_82',{}).get('val'))}　{chg(routes.get('P2A_82'))}",
-        f"- P3A 日本太平洋轮回　{fmt(routes.get('P3A_82',{}).get('val'))}　{chg(routes.get('P3A_82'))}",
-        f"- P5TC 综合　　　　 {fmt(routes.get('P5TC',{}).get('val'))}　{chg(routes.get('P5TC'))}",
+        f"- P5TC 综合　　　　 {rfmt('P5TC')}　{chg(routes.get('P5TC'))}",
+        f"- P4TC 综合　　　　 {rfmt('P4TC')}　{chg(routes.get('P4TC'))}",
+        f"- P5 航线 (82K)　　 {rfmt('P5_82')}　{chg(routes.get('P5_82'))}",
         "",
         "**— 灵便型 Supramax —**",
-        f"- S2 欧洲→远东　　 {fmt(routes.get('S2',{}).get('val'))}　{chg(routes.get('S2'))}",
-        f"- S3TC 63K综合　　 {fmt(routes.get('S3TC_63',{}).get('val'))}　{chg(routes.get('S3TC_63'))}",
+        f"- S3TC 63K综合　　 {rfmt('S3TC_63')}　{chg(routes.get('S3TC_63'))}",
+        f"- S10TC 综合　　　 {rfmt('S10TC')}　{chg(routes.get('S10TC'))}",
+        f"- S2 航线　　　　　{rfmt('S2')}　{chg(routes.get('S2'))}",
+        f"- S8 航线　　　　　{rfmt('S8')}　{chg(routes.get('S8'))}",
+        f"- S10 航线　　　　 {rfmt('S10')}　{chg(routes.get('S10'))}",
+        "",
+        "**— 小灵便型 Handysize —**",
+        f"- HS7TC 综合　　　 {rfmt('HS7TC')}　{chg(routes.get('HS7TC'))}",
+        "",
+        "## ⚓ 现货航线运价（$/吨）",
+        f"- C2 图巴朗→鹿特丹　{rfmt('C2')}　{chg(routes.get('C2'))}",
+        f"- C3 图巴朗→青岛　　{rfmt('C3')}　{chg(routes.get('C3'))}",
+        f"- C5 西澳→青岛　　　{rfmt('C5')}　{chg(routes.get('C5'))}",
+        f"- C7 玻利瓦尔→鹿特丹 {rfmt('C7')}　{chg(routes.get('C7'))}",
+        f"- C17 萨尔达尼亚→青岛 {rfmt('C17')}　{chg(routes.get('C17'))}",
     ]
 
     # 近5日走势
@@ -1845,18 +1904,20 @@ def push_dingtalk(data: dict, report_url: str = "") -> bool:
     bdi = idx["BDI"]
     bci = idx["BCI"]
 
-    def fmt(v):
-        return f"${v:,.0f}" if v else "—"
+    def fmt_ton(v):
+        return f"${v:.1f}/吨" if v else "—"
 
-    c3 = data["routes"].get("C3-TCE", {})
-    c5 = data["routes"].get("C5-TCE", {})
+    c5tc = data["routes"].get("C5TC", {})
+    c3 = data["routes"].get("C3", {})
+    c5 = data["routes"].get("C5", {})
 
     text = (
         f"【干散货日报 {data['date']}】\n"
         f"BDI: {int(bdi['val'] or 0)} ({bdi['pct_str']})\n"
         f"BCI: {int(bci['val'] or 0)} ({bci['pct_str']})\n"
-        f"C3 巴西→青岛: {fmt(c3.get('val'))} ({c3.get('pct_str','')})\n"
-        f"C5 西澳→青岛: {fmt(c5.get('val'))} ({c5.get('pct_str','')})\n"
+        f"C5TC Cape综合: ${c5tc.get('val') or 0:,.0f}/天 ({c5tc.get('pct_str','')})\n"
+        f"C3 巴西→青岛: {fmt_ton(c3.get('val'))} ({c3.get('pct_str','')})\n"
+        f"C5 西澳→青岛: {fmt_ton(c5.get('val'))} ({c5.get('pct_str','')})\n"
     )
     if report_url:
         text += f"完整报告: {report_url}"
@@ -1888,7 +1949,7 @@ def push_feishu(data: dict, report_url: str = "") -> bool:
     idx = data["indices"]
     bdi = idx["BDI"]
     bci = idx["BCI"]
-    c3 = data["routes"].get("C3-TCE", {})
+    c3 = data["routes"].get("C3", {})
 
     color = "green" if (bdi["pct"] or 0) >= 0 else "red"
 
@@ -1908,7 +1969,7 @@ def push_feishu(data: dict, report_url: str = "") -> bool:
                         {"is_short": True, "text": {"tag": "lark_md",
                             "content": f"**BCI 海岬**\n{int(bci['val'] or 0)} ({bci['pct_str']})"}},
                         {"is_short": True, "text": {"tag": "lark_md",
-                            "content": f"**C3 巴西→青岛**\n${c3.get('val') or 0:,.0f} ({c3.get('pct_str','')})"}},
+                            "content": f"**C3 巴西→青岛**\n${c3.get('val') or 0:.1f}/吨 ({c3.get('pct_str','')})"}},
                     ],
                 },
             ],
@@ -1946,12 +2007,15 @@ def push_slack(data: dict, report_url: str = "") -> bool:
     emoji = ":chart_with_upwards_trend:" if (bdi["pct"] or 0) >= 0 else ":chart_with_downwards_trend:"
 
     routes_txt = ""
-    for key, label in [("C3-TCE", "C3 Brazil→Qingdao"), ("C5-TCE", "C5 WAust→Qingdao"),
-                        ("P2A_82", "P2A Cont→FE")]:
+    for key, label in [("C5TC", "C5TC Cape avg ($/day)"),
+                        ("C3", "C3 Brazil→Qingdao ($/t)"),
+                        ("C5", "C5 WAust→Qingdao ($/t)"),
+                        ("P5TC", "P5TC Panamax avg ($/day)")]:
         r = data["routes"].get(key, {})
         if r.get("val"):
             e = "🔺" if r["direction"] == "up" else "🔻"
-            routes_txt += f"• {label}: *${r['val']:,.0f}* {e}{r['pct_str']}\n"
+            val_txt = f"${r['val']:.1f}" if r.get("unit") == "ton" else f"${r['val']:,.0f}"
+            routes_txt += f"• {label}: *{val_txt}* {e}{r['pct_str']}\n"
 
     blocks = [
         {"type": "header", "text": {"type": "plain_text",
