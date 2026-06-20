@@ -1,0 +1,29 @@
+name: SEO 报告页 · OSS 直传测试
+
+# 手动触发的隔离测试：只生成样例页并上传 OSS（不跑日报脚本、不发企微）。
+on:
+  workflow_dispatch:
+
+jobs:
+  test-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install oss2
+      - name: 生成样例页 + 上传 OSS + 推送收录
+        env:
+          OSS_ENDPOINT:     ${{ secrets.OSS_ENDPOINT }}
+          OSS_BUCKET:       ${{ secrets.OSS_BUCKET }}
+          OSS_AK_ID:        ${{ secrets.OSS_AK_ID }}
+          OSS_AK_SECRET:    ${{ secrets.OSS_AK_SECRET }}
+          BAIDU_PUSH_TOKEN: ${{ secrets.BAIDU_PUSH_TOKEN }}
+          INDEXNOW_KEY:     ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          mkdir -p seo_pages/data/bdi-market
+          cp seo_pages/sample_data/bdi-market-2026-06-17.json seo_pages/data/bdi-market/2026-06-17.json
+          python seo_pages/build_index.py out --site https://www.navgreen.cn
+          python seo_pages/publish.py out --urls "https://www.navgreen.cn/reports/bdi-market/2026-06-17/"
+          echo "::notice::验证 https://navgreen-reports.oss-cn-hangzhou.aliyuncs.com/reports/bdi-market/2026-06-17/index.html"
