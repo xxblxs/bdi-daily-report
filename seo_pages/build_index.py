@@ -21,8 +21,11 @@ import generator  # noqa: E402
 
 DATA_ROOT = pathlib.Path(__file__).resolve().parent / "data"
 TYPES = {
-    "bdi-market": ("干散货市场日报", "Dry Bulk Market Daily"),
-    # add: port-congestion, sea-conditions, bunker-fuel, cyclone ...
+    "bdi-market":      ("干散货市场日报", "Dry Bulk Market Daily"),
+    "port-congestion": ("干散货全球港口拥堵日报", "Global Port Congestion Report"),
+    "sea-conditions":  ("全球主要航线海况日报", "Global Sea Conditions Report"),
+    "cyclone":         ("全球热带气旋预警日报", "Global Tropical Cyclone Alert"),
+    "bunker-fuel":     ("全球船用燃油日报", "Global Bunker Fuel Report"),
 }
 
 HUB_CSS = generator.CSS
@@ -100,7 +103,8 @@ def main():
             p = json.loads(f.read_text(encoding="utf-8"))
             prev = p["date"] if i + 1 < len(files) else None  # newer→older; prev is the next file
             prev_date = json.loads(files[i + 1].read_text(encoding="utf-8"))["date"] if i + 1 < len(files) else None
-            page = generator.build_html(p, site, prev_date)
+            page = (generator.build_html(p, site, prev_date) if slug == "bdi-market"
+                    else generator.render_generic(p, site, prev_date))
             pd = out / "reports" / slug / p["date"]
             pd.mkdir(parents=True, exist_ok=True)
             (pd / "index.html").write_text(page, encoding="utf-8")

@@ -287,6 +287,133 @@ def build_html(p: dict, site: str, prev_date: str | None) -> str:
 </body></html>"""
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Generic section-based renderer — for report types other than bdi-market
+# (port-congestion / sea-conditions / cyclone / bunker-fuel). The JSON carries a
+# list of `sections`, each rendered by kind: cards | table | notes | views | stat.
+# ──────────────────────────────────────────────────────────────────────────────
+
+def head_generic(p: dict, site: str, url_path: str) -> str:
+    url = site + url_path
+    title = f"{p['type_zh']} {p['date']} | {BRAND}"
+    desc = p.get("summary_zh") or f"{p['type_zh']}（{p.get('type_en','')}）{p['date']}：{p.get('headline','')}。NAVGreen 航运商业操作系统。"
+    kw = p.get("keywords", "")
+    dataset = {
+        "@context": "https://schema.org", "@type": "Dataset",
+        "name": f"{p['type_zh']} {p['date']}", "description": strip_tags(desc)[:300],
+        "url": url, "inLanguage": ["zh-CN", "en"], "dateModified": p["date"],
+        "creator": {"@type": "Organization", "name": BRAND, "url": site + "/"},
+        "isAccessibleForFree": True,
+    }
+    article = {
+        "@context": "https://schema.org", "@type": "NewsArticle",
+        "headline": strip_tags(title), "description": strip_tags(desc)[:300],
+        "datePublished": p["date"] + "T09:00:00+08:00",
+        "dateModified": p["date"] + "T09:00:00+08:00",
+        "inLanguage": "zh-CN", "mainEntityOfPage": url,
+        "author": {"@type": "Organization", "name": BRAND},
+        "publisher": {"@type": "Organization", "name": BRAND,
+                      "logo": {"@type": "ImageObject", "url": site + "/logo.png"}},
+    }
+    return f"""<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>{esc(title)}</title>
+<meta name="description" content="{esc(desc)}"/>
+<meta name="keywords" content="{esc(kw)}"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="{esc(url)}"/>
+<link rel="alternate" hreflang="zh" href="{esc(url)}"/>
+<link rel="alternate" hreflang="en" href="{esc(url)}"/>
+<link rel="alternate" hreflang="x-default" href="{esc(url)}"/>
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="{esc(title)}"/>
+<meta property="og:description" content="{esc(desc)}"/>
+<meta property="og:url" content="{esc(url)}"/>
+<meta property="og:site_name" content="{BRAND}"/>
+<meta property="og:image" content="{esc(site)}/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<script type="application/ld+json">{json.dumps(dataset, ensure_ascii=False)}</script>
+<script type="application/ld+json">{json.dumps(article, ensure_ascii=False)}</script>
+<style>{CSS}</style>
+</head>"""
+
+
+def _render_section(s: dict) -> str:
+    title = f'<h2>{esc(s.get("title_zh",""))}{(" · " + s["title_en"]) if s.get("title_en") else ""}</h2>'
+    kind = s.get("kind")
+    if kind == "cards":
+        cards = "".join(
+            f'<div class="card"><div class="nm">{esc(i.get("label",""))}</div>'
+            f'<div class="v">{esc(i.get("value",""))}</div>'
+            f'<div class="{i.get("direction","neu")}">{esc(i.get("sub",""))}</div></div>'
+            for i in s.get("items", []))
+        return f'{title}<div class="cards">{cards}</div>'
+    if kind == "table":
+        head = "".join(
+            f'<th class="{"r" if c.get("num") else ""}">{esc(c.get("zh",""))}'
+            f'{("<br><span class=sl>"+esc(c["en"])+"</span>") if c.get("en") else ""}</th>'
+            for c in s.get("columns", []))
+        rows = ""
+        for row in s.get("rows", []):
+            rows += "<tr>" + "".join(
+                (f'<td class="r {c.get("cls","")}">{esc(c.get("v",""))}</td>' if isinstance(c, dict)
+                 else f"<td>{esc(c)}</td>")
+                for c in row) + "</tr>"
+        return f'{title}<table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table>'
+    if kind == "notes":
+        notes = "".join(
+            f'<div class="note {i.get("type","neu")}"><span class="tag">{esc(i.get("tag",""))}</span>{i.get("text","")}</div>'
+            for i in s.get("items", []))
+        return f"{title}{notes}"
+    if kind == "views":
+        vs = "".join(
+            f'<div class="view"><div class="st">{esc(i.get("label",""))}</div>'
+            f'<div class="ti">{esc(i.get("title",""))}</div><div>{esc(i.get("text",""))}</div></div>'
+            for i in s.get("items", []))
+        return f'{title}<div class="views">{vs}</div>'
+    return ""
+
+
+def render_generic(p: dict, site: str, prev_date: str | None) -> str:
+    slug = p["slug"]
+    date = p["date"]
+    url_path = f"/reports/{slug}/{date}/"
+    sections = "".join(_render_section(s) for s in p.get("sections", []))
+    related = "".join(f'<a href="{site}{href}">{esc(zh)} · {esc(en)}</a>' for href, zh, en in NAV_LINKS)
+    prev_link = (f'<a href="{site}/reports/{slug}/{prev_date}/">← 前一日 {prev_date}</a> · '
+                 if prev_date else "")
+    en_block = f'<div class="en" lang="en">{esc(p.get("summary_en",""))}</div>' if p.get("summary_en") else ""
+    return head_generic(p, site, url_path) + f"""
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="{site}/">NAV<span>Green</span></a>
+  <nav><a href="{site}/reports/{slug}/">{esc(p['type_zh'])}</a></nav>
+</div></header>
+<main class="wrap">
+  <div class="hero">
+    <div class="kicker">{esc(p.get('type_en','').upper())} · {esc(date)}</div>
+    <h1>{esc(p['type_zh'])}</h1>
+    <div class="sub">{esc(p.get('type_en',''))} — {esc(date)}</div>
+    <div class="headline">{esc(p.get('headline',''))}</div>
+  </div>
+  {en_block}
+  {sections}
+  <h2>延伸阅读 · From NAVGreen</h2>
+  <div class="related">{related}</div>
+  <h2>更多 · More</h2>
+  <p>{prev_link}<a href="{site}/reports/{slug}/">全部{esc(p['type_zh'])} →</a></p>
+</main>
+<footer class="site"><div class="wrap">
+  数据来源 Sources: {esc(" / ".join(p.get("sources", [])))}。
+  本报告由 NAVGreen 自动生成，仅供参考，不构成投资/航行决策建议。
+  © {datetime.date.today().year} {BRAND} · <a href="{site}/">www.navgreen.cn</a>
+</div></footer>
+</body></html>"""
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("data_json")

@@ -1,0 +1,42 @@
+{
+  "report_type": "sea-conditions",
+  "slug": "sea-conditions",
+  "date": "2026-06-19",
+  "type_zh": "全球主要航线海况日报",
+  "type_en": "Global Sea Conditions Report",
+  "headline": "南海需注意 · 北太平洋关注 · 印度洋适航",
+  "keywords": "航线海况,浪高,风速,涌浪,适航,天气路由,weather routing,sea state,wave height,voyage safety",
+  "summary_en": "On 2026-06-19, the South China Sea route shows the highest sea state (wave height up to 3.2 m, wind 27 kn), warranting routing caution, while the Indian Ocean and Atlantic legs remain favourable. Per-route wave height, swell and wind, plus a regional outlook, are listed below to support weather routing and ETA decisions.",
+  "summary_zh": "2026-06-19 主要航线海况：南海航段海况最高（最大浪高 3.2 米、风速 27 节），需注意天气路由；印度洋与大西洋航段较为适航。下表为各航区浪高/涌高/风速与分区观点，供天气路由与 ETA 决策参考。",
+  "sections": [
+    {
+      "kind": "table",
+      "title_zh": "各航区海况",
+      "title_en": "Route Sea State",
+      "columns": [
+        {"zh": "航区", "en": "Route"}, {"zh": "风速(节)", "en": "Wind", "num": true},
+        {"zh": "风向", "en": "Dir", "num": true}, {"zh": "最大浪高(米)", "en": "Wave", "num": true},
+        {"zh": "涌高(米)", "en": "Swell", "num": true}, {"zh": "评级", "en": "Risk", "num": true}
+      ],
+      "rows": [
+        ["南海 South China Sea", {"v": "27", "cls": "dn"}, {"v": "SW"}, {"v": "3.2", "cls": "dn"}, {"v": "2.1", "cls": "dn"}, {"v": "需注意", "cls": "dn"}],
+        ["北太平洋 North Pacific", {"v": "18"}, {"v": "W"}, {"v": "2.3"}, {"v": "1.6"}, {"v": "关注", "cls": "neu"}],
+        ["东海 East China Sea", {"v": "15"}, {"v": "S"}, {"v": "1.8"}, {"v": "1.1"}, {"v": "关注", "cls": "neu"}],
+        ["马六甲 Malacca Strait", {"v": "9"}, {"v": "SE"}, {"v": "0.9"}, {"v": "0.6"}, {"v": "适航", "cls": "up"}],
+        ["印度洋 Indian Ocean", {"v": "11"}, {"v": "SW"}, {"v": "1.3"}, {"v": "1.0"}, {"v": "适航", "cls": "up"}],
+        ["北大西洋 North Atlantic", {"v": "14"}, {"v": "NW"}, {"v": "1.7"}, {"v": "1.2"}, {"v": "适航", "cls": "up"}]
+      ]
+    },
+    {
+      "kind": "views",
+      "title_zh": "分区海况观点",
+      "title_en": "Regional Outlook",
+      "items": [
+        {"label": "西太平洋 W. PACIFIC", "title": "南海需注意", "text": "南海西南季风加强，最大浪高 3.2 米、风速 27 节。北上航线建议适当东偏避浪，关注涌浪叠加。"},
+        {"label": "印度洋 INDIAN OCEAN", "title": "总体适航", "text": "西南季风尚未全面爆发，浪高 1.3 米、风速 11 节，航行条件良好。"},
+        {"label": "大西洋 ATLANTIC", "title": "平稳", "text": "北大西洋无强气旋活动，浪高 1.7 米，适航；关注后期低压槽东移。"}
+      ]
+    }
+  ],
+  "sources": ["Open-Meteo Marine", "NAVGreen 气象"]
+}
