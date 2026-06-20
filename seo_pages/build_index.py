@@ -33,43 +33,60 @@ HUB_CSS = generator.CSS
 
 def hub_page(site, type_slug, zh, en, dates):
     items = "".join(
-        f'<li><a href="{site}/reports/{type_slug}/{d}/">{zh} · {d}</a></li>' for d in dates)
+        f'<li><a href="{site}/reports/{type_slug}/{d}/">'
+        f'{generator.biL({"zh": f"{zh} · {d}", "en": f"{en} · {d}"})}</a></li>'
+        for d in dates)
     url = f"{site}/reports/{type_slug}/"
-    return f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/>
+    title_zh = f"{zh} · 历史归档 | NAVGreen"
+    title_en = f"{en} Archive | NAVGreen"
+    desc = (f"{zh}（{en}）每日归档：BDI、各船型 TCE、主要航线运费与市场解读。"
+            f"NAVGreen 航运商业操作系统。 "
+            f"{en} daily archive — BDI, TCE by vessel class, route rates and market commentary.")
+    return f"""<!doctype html><html lang="zh-CN" data-lang="zh" data-title-zh="{generator.esc(title_zh)}" data-title-en="{generator.esc(title_en)}">
+<head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>{zh} · 历史归档 | NAVGreen</title>
-<meta name="description" content="{zh}（{en}）每日归档：BDI、各船型 TCE、主要航线运费与市场解读。NAVGreen 航运商业操作系统。"/>
+<title>{generator.esc(title_zh)}</title>
+<meta name="description" content="{generator.esc(desc)}"/>
 <link rel="canonical" href="{url}"/>
 <link rel="alternate" hreflang="zh" href="{url}"/><link rel="alternate" hreflang="en" href="{url}"/>
 <link rel="alternate" hreflang="x-default" href="{url}"/>
 <style>{HUB_CSS} ul{{list-style:none;padding:0}} li{{border-bottom:1px solid #14201b;padding:12px 0}}</style>
 </head><body>
 <header class="site"><div class="wrap"><a class="brand" href="{site}/">NAV<span>Green</span></a>
-<nav><a href="{site}/reports/">全部日报</a></nav></div></header>
+<nav>{generator.LANG_SWITCH}<a href="{site}/reports/">{generator.bi_title("全部日报", "All Reports")}</a></nav></div></header>
 <main class="wrap"><div class="hero"><div class="kicker">REPORTS · ARCHIVE</div>
-<h1>{zh}</h1><div class="sub">{en} — 每日更新归档</div></div>
-<h2>历史报告 · {len(dates)} 期</h2><ul>{items}</ul></main>
+<h1>{generator.bi_title(zh, en)}</h1><div class="sub">{generator.biL({"zh": f"{en} — 每日更新归档", "en": f"{en} — daily archive"})}</div></div>
+<h2>{generator.bi_title(f"历史报告 · {len(dates)} 期", f"Archive · {len(dates)} issues")}</h2><ul>{items}</ul></main>
 <footer class="site"><div class="wrap">© {datetime.date.today().year} NAVGreen · <a href="{site}/">www.navgreen.cn</a></div></footer>
+{generator.LANG_JS}
 </body></html>"""
 
 
 def landing_page(site, type_links):
     cards = "".join(
-        f'<div class="view"><div class="ti">{zh}</div><div>{en}</div>'
-        f'<p><a href="{site}/reports/{slug}/">查看归档 →</a></p></div>'
+        f'<div class="view"><div class="ti">{generator.bi_title(zh, en)}</div>'
+        f'<div>{generator.biL({"zh": "每日更新归档", "en": "Daily archive"})}</div>'
+        f'<p><a href="{site}/reports/{slug}/">{generator.bi_title("查看归档 →", "View archive →")}</a></p></div>'
         for slug, (zh, en) in type_links)
     url = f"{site}/reports/"
-    return f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/>
+    title_zh = "航运市场日报 | NAVGreen"
+    title_en = "Maritime Market Reports | NAVGreen"
+    desc = ("NAVGreen 每日航运市场数据报告：干散货 BDI、港口拥堵、航线海况、船用燃油、台风路径。数据驱动的航运决策。 "
+            "NAVGreen daily maritime market data: dry bulk BDI, port congestion, sea conditions, bunker fuel, cyclone tracks.")
+    return f"""<!doctype html><html lang="zh-CN" data-lang="zh" data-title-zh="{generator.esc(title_zh)}" data-title-en="{generator.esc(title_en)}">
+<head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>航运市场日报 · Maritime Market Reports | NAVGreen</title>
-<meta name="description" content="NAVGreen 每日航运市场数据报告：干散货 BDI、港口拥堵、航线海况、船用燃油、台风路径。数据驱动的航运决策。"/>
+<title>{generator.esc(title_zh)}</title>
+<meta name="description" content="{generator.esc(desc)}"/>
 <link rel="canonical" href="{url}"/>
 <style>{HUB_CSS}</style></head><body>
-<header class="site"><div class="wrap"><a class="brand" href="{site}/">NAV<span>Green</span></a></div></header>
+<header class="site"><div class="wrap"><a class="brand" href="{site}/">NAV<span>Green</span></a>
+<nav>{generator.LANG_SWITCH}</nav></div></header>
 <main class="wrap"><div class="hero"><div class="kicker">MARITIME MARKET REPORTS</div>
-<h1>航运市场日报</h1><div class="sub">Daily, data-driven maritime market intelligence</div></div>
+<h1>{generator.bi_title("航运市场日报", "Maritime Market Reports")}</h1><div class="sub">{generator.biL({"zh": "每日数据驱动的航运市场情报", "en": "Daily, data-driven maritime market intelligence"})}</div></div>
 <div class="views" style="margin-top:24px">{cards}</div></main>
 <footer class="site"><div class="wrap">© {datetime.date.today().year} NAVGreen · <a href="{site}/">www.navgreen.cn</a></div></footer>
+{generator.LANG_JS}
 </body></html>"""
 
 

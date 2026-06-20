@@ -75,6 +75,7 @@ def head(p: dict, site: str, url_path: str) -> str:
     bdi_val = int(idx.get("val") or 0)
     bdi_ps = idx.get("pct_str", "")
     title = f"干散货市场日报 {p['date']} · BDI {bdi_val} ({bdi_ps}) | {BRAND}"
+    title_en = f"Dry Bulk Market Daily {p['date']} · BDI {bdi_val} ({bdi_ps}) | {BRAND}"
     desc = (f"{p['date']} 波罗的海干散货指数 BDI {bdi_val}（{bdi_ps}）；"
             f"海岬型 BCI {int(p['indices']['BCI'].get('val') or 0)}、"
             f"巴拿马型 BPI {int(p['indices']['BPI'].get('val') or 0)}。"
@@ -106,7 +107,7 @@ def head(p: dict, site: str, url_path: str) -> str:
                       "logo": {"@type": "ImageObject", "url": site + "/logo.png"}},
     }
     return f"""<!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-lang="zh" data-title-zh="{esc(title)}" data-title-en="{esc(title_en)}">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -172,15 +173,79 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
 .related a:hover{border-color:#10B981;text-decoration:none}
 footer.site{border-top:1px solid #18241f;margin-top:46px;padding:24px 0;color:#6f857c;font-size:13px}
 @media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}.views,.grid2{grid-template-columns:1fr}h1{font-size:26px}}
+/* bilingual toggle: show only the active language */
+html[data-lang="zh"] .len{display:none}
+html[data-lang="en"] .lzh{display:none}
+.langsw{display:inline-flex;border:1px solid #18241f;border-radius:6px;overflow:hidden}
+.langsw button{background:transparent;color:#8aa399;border:0;padding:6px 12px;font-size:13px;cursor:pointer;font-family:inherit;line-height:1}
+.langsw button.on{background:#10B981;color:#06120d;font-weight:700}
 """
 
+# Language switcher button + the toggle script (vanilla JS, persists in localStorage).
+LANG_SWITCH = ('<div class="langsw" role="group" aria-label="language">'
+               '<button type="button" data-l="en">EN</button>'
+               '<button type="button" data-l="zh">中文</button></div>')
 
-def card(d: dict) -> str:
+LANG_JS = """<script>(function(){
+var L=localStorage.getItem('ng_lang')||'zh';
+function set(l){var d=document.documentElement;d.setAttribute('data-lang',l);localStorage.setItem('ng_lang',l);
+document.querySelectorAll('.langsw button').forEach(function(b){b.classList.toggle('on',b.dataset.l===l)});
+var t=d.getAttribute('data-title-'+l);if(t)document.title=t;}
+document.querySelectorAll('.langsw button').forEach(function(b){b.addEventListener('click',function(){set(b.dataset.l)})});
+set(L);})();</script>"""
+
+
+def biL(v) -> str:
+    """Render a bilingual field. Dict {zh,en} -> two lang spans; str -> plain."""
+    if isinstance(v, dict) and ("zh" in v or "en" in v):
+        return (f'<span class="lzh">{esc(v.get("zh",""))}</span>'
+                f'<span class="len">{esc(v.get("en",""))}</span>')
+    return esc(v)
+
+
+def bi_title(zh: str, en: str) -> str:
+    return f'<span class="lzh">{esc(zh)}</span><span class="len">{esc(en)}</span>'
+
+
+INDEX_LABELS = {
+    "BDI": ("BDI 综合", "BDI Composite"), "BCI": ("BCI 海岬型", "BCI Capesize"),
+    "BPI": ("BPI 巴拿马型", "BPI Panamax"), "BSI": ("BSI 灵便型", "BSI Supramax"),
+    "BHSI": ("BHSI 小灵便", "BHSI Handysize"),
+}
+
+
+def card(key: str, d: dict) -> str:
     v = d.get("val")
-    return (f'<div class="card"><div class="nm">{esc(d.get("label",""))}</div>'
+    zh, en = INDEX_LABELS.get(key, (d.get("label", key), d.get("label", key)))
+    return (f'<div class="card"><div class="nm">{bi_title(zh, en)}</div>'
             f'<div class="v">{int(v) if v is not None else "—"}</div>'
             f'<div class="{dir_class(d.get("direction"))}">{esc(d.get("pct_str","—"))} '
             f'({"+" if (d.get("diff") or 0)>=0 else ""}{d.get("diff","")})</div></div>')
+
+
+def en_drivers(p: dict) -> str:
+    """Deterministic English market-driver commentary from the indices."""
+    idx = p["indices"]
+    def s(k):
+        d = idx.get(k, {}); ps = d.get("pct_str", "n/a")
+        return f"{ps}"
+    return (f'<div class="note neu"><span class="tag">Market Drivers</span>'
+            f'<strong>Capesize (BCI) {s("BCI")}, Panamax (BPI) {s("BPI")}.</strong> '
+            f'Smaller sizes Supramax {s("BSI")} / Handysize {s("BHSI")}. '
+            'Movements are driven by iron-ore and coal tonne-mile demand against vessel supply, '
+            'port congestion and bunker costs; see the per-shiptype outlook below.</div>')
+
+
+def en_views(p: dict) -> str:
+    """Deterministic English per-shiptype outlook."""
+    idx = p["indices"]
+    def block(label, k):
+        d = idx.get(k, {})
+        return (f'<div class="view"><div class="st">{label}</div>'
+                f'<div class="ti">{d.get("val","—")} ({d.get("pct_str","—")})</div>'
+                f'<div>Daily change {d.get("pct_str","—")}; assess fixtures against the forward curve.</div></div>')
+    return (block("CAPESIZE", "BCI") + block("PANAMAX", "BPI")
+            + block("SUPRAMAX / HANDYSIZE", "BSI"))
 
 
 def route_rows(p: dict, unit: str) -> str:
@@ -197,7 +262,7 @@ def route_rows(p: dict, unit: str) -> str:
 def build_html(p: dict, site: str, prev_date: str | None) -> str:
     date = p["date"]
     url_path = f"/reports/bdi-market/{date}/"
-    cards = "".join(card(p["indices"][k]) for k in ["BDI", "BCI", "BPI", "BSI", "BHSI"])
+    cards = "".join(card(k, p["indices"][k]) for k in ["BDI", "BCI", "BPI", "BSI", "BHSI"])
 
     trend_rows = "".join(
         f'<tr><td>{esc(t["date"])}</td><td class="r">{int(t["BDI"])}</td>'
@@ -206,14 +271,17 @@ def build_html(p: dict, site: str, prev_date: str | None) -> str:
     week_rows = "".join(
         f'<tr><td>{esc(k)}</td><td class="r {dir_class("up" if (v.get("pct") or 0)>=0 else "dn")}">{esc(v.get("pct_str","—"))}</td></tr>'
         for k, v in p.get("week_chg", {}).items())
-    analysis = "".join(
+    analysis_zh = "".join(
         f'<div class="note {esc(a.get("type","neu"))}"><span class="tag">{esc(a.get("tag",""))}</span>{a.get("text","")}</div>'
         for a in p.get("market_analysis", []))
-    views = "".join(
+    analysis = f'<div class="lzh">{analysis_zh}</div><div class="len">{en_drivers(p)}</div>'
+    views_zh = "".join(
         f'<div class="view"><div class="st">{esc(v.get("shiptype",""))}</div>'
         f'<div class="ti">{esc(v.get("title",""))}</div><div>{esc(v.get("text",""))}</div></div>'
         for v in p.get("views", []))
-    related = "".join(f'<a href="{site}{href}">{esc(zh)} · {esc(en)}</a>' for href, zh, en in NAV_LINKS)
+    views = (f'<div class="lzh"><div class="views">{views_zh}</div></div>'
+             f'<div class="len"><div class="views">{en_views(p)}</div></div>')
+    related = "".join(f'<a href="{site}{href}">{biL({"zh": zh, "en": en})}</a>' for href, zh, en in NAV_LINKS)
     prev_link = (f'<a href="{site}/reports/bdi-market/{prev_date}/">← 前一日 {prev_date}</a> · '
                  if prev_date else "")
     fuel = p.get("fuel") or {}
@@ -227,63 +295,76 @@ def build_html(p: dict, site: str, prev_date: str | None) -> str:
             f'<tr><td>MGO</td><td class="r">${fuel.get("mgo_avg","—")}</td></tr>'
             f'</tbody></table>')
 
+    idx = p["indices"]
+    zh_sum = (f"{date} BDI {int(idx['BDI'].get('val') or 0)}（{idx['BDI'].get('pct_str','')}）；"
+              f"BCI {int(idx['BCI'].get('val') or 0)}、BPI {int(idx['BPI'].get('val') or 0)}、"
+              f"BSI {int(idx['BSI'].get('val') or 0)}、BHSI {int(idx['BHSI'].get('val') or 0)}。"
+              "下方为各船型 TCE、主要航线运费、5 日走势与市场解读。")
+    summary = biRaw({"zh": zh_sum, "en": en_summary(p)})
+    prev_lk = (f'<a href="{site}/reports/bdi-market/{prev_date}/">{bi_title("← 前一日 "+prev_date, "← Previous "+prev_date)}</a> · '
+               if prev_date else "")
+
     return head(p, site, url_path) + f"""
 <body>
 <header class="site"><div class="wrap">
   <a class="brand" href="{site}/">NAV<span>Green</span></a>
-  <nav><a href="{site}/reports/bdi-market/">市场日报 Reports</a></nav>
+  <nav style="display:flex;align-items:center;gap:16px">
+    <a href="{site}/reports/bdi-market/">{bi_title('市场日报', 'Reports')}</a>
+    {LANG_SWITCH}
+  </nav>
 </div></header>
 <main class="wrap">
   <div class="hero">
     <div class="kicker">DRY BULK MARKET · DAILY REPORT · {esc(date)}</div>
-    <h1>干散货市场日报</h1>
+    <h1>{bi_title('干散货市场日报', 'Dry Bulk Market Daily')}</h1>
     <div class="sub">Baltic Exchange Daily Briefing — {esc(date)}</div>
     <div class="headline">{esc(p.get("headline",""))}</div>
   </div>
 
-  <div class="en" lang="en">{esc(en_summary(p))}</div>
+  <div class="en">{summary}</div>
 
-  <h2>市场指数概览 · Market Indices</h2>
+  <h2>{bi_title('市场指数概览', 'Market Indices')}</h2>
   <div class="cards">{cards}</div>
 
   <div class="grid2" style="margin-top:24px">
     <div>
-      <h2 style="margin-top:0">期租 TCE ($/天) · Time-Charter</h2>
-      <table><thead><tr><th>航线 Route</th><th class="r">运费</th><th class="r">涨跌</th></tr></thead>
+      <h2 style="margin-top:0">{bi_title('期租 TCE ($/天)', 'Time-Charter TCE ($/day)')}</h2>
+      <table><thead><tr><th>{bi_title('航线', 'Route')}</th><th class="r">{bi_title('运费', 'Rate')}</th><th class="r">{bi_title('涨跌', 'Chg')}</th></tr></thead>
       <tbody>{route_rows(p,"day")}</tbody></table>
-      <h2>现货运价 ($/吨) · Spot</h2>
-      <table><thead><tr><th>航线 Route</th><th class="r">运价</th><th class="r">涨跌</th></tr></thead>
+      <h2>{bi_title('现货运价 ($/吨)', 'Spot ($/t)')}</h2>
+      <table><thead><tr><th>{bi_title('航线', 'Route')}</th><th class="r">{bi_title('运价', 'Rate')}</th><th class="r">{bi_title('涨跌', 'Chg')}</th></tr></thead>
       <tbody>{route_rows(p,"ton")}</tbody></table>
     </div>
     <div>
-      <h2 style="margin-top:0">近 5 日走势 · 5-Day Trend</h2>
-      <table><thead><tr><th>日期</th><th class="r">BDI</th><th class="r">BCI</th><th class="r">BPI</th></tr></thead>
+      <h2 style="margin-top:0">{bi_title('近 5 日走势', '5-Day Trend')}</h2>
+      <table><thead><tr><th>{bi_title('日期', 'Date')}</th><th class="r">BDI</th><th class="r">BCI</th><th class="r">BPI</th></tr></thead>
       <tbody>{trend_rows}</tbody></table>
-      <h2>周环比 · Week-over-Week</h2>
-      <table><thead><tr><th>指数</th><th class="r">5 日变化</th></tr></thead>
+      <h2>{bi_title('周环比', 'Week-over-Week')}</h2>
+      <table><thead><tr><th>{bi_title('指数', 'Index')}</th><th class="r">{bi_title('5 日变化', '5-day')}</th></tr></thead>
       <tbody>{week_rows}</tbody></table>
     </div>
   </div>
 
-  <h2>今日市场驱动因素 · Market Drivers</h2>
+  <h2>{bi_title('今日市场驱动因素', 'Market Drivers')}</h2>
   {analysis}
 
-  <h2>分船型市场观点 · By Shiptype</h2>
-  <div class="views">{views}</div>
+  <h2>{bi_title('分船型市场观点', 'By Shiptype')}</h2>
+  {views}
 
   {fuel_html}
 
-  <h2>延伸阅读 · From NAVGreen</h2>
+  <h2>{bi_title('延伸阅读', 'From NAVGreen')}</h2>
   <div class="related">{related}</div>
 
-  <h2>更多 · More Reports</h2>
-  <p>{prev_link}<a href="{site}/reports/bdi-market/">全部干散货市场日报 →</a></p>
+  <h2>{bi_title('更多', 'More')}</h2>
+  <p>{prev_lk}<a href="{site}/reports/bdi-market/">{bi_title('全部干散货市场日报 →', 'All Dry Bulk Market Daily →')}</a></p>
 </main>
 <footer class="site"><div class="wrap">
-  数据来源 Sources: {esc(" / ".join(p.get("sources", [])))}。
-  本报告由 NAVGreen 自动生成，仅供参考，不构成投资建议。
+  {bi_title('数据来源', 'Sources')}: {esc(" / ".join(p.get("sources", [])))}。
+  {bi_title('本报告由 NAVGreen 自动生成，仅供参考，不构成投资建议。', 'Auto-generated by NAVGreen for reference only; not investment advice.')}
   © {datetime.date.today().year} {BRAND} · <a href="{site}/">www.navgreen.cn</a>
 </div></footer>
+{LANG_JS}
 </body></html>"""
 
 
@@ -296,6 +377,7 @@ def build_html(p: dict, site: str, prev_date: str | None) -> str:
 def head_generic(p: dict, site: str, url_path: str) -> str:
     url = site + url_path
     title = f"{p['type_zh']} {p['date']} | {BRAND}"
+    title_en = f"{p.get('type_en', p['type_zh'])} {p['date']} | {BRAND}"
     desc = p.get("summary_zh") or f"{p['type_zh']}（{p.get('type_en','')}）{p['date']}：{p.get('headline','')}。NAVGreen 航运商业操作系统。"
     kw = p.get("keywords", "")
     dataset = {
@@ -316,7 +398,7 @@ def head_generic(p: dict, site: str, url_path: str) -> str:
                       "logo": {"@type": "ImageObject", "url": site + "/logo.png"}},
     }
     return f"""<!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-lang="zh" data-title-zh="{esc(title)}" data-title-en="{esc(title_en)}">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -341,14 +423,31 @@ def head_generic(p: dict, site: str, url_path: str) -> str:
 </head>"""
 
 
+def biRaw(v) -> str:
+    """Bilingual field that may contain HTML (e.g. <strong>) — not escaped."""
+    if isinstance(v, dict) and ("zh" in v or "en" in v):
+        return f'<span class="lzh">{v.get("zh","")}</span><span class="len">{v.get("en","")}</span>'
+    return str(v)
+
+
+def _cell(c) -> str:
+    """Table cell: str (neutral) | {v,cls} (neutral value) | {zh,en,cls} (bilingual)."""
+    if isinstance(c, dict):
+        cls = c.get("cls", "")
+        if "zh" in c or "en" in c:
+            return f'<td class="r {cls}">{biL(c)}</td>'
+        return f'<td class="r {cls}">{esc(c.get("v",""))}</td>'
+    return f"<td>{esc(c)}</td>"
+
+
 def _render_section(s: dict) -> str:
-    title = f'<h2>{esc(s.get("title_zh",""))}{(" · " + s["title_en"]) if s.get("title_en") else ""}</h2>'
+    title = f'<h2>{bi_title(s.get("title_zh",""), s.get("title_en") or s.get("title_zh",""))}</h2>'
     kind = s.get("kind")
     if kind == "cards":
         cards = "".join(
-            f'<div class="card"><div class="nm">{esc(i.get("label",""))}</div>'
+            f'<div class="card"><div class="nm">{biL(i.get("label",""))}</div>'
             f'<div class="v">{esc(i.get("value",""))}</div>'
-            f'<div class="{i.get("direction","neu")}">{esc(i.get("sub",""))}</div></div>'
+            f'<div class="{i.get("direction","neu")}">{biL(i.get("sub",""))}</div></div>'
             for i in s.get("items", []))
         return f'{title}<div class="cards">{cards}</div>'
     if kind == "table":
@@ -356,22 +455,17 @@ def _render_section(s: dict) -> str:
             f'<th class="{"r" if c.get("num") else ""}">{esc(c.get("zh",""))}'
             f'{("<br><span class=sl>"+esc(c["en"])+"</span>") if c.get("en") else ""}</th>'
             for c in s.get("columns", []))
-        rows = ""
-        for row in s.get("rows", []):
-            rows += "<tr>" + "".join(
-                (f'<td class="r {c.get("cls","")}">{esc(c.get("v",""))}</td>' if isinstance(c, dict)
-                 else f"<td>{esc(c)}</td>")
-                for c in row) + "</tr>"
+        rows = "".join("<tr>" + "".join(_cell(c) for c in row) + "</tr>" for row in s.get("rows", []))
         return f'{title}<table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table>'
     if kind == "notes":
         notes = "".join(
-            f'<div class="note {i.get("type","neu")}"><span class="tag">{esc(i.get("tag",""))}</span>{i.get("text","")}</div>'
+            f'<div class="note {i.get("type","neu")}"><span class="tag">{biL(i.get("tag",""))}</span>{biRaw(i.get("text",""))}</div>'
             for i in s.get("items", []))
         return f"{title}{notes}"
     if kind == "views":
         vs = "".join(
-            f'<div class="view"><div class="st">{esc(i.get("label",""))}</div>'
-            f'<div class="ti">{esc(i.get("title",""))}</div><div>{esc(i.get("text",""))}</div></div>'
+            f'<div class="view"><div class="st">{biL(i.get("label",""))}</div>'
+            f'<div class="ti">{biL(i.get("title",""))}</div><div>{biRaw(i.get("text",""))}</div></div>'
             for i in s.get("items", []))
         return f'{title}<div class="views">{vs}</div>'
     return ""
@@ -382,35 +476,39 @@ def render_generic(p: dict, site: str, prev_date: str | None) -> str:
     date = p["date"]
     url_path = f"/reports/{slug}/{date}/"
     sections = "".join(_render_section(s) for s in p.get("sections", []))
-    related = "".join(f'<a href="{site}{href}">{esc(zh)} · {esc(en)}</a>' for href, zh, en in NAV_LINKS)
-    prev_link = (f'<a href="{site}/reports/{slug}/{prev_date}/">← 前一日 {prev_date}</a> · '
+    related = "".join(f'<a href="{site}{href}">{biL({"zh": zh, "en": en})}</a>' for href, zh, en in NAV_LINKS)
+    prev_link = (f'<a href="{site}/reports/{slug}/{prev_date}/">{bi_title("← 前一日 "+prev_date, "← Previous "+prev_date)}</a> · '
                  if prev_date else "")
-    en_block = f'<div class="en" lang="en">{esc(p.get("summary_en",""))}</div>' if p.get("summary_en") else ""
+    summary = biRaw({"zh": p.get("summary_zh", ""), "en": p.get("summary_en", "")}) if (p.get("summary_zh") or p.get("summary_en")) else ""
     return head_generic(p, site, url_path) + f"""
 <body>
 <header class="site"><div class="wrap">
   <a class="brand" href="{site}/">NAV<span>Green</span></a>
-  <nav><a href="{site}/reports/{slug}/">{esc(p['type_zh'])}</a></nav>
+  <nav style="display:flex;align-items:center;gap:16px">
+    <a href="{site}/reports/{slug}/">{biL({"zh": p['type_zh'], "en": p.get('type_en', p['type_zh'])})}</a>
+    {LANG_SWITCH}
+  </nav>
 </div></header>
 <main class="wrap">
   <div class="hero">
     <div class="kicker">{esc(p.get('type_en','').upper())} · {esc(date)}</div>
-    <h1>{esc(p['type_zh'])}</h1>
+    <h1>{bi_title(p['type_zh'], p.get('type_en', p['type_zh']))}</h1>
     <div class="sub">{esc(p.get('type_en',''))} — {esc(date)}</div>
-    <div class="headline">{esc(p.get('headline',''))}</div>
+    <div class="headline">{biRaw(p.get('headline',''))}</div>
   </div>
-  {en_block}
+  {f'<div class="en">{summary}</div>' if summary else ''}
   {sections}
-  <h2>延伸阅读 · From NAVGreen</h2>
+  <h2>{bi_title('延伸阅读', 'From NAVGreen')}</h2>
   <div class="related">{related}</div>
-  <h2>更多 · More</h2>
-  <p>{prev_link}<a href="{site}/reports/{slug}/">全部{esc(p['type_zh'])} →</a></p>
+  <h2>{bi_title('更多', 'More')}</h2>
+  <p>{prev_link}<a href="{site}/reports/{slug}/">{bi_title('全部' + p['type_zh'] + ' →', 'All ' + p.get('type_en', p['type_zh']) + ' →')}</a></p>
 </main>
 <footer class="site"><div class="wrap">
-  数据来源 Sources: {esc(" / ".join(p.get("sources", [])))}。
-  本报告由 NAVGreen 自动生成，仅供参考，不构成投资/航行决策建议。
+  {bi_title('数据来源', 'Sources')}: {esc(" / ".join(p.get("sources", [])))}。
+  {bi_title('本报告由 NAVGreen 自动生成，仅供参考，不构成投资/航行决策建议。', 'Auto-generated by NAVGreen for reference only; not investment or navigation advice.')}
   © {datetime.date.today().year} {BRAND} · <a href="{site}/">www.navgreen.cn</a>
 </div></footer>
+{LANG_JS}
 </body></html>"""
 
 
@@ -423,12 +521,14 @@ def main():
     args = ap.parse_args()
 
     p = json.loads(pathlib.Path(args.data_json).read_text(encoding="utf-8"))
-    html_out = build_html(p, args.site.rstrip("/"), args.prev)
+    slug = p.get("slug") or "bdi-market"
+    page = (build_html(p, args.site.rstrip("/"), args.prev) if slug == "bdi-market"
+            else render_generic(p, args.site.rstrip("/"), args.prev))
 
-    out = pathlib.Path(args.out_dir) / "reports" / "bdi-market" / p["date"]
+    out = pathlib.Path(args.out_dir) / "reports" / slug / p["date"]
     out.mkdir(parents=True, exist_ok=True)
-    (out / "index.html").write_text(html_out, encoding="utf-8")
-    print(f"  ✓ {out / 'index.html'}  ({len(strip_tags(html_out))} chars text)")
+    (out / "index.html").write_text(page, encoding="utf-8")
+    print(f"  ✓ {out / 'index.html'}  ({len(strip_tags(page))} chars text)")
 
 
 if __name__ == "__main__":
