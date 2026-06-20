@@ -52,12 +52,11 @@ def hub_page(site, type_slug, zh, en, dates):
 <link rel="alternate" hreflang="x-default" href="{url}"/>
 <style>{HUB_CSS} ul{{list-style:none;padding:0}} li{{border-bottom:1px solid #14201b;padding:12px 0}}</style>
 </head><body>
-<header class="site"><div class="wrap"><a class="brand" href="{site}/">NAV<span>Green</span></a>
-<nav>{generator.LANG_SWITCH}<a href="{site}/reports/">{generator.bi_title("全部日报", "All Reports")}</a></nav></div></header>
+{generator.site_header(site)}
 <main class="wrap"><div class="hero"><div class="kicker">REPORTS · ARCHIVE</div>
 <h1>{generator.bi_title(zh, en)}</h1><div class="sub">{generator.biL({"zh": f"{en} — 每日更新归档", "en": f"{en} — daily archive"})}</div></div>
 <h2>{generator.bi_title(f"历史报告 · {len(dates)} 期", f"Archive · {len(dates)} issues")}</h2><ul>{items}</ul></main>
-<footer class="site"><div class="wrap">© {datetime.date.today().year} NAVGreen · <a href="{site}/">www.navgreen.cn</a></div></footer>
+{generator.site_footer(site)}
 {generator.LANG_JS}
 </body></html>"""
 
@@ -80,12 +79,11 @@ def landing_page(site, type_links):
 <meta name="description" content="{generator.esc(desc)}"/>
 <link rel="canonical" href="{url}"/>
 <style>{HUB_CSS}</style></head><body>
-<header class="site"><div class="wrap"><a class="brand" href="{site}/">NAV<span>Green</span></a>
-<nav>{generator.LANG_SWITCH}</nav></div></header>
+{generator.site_header(site)}
 <main class="wrap"><div class="hero"><div class="kicker">MARITIME MARKET REPORTS</div>
 <h1>{generator.bi_title("航运市场日报", "Maritime Market Reports")}</h1><div class="sub">{generator.biL({"zh": "每日数据驱动的航运市场情报", "en": "Daily, data-driven maritime market intelligence"})}</div></div>
 <div class="views" style="margin-top:24px">{cards}</div></main>
-<footer class="site"><div class="wrap">© {datetime.date.today().year} NAVGreen · <a href="{site}/">www.navgreen.cn</a></div></footer>
+{generator.site_footer(site)}
 {generator.LANG_JS}
 </body></html>"""
 

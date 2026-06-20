@@ -135,56 +135,88 @@ def head(p: dict, site: str, url_path: str) -> str:
 
 
 CSS = """
-*{box-sizing:border-box}body{margin:0;background:#070c0a;color:#cfe0d8;
-font-family:ui-sans-serif,system-ui,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.6}
-a{color:#10B981;text-decoration:none}a:hover{text-decoration:underline}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box}body{margin:0;background:#050A14;color:#F1F5F9;
+font-family:'Inter',ui-sans-serif,system-ui,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.6}
+a{color:#00F0A0;text-decoration:none}a:hover{text-decoration:underline}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-header.site{border-bottom:1px solid #18241f;background:#070c0a;position:sticky;top:0;z-index:5}
+header.site{border-bottom:1px solid rgba(255,255,255,0.08);background:#050A14;position:sticky;top:0;z-index:5}
 header.site .wrap{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
-.brand{font-weight:800;font-size:20px;color:#fff}.brand span{color:#10B981}
-.hero{padding:40px 0 24px;border-bottom:1px solid #18241f}
-.kicker{font-size:12px;letter-spacing:.18em;color:#10B981;font-family:ui-monospace,monospace;text-transform:uppercase}
+.brand{font-weight:800;font-size:20px;color:#fff}.brand span{color:#00F0A0}
+.hero{padding:40px 0 24px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.kicker{font-size:12px;letter-spacing:.18em;color:#00F0A0;font-family:ui-monospace,monospace;text-transform:uppercase}
 h1{font-size:34px;line-height:1.15;color:#fff;margin:10px 0 6px;letter-spacing:-.5px}
-.sub{color:#8aa399;font-style:italic}
-.headline{margin-top:10px;color:#cfe0d8;font-family:ui-monospace,monospace;font-size:14px}
-.en{background:#0c1510;border:1px solid #18241f;border-radius:8px;padding:16px 18px;margin:22px 0;color:#aebfb7;font-size:15px}
+.sub{color:#94A3B8;font-style:italic}
+.headline{margin-top:10px;color:#F1F5F9;font-family:ui-monospace,monospace;font-size:14px}
+.en{background:#0F172A;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px 18px;margin:22px 0;color:#CBD5E1;font-size:15px}
 .en b{color:#fff}
-h2{font-size:13px;letter-spacing:.16em;color:#7f968d;font-family:ui-monospace,monospace;text-transform:uppercase;
-margin:38px 0 14px;padding-bottom:8px;border-bottom:1px solid #18241f}
+h2{font-size:13px;letter-spacing:.16em;color:#64748B;font-family:ui-monospace,monospace;text-transform:uppercase;
+margin:38px 0 14px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.card{background:#0c1510;border:1px solid #18241f;border-radius:8px;padding:14px}
-.card .nm{font-size:12px;color:#8aa399}.card .v{font-size:26px;font-weight:800;color:#fff;margin:4px 0}
-.up{color:#10B981}.dn{color:#f97066}.neu{color:#8aa399}
+.card{background:#0F172A;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px}
+.card .nm{font-size:12px;color:#94A3B8}.card .v{font-size:26px;font-weight:800;color:#fff;margin:4px 0}
+.up{color:#00F0A0}.dn{color:#f97066}.neu{color:#94A3B8}
 table{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 4px}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #14201b}
-th{color:#7f968d;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+th{color:#64748B;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
-.sl{color:#6f857c;font-size:12px}
+.sl{color:#64748B;font-size:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-.note{border-left:3px solid #10B981;padding:10px 14px;margin:10px 0;background:#0c1510;border-radius:0 6px 6px 0}
+.note{border-left:3px solid #00F0A0;padding:10px 14px;margin:10px 0;background:#0F172A;border-radius:0 6px 6px 0}
 .note.bear{border-color:#f97066}.note.neu{border-color:#5b7,opacity:.9}
-.note .tag{font-size:11px;font-family:ui-monospace,monospace;letter-spacing:.06em;color:#8aa399;display:block;margin-bottom:4px}
+.note .tag{font-size:11px;font-family:ui-monospace,monospace;letter-spacing:.06em;color:#94A3B8;display:block;margin-bottom:4px}
 .views{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.view{background:#0c1510;border:1px solid #18241f;border-radius:8px;padding:16px}
-.view .st{font-size:11px;color:#7f968d;font-family:ui-monospace,monospace}
-.view .ti{font-size:18px;font-weight:700;color:#10B981;margin:6px 0}
+.view{background:#0F172A;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px}
+.view .st{font-size:11px;color:#64748B;font-family:ui-monospace,monospace}
+.view .ti{font-size:18px;font-weight:700;color:#00F0A0;margin:6px 0}
 .related{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.related a{background:#0c1510;border:1px solid #18241f;border-radius:6px;padding:10px 14px;color:#cfe0d8;font-size:14px}
-.related a:hover{border-color:#10B981;text-decoration:none}
-footer.site{border-top:1px solid #18241f;margin-top:46px;padding:24px 0;color:#6f857c;font-size:13px}
+.related a{background:#0F172A;border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px 14px;color:#F1F5F9;font-size:14px}
+.related a:hover{border-color:#00F0A0;text-decoration:none}
+footer.site{border-top:1px solid rgba(255,255,255,0.08);margin-top:46px;padding:24px 0;color:#64748B;font-size:13px}
 @media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}.views,.grid2{grid-template-columns:1fr}h1{font-size:26px}}
 /* bilingual toggle: show only the active language */
 html[data-lang="zh"] .len{display:none}
 html[data-lang="en"] .lzh{display:none}
-.langsw{display:inline-flex;border:1px solid #18241f;border-radius:6px;overflow:hidden}
-.langsw button{background:transparent;color:#8aa399;border:0;padding:6px 12px;font-size:13px;cursor:pointer;font-family:inherit;line-height:1}
-.langsw button.on{background:#10B981;color:#06120d;font-weight:700}
+/* site header — matches navgreen-home */
+.nav{display:flex;align-items:center;gap:34px}
+.nav .nitem{display:flex;flex-direction:column;align-items:center;line-height:1.1;color:#F1F5F9;font-size:15px;font-weight:500}
+.nav .nitem .sub{font-size:9px;letter-spacing:.14em;color:#64748B;font-family:'JetBrains Mono',ui-monospace,monospace;text-transform:uppercase;margin-top:3px}
+.nav .nitem:hover{color:#00F0A0}
+.nav .nitem:hover .sub{color:#00F0A0}
+.divider{width:1px;height:28px;background:rgba(255,255,255,0.08)}
+.login{color:#F1F5F9;font-size:14px}.login:hover{color:#00F0A0}
+.demo{background:#00F0A0;color:#06120d;font-weight:700;font-size:14px;padding:9px 18px;border-radius:4px}
+.demo:hover{background:#fff;text-decoration:none}
+.langsw{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:9999px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05)}
+.langsw:hover{border-color:rgba(0,240,160,0.3)}
+.langsw .gl{width:14px;height:14px;color:#94A3B8}
+.langsw button{background:none;border:0;padding:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;color:#94A3B8;cursor:pointer}
+.langsw button.on{color:#fff}
+.langsw .sep{color:rgba(255,255,255,0.2);font-size:12px}
+/* site footer — matches navgreen-home */
+.foot{border-top:1px solid rgba(255,255,255,0.08);margin-top:64px;padding:56px 0 28px}
+.foot .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:32px}
+.foot .tag{color:#94A3B8;font-size:14px;font-weight:300;max-width:320px;margin:16px 0 10px}
+.foot .loc{color:#64748B;font-size:13px}
+.foot h4{color:#fff;font-size:11px;font-family:'JetBrains Mono',ui-monospace,monospace;letter-spacing:.18em;margin:0 0 18px}
+.foot ul{list-style:none;padding:0;margin:0}.foot li{margin-bottom:14px}
+.foot a.fl{color:#94A3B8;font-size:14px;font-weight:300}.foot a.fl:hover{color:#00F0A0;text-decoration:none}
+.foot .sub-in{display:flex;gap:0;margin-top:4px}
+.foot .sub-in input{flex:1;background:#0F172A;border:1px solid rgba(255,255,255,0.08);border-right:0;color:#F1F5F9;padding:10px 12px;border-radius:4px 0 0 4px;font-family:inherit;font-size:13px}
+.foot .sub-in a{background:#00F0A0;color:#06120d;padding:0 16px;display:flex;align-items:center;border-radius:0 4px 4px 0;font-weight:700}
+.foot .botbar{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.08);color:#64748B;font-size:12px;font-family:'JetBrains Mono',ui-monospace,monospace;letter-spacing:.05em}
+.foot .botbar .lk{display:flex;gap:26px}.foot .botbar a{color:#64748B}.foot .botbar a:hover{color:#fff;text-decoration:none}
+@media(max-width:760px){.nav{display:none}.foot .cols{grid-template-columns:1fr 1fr}.foot .botbar{flex-direction:column;gap:12px}}
 """
 
-# Language switcher button + the toggle script (vanilla JS, persists in localStorage).
-LANG_SWITCH = ('<div class="langsw" role="group" aria-label="language">'
+# Globe EN/CN pill — matches navgreen-home's LanguageSwitcher. Buttons drive the toggle JS.
+_GLOBE = ('<svg class="gl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+          'stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/>'
+          '<path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>')
+LANG_SWITCH = ('<div class="langsw" role="group" aria-label="language">' + _GLOBE +
                '<button type="button" data-l="en">EN</button>'
-               '<button type="button" data-l="zh">中文</button></div>')
+               '<span class="sep">/</span>'
+               '<button type="button" data-l="zh">CN</button></div>')
 
 LANG_JS = """<script>(function(){
 var L=localStorage.getItem('ng_lang')||'zh';
@@ -193,6 +225,71 @@ document.querySelectorAll('.langsw button').forEach(function(b){b.classList.togg
 var t=d.getAttribute('data-title-'+l);if(t)document.title=t;}
 document.querySelectorAll('.langsw button').forEach(function(b){b.addEventListener('click',function(){set(b.dataset.l)})});
 set(L);})();</script>"""
+
+
+def _nitem(href, zh, en, sub):
+    return (f'<a class="nitem" href="{href}"><span>'
+            f'<span class="lzh">{esc(zh)}</span><span class="len">{esc(en)}</span></span>'
+            f'<span class="sub">{esc(sub)}</span></a>')
+
+
+def site_header(site: str) -> str:
+    """Header matching navgreen-home: logo + nav + EN/CN pill + Login + Book a Demo."""
+    nav = (
+        _nitem(f"{site}/", "数据洞察", "Insights", "INSIGHTS")
+        + _nitem(f"{site}/", "核心技术", "Technology", "TECHNOLOGY")
+        + _nitem(f"{site}/blog", "资源", "Resources", "RESOURCES")
+        + _nitem(f"{site}/reports/", "市场日报", "Reports", "REPORTS")
+    )
+    return (
+        '<header class="site"><div class="wrap">'
+        f'<a class="brand" href="{site}/">NAV<span>Green</span></a>'
+        f'<div style="display:flex;align-items:center;gap:24px">'
+        f'<div class="nav">{nav}</div>'
+        '<div class="divider"></div>'
+        f'{LANG_SWITCH}'
+        f'<a class="login" href="https://vip.navgreen.cn"><span class="lzh">登录</span><span class="len">Login</span></a>'
+        f'<a class="demo" href="{site}/"><span class="lzh">预约演示 →</span><span class="len">Book a Demo →</span></a>'
+        '</div></div></header>'
+    )
+
+
+def _fl(href, zh, en):
+    return f'<li><a class="fl" href="{href}"><span class="lzh">{esc(zh)}</span><span class="len">{esc(en)}</span></a></li>'
+
+
+def site_footer(site: str) -> str:
+    """Footer matching navgreen-home: brand + Solutions/Resources/Subscribe + bottom bar."""
+    yr = datetime.date.today().year
+    return (
+        '<footer class="foot"><div class="wrap"><div class="cols">'
+        '<div>'
+        f'<a class="brand" href="{site}/">NAV<span>Green</span></a>'
+        '<p class="tag"><span class="lzh">通过预测智能与自动化金融结算，开创海事物流的未来。</span>'
+        '<span class="len">Pioneering the future of maritime logistics through predictive intelligence and automated financial settlements.</span></p>'
+        '<p class="loc"><span class="lzh">北京 · 新加坡 · 鹿特丹</span><span class="len">Beijing · Singapore · Rotterdam</span></p>'
+        '</div>'
+        '<div><h4><span class="lzh">解决方案</span><span class="len">SOLUTIONS</span></h4><ul>'
+        + _fl(f"{site}/solutions/freight-prediction-bulk-carriers", "运费预测", "Freight Prediction")
+        + _fl(f"{site}/solutions/demurrage-defense-charterers", "滞期抗辩", "Demurrage Defense")
+        + '</ul></div>'
+        '<div><h4><span class="lzh">资源</span><span class="len">RESOURCES</span></h4><ul>'
+        + _fl(f"{site}/blog", "航运洞察", "Insights")
+        + _fl(f"{site}/cases", "客户案例", "Case Studies")
+        + _fl(f"{site}/reports/", "市场日报", "Market Reports")
+        + '</ul></div>'
+        '<div><h4><span class="lzh">订阅</span><span class="len">SUBSCRIBE</span></h4>'
+        '<div class="sub-in"><input type="email" placeholder="Email Address" aria-label="email"/>'
+        f'<a href="{site}/" aria-label="subscribe">→</a></div></div>'
+        '</div>'
+        '<div class="botbar">'
+        f'<span>© {yr} <span class="lzh">NAVGreen 科技. 保留所有权利。</span><span class="len">NAVGreen Technology. All rights reserved.</span></span>'
+        '<span class="lk">'
+        f'<a href="{site}/"><span class="lzh">隐私政策</span><span class="len">Privacy Policy</span></a>'
+        f'<a href="{site}/"><span class="lzh">服务条款</span><span class="len">Terms of Service</span></a>'
+        f'<a href="{site}/sitemap.xml"><span class="lzh">网站地图</span><span class="len">Sitemap</span></a>'
+        '</span></div></div></footer>'
+    )
 
 
 def biL(v) -> str:
@@ -306,13 +403,7 @@ def build_html(p: dict, site: str, prev_date: str | None) -> str:
 
     return head(p, site, url_path) + f"""
 <body>
-<header class="site"><div class="wrap">
-  <a class="brand" href="{site}/">NAV<span>Green</span></a>
-  <nav style="display:flex;align-items:center;gap:16px">
-    <a href="{site}/reports/bdi-market/">{bi_title('市场日报', 'Reports')}</a>
-    {LANG_SWITCH}
-  </nav>
-</div></header>
+{site_header(site)}
 <main class="wrap">
   <div class="hero">
     <div class="kicker">DRY BULK MARKET · DAILY REPORT · {esc(date)}</div>
@@ -358,12 +449,11 @@ def build_html(p: dict, site: str, prev_date: str | None) -> str:
 
   <h2>{bi_title('更多', 'More')}</h2>
   <p>{prev_lk}<a href="{site}/reports/bdi-market/">{bi_title('全部干散货市场日报 →', 'All Dry Bulk Market Daily →')}</a></p>
-</main>
-<footer class="site"><div class="wrap">
+  <p style="color:#64748B;font-size:13px;margin-top:28px">
   {bi_title('数据来源', 'Sources')}: {esc(" / ".join(p.get("sources", [])))}。
-  {bi_title('本报告由 NAVGreen 自动生成，仅供参考，不构成投资建议。', 'Auto-generated by NAVGreen for reference only; not investment advice.')}
-  © {datetime.date.today().year} {BRAND} · <a href="{site}/">www.navgreen.cn</a>
-</div></footer>
+  {bi_title('本报告由 NAVGreen 自动生成，仅供参考，不构成投资建议。', 'Auto-generated by NAVGreen for reference only; not investment advice.')}</p>
+</main>
+{site_footer(site)}
 {LANG_JS}
 </body></html>"""
 
@@ -482,13 +572,7 @@ def render_generic(p: dict, site: str, prev_date: str | None) -> str:
     summary = biRaw({"zh": p.get("summary_zh", ""), "en": p.get("summary_en", "")}) if (p.get("summary_zh") or p.get("summary_en")) else ""
     return head_generic(p, site, url_path) + f"""
 <body>
-<header class="site"><div class="wrap">
-  <a class="brand" href="{site}/">NAV<span>Green</span></a>
-  <nav style="display:flex;align-items:center;gap:16px">
-    <a href="{site}/reports/{slug}/">{biL({"zh": p['type_zh'], "en": p.get('type_en', p['type_zh'])})}</a>
-    {LANG_SWITCH}
-  </nav>
-</div></header>
+{site_header(site)}
 <main class="wrap">
   <div class="hero">
     <div class="kicker">{esc(p.get('type_en','').upper())} · {esc(date)}</div>
@@ -502,12 +586,11 @@ def render_generic(p: dict, site: str, prev_date: str | None) -> str:
   <div class="related">{related}</div>
   <h2>{bi_title('更多', 'More')}</h2>
   <p>{prev_link}<a href="{site}/reports/{slug}/">{bi_title('全部' + p['type_zh'] + ' →', 'All ' + p.get('type_en', p['type_zh']) + ' →')}</a></p>
-</main>
-<footer class="site"><div class="wrap">
+  <p style="color:#64748B;font-size:13px;margin-top:28px">
   {bi_title('数据来源', 'Sources')}: {esc(" / ".join(p.get("sources", [])))}。
-  {bi_title('本报告由 NAVGreen 自动生成，仅供参考，不构成投资/航行决策建议。', 'Auto-generated by NAVGreen for reference only; not investment or navigation advice.')}
-  © {datetime.date.today().year} {BRAND} · <a href="{site}/">www.navgreen.cn</a>
-</div></footer>
+  {bi_title('本报告由 NAVGreen 自动生成，仅供参考，不构成投资/航行决策建议。', 'Auto-generated by NAVGreen for reference only; not investment or navigation advice.')}</p>
+</main>
+{site_footer(site)}
 {LANG_JS}
 </body></html>"""
 
