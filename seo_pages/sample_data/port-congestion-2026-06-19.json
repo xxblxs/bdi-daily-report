@@ -4,21 +4,79 @@
   "date": "2026-06-19",
   "type_zh": "干散货全球港口拥堵日报",
   "type_en": "Global Port Congestion Report",
-  "headline": "严重拥堵 3 港 · 总锚泊 787 艘 · 预抵 1862 艘",
-  "keywords": "港口拥堵,干散货,锚泊,靠泊,滞期风险,铁矿石港口,Dalian,Port Hedland,port congestion,dry bulk demurrage",
-  "summary_en": "On 2026-06-19, 3 ports show severe congestion and 1 moderate across the monitored dry-bulk network, with 787 vessels at anchor and 1,862 inbound over 7 days. Dalian (127 at anchor, ~2.9 days wait) and Paradip lead demurrage risk. Full port-by-port anchored/berth/inbound counts and estimated waiting days are tabulated below.",
-  "summary_zh": "2026-06-19 全球干散货港口监测：严重拥堵 3 港、中度 1 港，总锚泊 787 艘、未来 7 日预抵 1862 艘。大连港（锚泊 127、估等约 2.9 天）与巴拉迪布港滞期风险最高。下表为各港锚泊/靠泊/预抵与估等天数。",
+  "headline": {
+    "zh": "严重拥堵 1 港 · 总锚泊 198 艘 · 预抵 448 艘",
+    "en": "1 severe · 198 at anchor · 448 inbound"
+  },
+  "keywords": "港口拥堵,干散货,锚泊,靠泊,滞期风险,铁矿石港口,port congestion,dry bulk demurrage",
+  "summary_zh": "2026-06-19 全球干散货港口监测：严重拥堵 1 港、中度 1 港、正常 1 港，总锚泊 198 艘、预抵 448 艘。下表为各港锚泊/靠泊/预抵与估等天数。",
+  "summary_en": "On 2026-06-19, 1 ports show severe congestion and 1 moderate across the monitored dry-bulk network, with 198 vessels at anchor and 448 inbound. Port-by-port anchored/berth/inbound counts and estimated waiting days are tabulated below.",
   "sections": [
     {
       "kind": "cards",
       "title_zh": "全球港口概览",
       "title_en": "Overview",
       "items": [
-        {"label": "严重拥堵", "value": "3", "sub": "港", "direction": "dn"},
-        {"label": "中度拥堵", "value": "1", "sub": "港", "direction": "neu"},
-        {"label": "正常运营", "value": "19", "sub": "港", "direction": "up"},
-        {"label": "总锚泊", "value": "787", "sub": "艘", "direction": "neu"},
-        {"label": "预抵(7日)", "value": "1862", "sub": "艘", "direction": "neu"}
+        {
+          "label": {
+            "zh": "严重拥堵",
+            "en": "Severe"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "港",
+            "en": "ports"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "中度拥堵",
+            "en": "Moderate"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "港",
+            "en": "ports"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "正常运营",
+            "en": "Normal"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "港",
+            "en": "ports"
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "总锚泊",
+            "en": "At anchor"
+          },
+          "value": "198",
+          "sub": {
+            "zh": "艘",
+            "en": "vessels"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预抵",
+            "en": "Inbound"
+          },
+          "value": "448",
+          "sub": {
+            "zh": "艘",
+            "en": "vessels"
+          },
+          "direction": "neu"
+        }
       ]
     },
     {
@@ -26,9 +84,28 @@
       "title_zh": "Demurrage 风险提示",
       "title_en": "Demurrage Risk",
       "items": [
-        {"type": "bear", "tag": "高风险 · 大连 Dalian", "text": "<strong>锚泊 127 艘（约为 7 日均值的 +49%）</strong>，估等约 2.9 天。铁矿石泊位周转偏慢，建议提前计算 Laytime 准备。"},
-        {"type": "bear", "tag": "高风险 · 巴拉迪布 Paradip", "text": "<strong>估等约 1.9 天，锚泊高于近期均值。</strong>印度东海岸铁矿石/煤炭进港集中。"},
-        {"type": "neu", "tag": "关注 · 丹戎巴拉 Tanjung Bara", "text": "印尼动力煤装港，锚泊显著高于均值，关注装期延误对 NOR 递交窗口的影响。"}
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "高风险 · Dalian 大连港",
+            "en": "High risk · Dalian"
+          },
+          "text": {
+            "zh": "<strong>锚泊 127 艘，估等约 2.9 天。</strong>铁矿石泊位，建议提前计算 Laytime。",
+            "en": "<strong>127 vessels at anchor, est. ~2.9 days wait.</strong> Iron ore berth — calculate laytime in advance."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "关注 · Paradip 巴拉迪布",
+            "en": "Watch · Paradip"
+          },
+          "text": {
+            "zh": "<strong>锚泊 14 艘，估等约 1.9 天。</strong>铁矿石/煤炭泊位，建议提前计算 Laytime。",
+            "en": "<strong>14 vessels at anchor, est. ~1.9 days wait.</strong> Iron ore/Coal berth — calculate laytime in advance."
+          }
+        }
       ]
     },
     {
@@ -36,23 +113,124 @@
       "title_zh": "各港口拥堵明细",
       "title_en": "Port-by-Port",
       "columns": [
-        {"zh": "港口", "en": "Port"}, {"zh": "货种", "en": "Cargo"},
-        {"zh": "锚泊", "en": "Anchored", "num": true}, {"zh": "靠泊", "en": "Berth", "num": true},
-        {"zh": "预抵", "en": "Inbound", "num": true}, {"zh": "估等(天)", "en": "Wait", "num": true},
-        {"zh": "评级", "en": "Level", "num": true}
+        {
+          "zh": "港口",
+          "en": "Port"
+        },
+        {
+          "zh": "货种",
+          "en": "Cargo"
+        },
+        {
+          "zh": "锚泊",
+          "en": "Anchored",
+          "num": true
+        },
+        {
+          "zh": "靠泊",
+          "en": "Berth",
+          "num": true
+        },
+        {
+          "zh": "预抵",
+          "en": "Inbound",
+          "num": true
+        },
+        {
+          "zh": "估等(天)",
+          "en": "Wait",
+          "num": true
+        },
+        {
+          "zh": "评级",
+          "en": "Level",
+          "num": true
+        }
       ],
       "rows": [
-        ["连云港 Lianyungang", "铁矿石", {"v": "178"}, {"v": "127"}, {"v": "252"}, {"v": "2.1"}, {"v": "正常"}],
-        ["大连港 Dalian", "铁矿石", {"v": "127", "cls": "dn"}, {"v": "65"}, {"v": "127"}, {"v": "2.9", "cls": "dn"}, {"v": "严重", "cls": "dn"}],
-        ["天津港 Tianjin", "铁矿石/煤炭", {"v": "112"}, {"v": "90"}, {"v": "225"}, {"v": "1.9"}, {"v": "正常"}],
-        ["青岛港 Qingdao", "铁矿石", {"v": "57"}, {"v": "66"}, {"v": "283"}, {"v": "1.3"}, {"v": "轻度"}],
-        ["曹妃甸 Caofeidian", "铁矿石/煤炭", {"v": "53"}, {"v": "78"}, {"v": "160"}, {"v": "1.0"}, {"v": "轻度"}],
-        ["黑德兰港 Port Hedland", "铁矿石", {"v": "44"}, {"v": "15"}, {"v": "97"}, {"v": "4.4", "cls": "dn"}, {"v": "正常"}],
-        ["马德拉角 Ponta da Madeira", "铁矿石", {"v": "36"}, {"v": "10"}, {"v": "76"}, {"v": "5.4", "cls": "dn"}, {"v": "正常"}],
-        ["格拉德斯通 Gladstone", "煤炭/铝矾土", {"v": "23"}, {"v": "10"}, {"v": "57"}, {"v": "3.5"}, {"v": "正常"}],
-        ["黑点港 Hay Point/DBCT", "焦煤", {"v": "21"}, {"v": "2"}, {"v": "43"}, {"v": "15.8", "cls": "dn"}, {"v": "中度", "cls": "neu"}]
+        [
+          "Dalian 大连港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "127",
+            "cls": "dn"
+          },
+          {
+            "v": "65"
+          },
+          {
+            "v": "127"
+          },
+          {
+            "v": "2.9",
+            "cls": ""
+          },
+          {
+            "zh": "严重",
+            "en": "Severe",
+            "cls": "dn"
+          }
+        ],
+        [
+          "Paradip 巴拉迪布",
+          {
+            "zh": "铁矿石/煤炭",
+            "en": "Iron ore/Coal"
+          },
+          {
+            "v": "14",
+            "cls": ""
+          },
+          {
+            "v": "11"
+          },
+          {
+            "v": "38"
+          },
+          {
+            "v": "1.9",
+            "cls": ""
+          },
+          {
+            "zh": "中度",
+            "en": "Moderate",
+            "cls": "neu"
+          }
+        ],
+        [
+          "Qingdao 青岛港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "57",
+            "cls": ""
+          },
+          {
+            "v": "66"
+          },
+          {
+            "v": "283"
+          },
+          {
+            "v": "1.3",
+            "cls": ""
+          },
+          {
+            "zh": "轻度",
+            "en": "Light",
+            "cls": "up"
+          }
+        ]
       ]
     }
   ],
-  "sources": ["MyVessel 港口实时数据", "ISOWAY"]
+  "sources": [
+    "MyVessel 港口实时数据",
+    "ISOWAY"
+  ]
 }

@@ -4,20 +4,67 @@
   "date": "2026-06-18",
   "type_zh": "全球船用燃油日报",
   "type_en": "Global Bunker Fuel Report",
-  "headline": "IFO380 均价 $412.5/吨 · VLSFO $548.0 · LSMGO $712.0",
-  "keywords": "船用燃油,燃油价格,IFO380,VLSFO,LSMGO,加油港,bunker price,marine fuel,scrubber spread,新加坡燃油",
-  "summary_en": "On 2026-06-18, global bunker averages across fresh ports: IFO380 USD 412.5/t, VLSFO USD 548.0/t, LSMGO USD 712.0/t, with the VLSFO–IFO380 scrubber spread around USD 135/t. Singapore remains the price benchmark. Key-port prices and the daily movement are listed below for voyage bunker planning and eco-speed decisions.",
-  "summary_zh": "2026-06-18 全球船用燃油均价（近 30 天有效港口）：IFO380 412.5 美元/吨、VLSFO 548.0、LSMGO 712.0；VLSFO–IFO380 脱硫塔价差约 135 美元/吨。新加坡仍为价格标杆。下表为关键港口价格与当日涨跌,供航次加油与经济航速决策。",
+  "headline": {
+    "zh": "IFO380 均价 $412.5/吨 · VLSFO $548.0 · LSMGO $712.0",
+    "en": "IFO380 avg $412.5/t · VLSFO $548.0 · LSMGO $712.0"
+  },
+  "keywords": "船用燃油,燃油价格,IFO380,VLSFO,LSMGO,加油港,bunker price,marine fuel,scrubber spread",
+  "summary_zh": "2026-06-18 全球船用燃油均价：IFO380 $412.5/吨、VLSFO $548.0、LSMGO $712.0;VLSFO−IFO380 脱硫塔价差约 $135.5/吨。下表为关键港口价格。",
+  "summary_en": "On 2026-06-18, global bunker averages: IFO380 $412.5/t, VLSFO $548.0/t, LSMGO $712.0/t, scrubber spread ~$135.5/t. Key-port prices below.",
   "sections": [
     {
       "kind": "cards",
       "title_zh": "全球均价概览",
       "title_en": "Global Averages (USD/t)",
       "items": [
-        {"label": "IFO380 均价", "value": "$412.5", "sub": "18 港", "direction": "neu"},
-        {"label": "VLSFO 均价", "value": "$548.0", "sub": "18 港", "direction": "neu"},
-        {"label": "LSMGO 均价", "value": "$712.0", "sub": "18 港", "direction": "neu"},
-        {"label": "脱硫塔价差", "value": "$135.5", "sub": "VLSFO−IFO380", "direction": "up"}
+        {
+          "label": {
+            "zh": "IFO380 均价",
+            "en": "IFO380 avg"
+          },
+          "value": "$412.5",
+          "sub": {
+            "zh": "全球",
+            "en": "Global"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "VLSFO 均价",
+            "en": "VLSFO avg"
+          },
+          "value": "$548.0",
+          "sub": {
+            "zh": "全球",
+            "en": "Global"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "LSMGO 均价",
+            "en": "LSMGO avg"
+          },
+          "value": "$712.0",
+          "sub": {
+            "zh": "全球",
+            "en": "Global"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "脱硫塔价差",
+            "en": "Scrubber spread"
+          },
+          "value": "$135.5",
+          "sub": {
+            "zh": "VLSFO−IFO380",
+            "en": "VLSFO−IFO380"
+          },
+          "direction": "up"
+        }
       ]
     },
     {
@@ -25,19 +72,67 @@
       "title_zh": "关键港口价格",
       "title_en": "Key Ports",
       "columns": [
-        {"zh": "港口", "en": "Port"},
-        {"zh": "IFO380", "en": "", "num": true}, {"zh": "VLSFO", "en": "", "num": true},
-        {"zh": "LSMGO", "en": "", "num": true}, {"zh": "当日", "en": "Move", "num": true}
+        {
+          "zh": "港口",
+          "en": "Port"
+        },
+        {
+          "zh": "IFO380",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "VLSFO",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "LSMGO",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "价差",
+          "en": "Spread",
+          "num": true
+        }
       ],
       "rows": [
-        ["新加坡 Singapore", {"v": "$408"}, {"v": "$542"}, {"v": "$705"}, {"v": "+3", "cls": "up"}],
-        ["鹿特丹 Rotterdam", {"v": "$401"}, {"v": "$535"}, {"v": "$698"}, {"v": "-2", "cls": "dn"}],
-        ["富查伊拉 Fujairah", {"v": "$415"}, {"v": "$551"}, {"v": "$720"}, {"v": "+1", "cls": "up"}],
-        ["休斯顿 Houston", {"v": "$420"}, {"v": "$560"}, {"v": "$731"}, {"v": "+5", "cls": "up"}],
-        ["舟山 Zhoushan", {"v": "$418"}, {"v": "$553"}, {"v": "$716"}, {"v": "0"}],
-        ["香港 Hong Kong", {"v": "$417"}, {"v": "$549"}, {"v": "$712"}, {"v": "-1", "cls": "dn"}]
+        [
+          "Singapore",
+          {
+            "v": "$408"
+          },
+          {
+            "v": "$542"
+          },
+          {
+            "v": "$705"
+          },
+          {
+            "v": "$134"
+          }
+        ],
+        [
+          "Rotterdam",
+          {
+            "v": "$401"
+          },
+          {
+            "v": "$535"
+          },
+          {
+            "v": "$698"
+          },
+          {
+            "v": "$134"
+          }
+        ]
       ]
     }
   ],
-  "sources": ["Ship & Bunker", "NAVGreen"]
+  "sources": [
+    "Ship & Bunker",
+    "NAVGreen"
+  ]
 }
