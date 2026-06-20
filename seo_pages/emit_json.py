@@ -402,6 +402,9 @@ def emit_cyclone_json(storms: list, date: str) -> str:
 def emit_fuel_json(fuel_data: dict, date: str) -> str:
     if not fuel_data:
         return ""
+    # Bunker fuel has its OWN date — it publishes daily, whereas the BDI market
+    # date can lag (Baltic doesn't report on weekends). Always use the fuel date.
+    date = fuel_data.get("date") or date
     gs = fuel_data.get("global_stats", {})
     ifo = gs.get("ifo380", {}).get("avg")
     vlsfo = gs.get("vlsfo", {}).get("avg")

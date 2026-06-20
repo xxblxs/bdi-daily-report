@@ -2129,7 +2129,8 @@ def run_once() -> bool:
     try:
         if fuel_data:
             from seo_pages.emit_json import emit_fuel_json
-            log.info(f"✅ SEO 燃油 JSON: {emit_fuel_json(fuel_data, data['date'])}")
+            # Fuel has its own (daily) date; BDI's date can lag on weekends.
+            log.info(f"✅ SEO 燃油 JSON: {emit_fuel_json(fuel_data, fuel_data.get('date') or data['date'])}")
     except Exception as e:
         log.warning(f"SEO 燃油 JSON 生成失败（不影响推送）: {e}")
 
