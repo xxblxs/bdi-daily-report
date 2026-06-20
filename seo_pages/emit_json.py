@@ -94,15 +94,40 @@ def _plain(s: str) -> str:
     return strip_html(str(s or "")).strip()
 
 
+CARGO_EN = {
+    "铁矿石": "Iron ore", "煤炭": "Coal", "动力煤": "Thermal coal", "焦煤": "Coking coal",
+    "铝土": "Bauxite", "粮食": "Grain", "煤炭/铝土": "Coal/Bauxite", "铁矿石/煤炭": "Iron ore/Coal",
+}
+GROUP_EN = {
+    "装港·澳大利亚": "Load · Australia", "装港·巴西": "Load · Brazil",
+    "装港·南非": "Load · South Africa", "装港·印尼": "Load · Indonesia",
+    "装港·西非": "Load · West Africa", "装港·加拿大": "Load · Canada",
+    "装港·美国": "Load · USA", "装港·俄罗斯": "Load · Russia",
+    "卸港·中国": "Discharge · China", "卸港·印度": "Discharge · India",
+    "卸港·日本": "Discharge · Japan", "卸港·韩国": "Discharge · Korea",
+    "卸港·欧洲": "Discharge · Europe", "卸港·东南亚": "Discharge · SE Asia",
+    "未分组": "Ungrouped",
+}
+
+
+def _cargo_bi(zh: str) -> dict:
+    return {"zh": zh or "—", "en": CARGO_EN.get(zh, zh) or "—"}
+
+
+def _group_bi(zh: str) -> dict:
+    return {"zh": zh, "en": GROUP_EN.get(zh, zh)}
+
+
 # ── Port congestion ───────────────────────────────────────────────────────────
 def emit_port_json(port_results: list, date: str) -> str:
-    """Map analyze_ports() output → port-congestion report JSON."""
+    """Map analyze_ports() output → bilingual + grouped port-congestion JSON."""
     severe = sum(1 for p in port_results if p.get("congestion") == "high")
     moderate = sum(1 for p in port_results if p.get("congestion") == "mod")
     normalish = sum(1 for p in port_results if p.get("congestion") in ("normal", "low"))
     tot_anchored = sum(p.get("n_anchored", 0) or 0 for p in port_results)
     tot_estimate = sum(p.get("n_estimate", 0) or 0 for p in port_results)
     cong_zh = {"high": "严重", "mod": "中度", "low": "轻度", "normal": "正常"}
+    cong_en = {"high": "Severe", "mod": "Moderate", "low": "Light", "normal": "Normal"}
     cong_cls = {"high": "dn", "mod": "neu", "low": "up", "normal": "up"}
 
     grouped = defaultdict(lambda: {
@@ -122,20 +147,20 @@ def emit_port_json(port_results: list, date: str) -> str:
         g["mod"] += 1 if c == "mod" else 0
         g["max_wait"] = max(g["max_wait"], p.get("est_wait_days", 0) or 0)
         rows.append([
-            group,
+            _group_bi(group),
             f'{p.get("name","")} {p.get("name_cn","")}'.strip(),
-            p.get("cargo", "—"),
+            _cargo_bi(p.get("cargo", "—")),
             {"v": str(p.get("n_anchored", 0) or 0), "cls": "dn" if c == "high" else ""},
             {"v": str(p.get("n_moored", 0) or 0)},
             {"v": str(p.get("n_estimate", 0) or 0)},
             {"v": str(p.get("est_wait_days", 0) or 0), "cls": "dn" if (p.get("est_wait_days") or 0) >= 3 else ""},
-            {"v": cong_zh.get(c, c), "cls": cong_cls.get(c, "")},
+            {"zh": cong_zh.get(c, c), "en": cong_en.get(c, c), "cls": cong_cls.get(c, "")},
         ])
     group_rows = []
     for group, g in sorted(grouped.items(), key=lambda kv: kv[1]["anchored"], reverse=True):
         risk_cls = "dn" if g["high"] else ("neu" if g["mod"] else "up")
         group_rows.append([
-            group,
+            _group_bi(group),
             {"v": str(g["ports"])},
             {"v": str(g["anchored"]), "cls": risk_cls},
             {"v": str(g["moored"])},
@@ -151,28 +176,33 @@ def emit_port_json(port_results: list, date: str) -> str:
     )[:5]
     notes = [{
         "type": "bear" if p.get("congestion") == "high" else "neu",
-        "tag": f'{"高风险" if p.get("congestion")=="high" else "关注"} · {p.get("group","")} · {p.get("name","")} {p.get("name_cn","")}'.strip(),
-        "text": f'<strong>锚泊 {p.get("n_anchored",0)} 艘，估等约 {p.get("est_wait_days",0)} 天。</strong>'
-                f'{p.get("cargo","")}泊位，建议提前计算 Laytime。',
-    } for p in risk] or [{"type": "neu", "tag": "市场资讯", "text": "当前各港口拥堵程度总体正常。"}]
+        "tag": {"zh": f'{"高风险" if p.get("congestion")=="high" else "关注"} · {p.get("name","")} {p.get("name_cn","")}'.strip(),
+                "en": f'{"High risk" if p.get("congestion")=="high" else "Watch"} · {p.get("name","")}'},
+        "text": {"zh": f'<strong>锚泊 {p.get("n_anchored",0)} 艘，估等约 {p.get("est_wait_days",0)} 天。</strong>'
+                       f'{p.get("cargo","")}泊位，建议提前计算 Laytime。',
+                 "en": f'<strong>{p.get("n_anchored",0)} vessels at anchor, est. ~{p.get("est_wait_days",0)} days wait.</strong> '
+                       f'{CARGO_EN.get(p.get("cargo",""), p.get("cargo",""))} berth — calculate laytime in advance.'},
+    } for p in risk] or [{"type": "neu", "tag": {"zh": "市场资讯", "en": "Note"},
+                          "text": {"zh": "当前各港口拥堵程度总体正常。", "en": "Congestion is broadly normal across the network."}}]
 
     payload = {
         "report_type": "port-congestion", "slug": "port-congestion", "date": date,
         "type_zh": "干散货全球港口拥堵日报", "type_en": "Global Port Congestion Report",
-        "headline": f"严重拥堵 {severe} 港 · 总锚泊 {tot_anchored} 艘 · 预抵 {tot_estimate} 艘",
+        "headline": {"zh": f"严重拥堵 {severe} 港 · 总锚泊 {tot_anchored} 艘 · 预抵 {tot_estimate} 艘",
+                     "en": f"{severe} severe · {tot_anchored} at anchor · {tot_estimate} inbound"},
         "keywords": "港口拥堵,干散货,锚泊,靠泊,滞期风险,铁矿石港口,port congestion,dry bulk demurrage",
         "summary_zh": f"{date} 全球干散货港口监测：严重拥堵 {severe} 港、中度 {moderate} 港、正常 {normalish} 港，"
-                      f"总锚泊 {tot_anchored} 艘、预抵 {tot_estimate} 艘。下表为各港锚泊/靠泊/预抵与估等天数。",
+                      f"总锚泊 {tot_anchored} 艘、预抵 {tot_estimate} 艘。下方按装港/卸港分区汇总，并附各港明细。",
         "summary_en": f"On {date}, {severe} ports show severe congestion and {moderate} moderate across the monitored "
                       f"dry-bulk network, with {tot_anchored} vessels at anchor and {tot_estimate} inbound. "
-                      "Port-by-port anchored/berth/inbound counts and estimated waiting days are tabulated below.",
+                      "A loading/discharge regional summary plus port-by-port detail are tabulated below.",
         "sections": [
             {"kind": "cards", "title_zh": "全球港口概览", "title_en": "Overview", "items": [
-                {"label": "严重拥堵", "value": str(severe), "sub": "港", "direction": "dn"},
-                {"label": "中度拥堵", "value": str(moderate), "sub": "港", "direction": "neu"},
-                {"label": "正常运营", "value": str(normalish), "sub": "港", "direction": "up"},
-                {"label": "总锚泊", "value": str(tot_anchored), "sub": "艘", "direction": "neu"},
-                {"label": "预抵", "value": str(tot_estimate), "sub": "艘", "direction": "neu"},
+                {"label": {"zh": "严重拥堵", "en": "Severe"}, "value": str(severe), "sub": {"zh": "港", "en": "ports"}, "direction": "dn"},
+                {"label": {"zh": "中度拥堵", "en": "Moderate"}, "value": str(moderate), "sub": {"zh": "港", "en": "ports"}, "direction": "neu"},
+                {"label": {"zh": "正常运营", "en": "Normal"}, "value": str(normalish), "sub": {"zh": "港", "en": "ports"}, "direction": "up"},
+                {"label": {"zh": "总锚泊", "en": "At anchor"}, "value": str(tot_anchored), "sub": {"zh": "艘", "en": "vessels"}, "direction": "neu"},
+                {"label": {"zh": "预抵", "en": "Inbound"}, "value": str(tot_estimate), "sub": {"zh": "艘", "en": "vessels"}, "direction": "neu"},
             ]},
             {"kind": "table", "title_zh": "按装港/卸港分区汇总", "title_en": "Regional Loading/Discharge Summary", "columns": [
                 {"zh": "分区", "en": "Group"}, {"zh": "港口", "en": "Ports", "num": True},
@@ -202,8 +232,16 @@ def _marine_risk(r: dict) -> str:
     return "calm"
 
 
+MARINE_VERDICT_EN = {
+    "整体平稳": "Generally calm", "需关注局部": "Watch locally", "海况偏差": "Rough seas",
+    "季风过渡期": "Monsoon transition", "总体平稳": "Broadly calm",
+    "好望角需关注": "Cape of Good Hope — watch", "整体可行": "Workable",
+}
+
+
 def emit_marine_json(routes: list, views: dict, date: str) -> str:
     risk_zh = {"high": "需注意", "mod": "关注", "low": "适航", "calm": "平稳"}
+    risk_en = {"high": "Caution", "mod": "Watch", "low": "Workable", "calm": "Calm"}
     risk_cls = {"high": "dn", "mod": "neu", "low": "up", "calm": "up"}
     rows = []
     forecast_rows = []
@@ -230,7 +268,7 @@ def emit_marine_json(routes: list, views: dict, date: str) -> str:
             {"v": _num(r.get("wh_max")), "cls": risk_cls.get(rk, "")},
             {"v": _fmt(r.get("wp_max"), 1)},
             {"v": _num(r.get("sh_max"))},
-            {"v": risk_zh.get(rk, rk), "cls": risk_cls.get(rk, "")},
+            {"zh": risk_zh.get(rk, rk), "en": risk_en.get(rk, rk), "cls": risk_cls.get(rk, "")},
         ])
         forecast_rows.append([
             r.get("name", ""),
@@ -241,26 +279,34 @@ def emit_marine_json(routes: list, views: dict, date: str) -> str:
         ])
     vmap = views or {}
     view_items = []
-    for key, label in [("apac", "西太/亚太 W.PACIFIC"), ("io", "印度洋 INDIAN OCEAN"), ("atl", "大西洋 ATLANTIC")]:
+    for key, lz, le in [("apac", "西太/亚太", "W.Pacific"), ("io", "印度洋", "Indian Ocean"), ("atl", "大西洋", "Atlantic")]:
         v = vmap.get(key) or {}
         if v:
-            view_items.append({"label": label, "title": v.get("verdict", ""), "text": strip_html(v.get("text", ""))})
+            verdict = v.get("verdict", "")
+            ve = MARINE_VERDICT_EN.get(verdict, verdict)
+            view_items.append({
+                "label": {"zh": lz, "en": le},
+                "title": {"zh": verdict, "en": ve},
+                "text": {"zh": strip_html(v.get("text", "")),
+                         "en": f"{le}: {ve}. See the sea-state table above for wave, swell and wind by leg."},
+            })
     worst = max((_marine_risk(r) for r in routes if not r.get("error")), key=lambda x: ["calm", "low", "mod", "high"].index(x), default="calm")
     payload = {
         "report_type": "sea-conditions", "slug": "sea-conditions", "date": date,
         "type_zh": "全球主要航线海况日报", "type_en": "Global Sea Conditions Report",
-        "headline": f"全球航线海况 · 最高评级 {risk_zh.get(worst, worst)}",
+        "headline": {"zh": f"全球航线海况 · 最高评级 {risk_zh.get(worst, worst)}",
+                     "en": f"Global sea state · peak risk {risk_en.get(worst, worst)}"},
         "keywords": "航线海况,浪高,风速,涌浪,适航,天气路由,weather routing,sea state,wave height",
         "summary_zh": f"{date} 主要航线海况：各航区浪高/涌高/风速与分区观点见下，供天气路由与 ETA 决策参考。",
         "summary_en": f"On {date}, per-route wave height, swell and wind across the main shipping legs, plus a "
                       "regional outlook, are listed below to support weather routing and ETA decisions.",
         "sections": [
             {"kind": "cards", "title_zh": "海况概览", "title_en": "Sea-State Overview", "items": [
-                {"label": "需注意", "value": str(risk_counts["high"]), "sub": "航区", "direction": "dn" if risk_counts["high"] else "up"},
-                {"label": "关注", "value": str(risk_counts["mod"]), "sub": "航区", "direction": "neu"},
-                {"label": "适航/平稳", "value": str(risk_counts["low"] + risk_counts["calm"]), "sub": "航区", "direction": "up"},
-                {"label": "最高浪高", "value": _fmt(worst_wave, 1, suffix="m"), "sub": "5日预报", "direction": "dn" if worst_wave >= 2.5 else "neu"},
-                {"label": "最大阵风", "value": _fmt(max_gust, 0, suffix="kn"), "sub": "当前", "direction": "dn" if max_gust >= 30 else "neu"},
+                {"label": {"zh": "需注意", "en": "Caution"}, "value": str(risk_counts["high"]), "sub": {"zh": "航区", "en": "routes"}, "direction": "dn" if risk_counts["high"] else "up"},
+                {"label": {"zh": "关注", "en": "Watch"}, "value": str(risk_counts["mod"]), "sub": {"zh": "航区", "en": "routes"}, "direction": "neu"},
+                {"label": {"zh": "适航/平稳", "en": "Workable"}, "value": str(risk_counts["low"] + risk_counts["calm"]), "sub": {"zh": "航区", "en": "routes"}, "direction": "up"},
+                {"label": {"zh": "最高浪高", "en": "Peak wave"}, "value": _fmt(worst_wave, 1, suffix="m"), "sub": {"zh": "5日预报", "en": "5-day"}, "direction": "dn" if worst_wave >= 2.5 else "neu"},
+                {"label": {"zh": "最大阵风", "en": "Max gust"}, "value": _fmt(max_gust, 0, suffix="kn"), "sub": {"zh": "当前", "en": "now"}, "direction": "dn" if max_gust >= 30 else "neu"},
             ]},
             {"kind": "table", "title_zh": "各航区海况", "title_en": "Route Sea State", "columns": [
                 {"zh": "航区", "en": "Route"}, {"zh": "风速(节)", "en": "Wind", "num": True},
@@ -302,32 +348,44 @@ def emit_cyclone_json(storms: list, date: str) -> str:
                 f'{_fmt(fp.get("lat"), 1)} / {_fmt(fp.get("lon"), 1)}',
                 {"v": _fmt(fp.get("wind") or fp.get("wind_kn"), 0), "cls": "dn" if (fp.get("wind") or fp.get("wind_kn") or 0) >= 64 else ""},
             ])
+        nm = s.get("name", "UNNAMED")
         notes.append({
             "type": "bear" if impact in ("danger", "warn") else "neu",
-            "tag": f'{"台风/飓风" if impact=="danger" else "热带系统"} · {s.get("name","UNNAMED")}',
-            "text": f'<strong>中心 {s.get("lat","—")}°N, {s.get("lon","—")}°E，'
-                    f'中心风速约 {_num(wind)} 节{("（"+s.get("sshs_text","")+"）") if s.get("sshs_text") else ""}'
-                    f'{("，气压 "+str(s.get("pres_mb"))+" hPa") if s.get("pres_mb") else ""}。</strong>'
-                    f'移动方向/速度：{mov_dir} / {_fmt(mov_speed, 0, suffix=" kn")}。'
-                    + (f'最近航线：{s.get("nearest_route_name")}（约 {round(s.get("nearest_route_dist"))} 海里）。'
-                       if s.get("nearest_route_name") else "")
-                    + "建议受影响航线船舶提前绕避，留足安全余量。",
+            "tag": {"zh": f'{"台风/飓风" if impact=="danger" else "热带系统"} · {nm}',
+                    "en": f'{"Typhoon/Hurricane" if impact=="danger" else "Tropical system"} · {nm}'},
+            "text": {
+                "zh": f'<strong>中心 {s.get("lat","—")}°N, {s.get("lon","—")}°E，'
+                      f'中心风速约 {_num(wind)} 节{("（"+s.get("sshs_text","")+"）") if s.get("sshs_text") else ""}'
+                      f'{("，气压 "+str(s.get("pres_mb"))+" hPa") if s.get("pres_mb") else ""}。</strong>'
+                      f'移动方向/速度：{mov_dir} / {_fmt(mov_speed, 0, suffix=" kn")}。'
+                      + (f'最近航线：{s.get("nearest_route_name")}（约 {round(s.get("nearest_route_dist"))} 海里）。'
+                         if s.get("nearest_route_name") else "")
+                      + "建议受影响航线船舶提前绕避，留足安全余量。",
+                "en": f'<strong>Centre {s.get("lat","—")}°N, {s.get("lon","—")}°E, '
+                      f'max wind ~{_num(wind)} kn{(" ("+s.get("sshs_text","")+")") if s.get("sshs_text") else ""}'
+                      f'{(", pressure "+str(s.get("pres_mb"))+" hPa") if s.get("pres_mb") else ""}.</strong> '
+                      f'Movement: {mov_dir} / {_fmt(mov_speed, 0, suffix=" kn")}. '
+                      + (f'Nearest route: {s.get("nearest_route_name")} (~{round(s.get("nearest_route_dist"))} nm). '
+                         if s.get("nearest_route_name") else "")
+                      + "Vessels on affected routes should divert early and keep ample margin.",
+            },
         })
     danger = sum(1 for s in storms if s.get("impact") == "danger")
     payload = {
         "report_type": "cyclone", "slug": "cyclone", "date": date,
         "type_zh": "全球热带气旋预警日报", "type_en": "Global Tropical Cyclone Alert",
-        "headline": f"{len(storms)} 个活跃热带系统" + (f" · {danger} 个达台风/飓风级" if danger else ""),
+        "headline": {"zh": f"{len(storms)} 个活跃热带系统" + (f" · {danger} 个达台风/飓风级" if danger else ""),
+                     "en": f"{len(storms)} active tropical system(s)" + (f" · {danger} at typhoon/hurricane strength" if danger else "")},
         "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
         "summary_zh": f"{date} 全球活跃热带系统 {len(storms)} 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
         "summary_en": f"On {date}, {len(storms)} active tropical system(s) are tracked. Position, intensity, the "
                       "nearest shipping route and impact for each are summarized below for voyage avoidance.",
         "sections": [
             {"kind": "cards", "title_zh": "活跃系统概览", "title_en": "Active Systems", "items": [
-                {"label": "活跃系统", "value": str(len(storms)), "sub": "个", "direction": "dn" if danger else "neu"},
-                {"label": "台风/飓风级", "value": str(danger), "sub": "个", "direction": "dn" if danger else "up"},
-                {"label": "最强风速", "value": _fmt(max_wind, 0), "sub": "kn", "direction": "dn" if max_wind >= 64 else "neu"},
-                {"label": "预报路径点", "value": str(len(forecast_rows)), "sub": "个", "direction": "neu"},
+                {"label": {"zh": "活跃系统", "en": "Active systems"}, "value": str(len(storms)), "sub": {"zh": "个", "en": ""}, "direction": "dn" if danger else "neu"},
+                {"label": {"zh": "台风/飓风级", "en": "Typhoon/Hurricane"}, "value": str(danger), "sub": {"zh": "个", "en": ""}, "direction": "dn" if danger else "up"},
+                {"label": {"zh": "最强风速", "en": "Peak wind"}, "value": _fmt(max_wind, 0), "sub": {"zh": "kn", "en": "kn"}, "direction": "dn" if max_wind >= 64 else "neu"},
+                {"label": {"zh": "预报路径点", "en": "Forecast pts"}, "value": str(len(forecast_rows)), "sub": {"zh": "个", "en": ""}, "direction": "neu"},
             ]},
             {"kind": "notes", "title_zh": "各系统详情与航运影响", "title_en": "Storm Details & Shipping Impact", "items": notes},
         ] + ([{"kind": "table", "title_zh": "预报路径", "title_en": "Forecast Track", "columns": [
@@ -381,15 +439,25 @@ def emit_fuel_json(fuel_data: dict, date: str) -> str:
             p.get("district", ""),
             {"v": _num(spread_v, "$"), "cls": "up" if (spread_v or 0) >= 150 else "neu"},
         ])
+    view_en_text = {
+        "price_level": f"Global averages: IFO380 {_num(ifo,'$')}, VLSFO {_num(vlsfo,'$')}, LSMGO {_num(lsmgo,'$')}/t.",
+        "scrubber": f"Average VLSFO−IFO380 spread ~{_num(spread,'$')}/t (scrubber breakeven ≈ $150/t).",
+        "regional": "Asia-Pacific prices generally run above Europe; see the key-port and China tables above.",
+    }
     view_items = []
-    for key, label in [("price_level", "价格水平 PRICE"), ("scrubber", "脱硫塔价差 SCRUBBER"), ("regional", "区域价差 REGIONAL")]:
+    for key, lz, le in [("price_level", "价格水平", "Price level"), ("scrubber", "脱硫塔价差", "Scrubber spread"), ("regional", "区域价差", "Regional spread")]:
         v = (fuel_data.get("views") or {}).get(key) or {}
         if v:
-            view_items.append({"label": label, "title": v.get("verdict", ""), "text": _plain(v.get("text", ""))})
+            view_items.append({
+                "label": {"zh": lz, "en": le},
+                "title": {"zh": v.get("verdict", ""), "en": le},
+                "text": {"zh": _plain(v.get("text", "")), "en": view_en_text.get(key, "")},
+            })
     payload = {
         "report_type": "bunker-fuel", "slug": "bunker-fuel", "date": date,
         "type_zh": "全球船用燃油日报", "type_en": "Global Bunker Fuel Report",
-        "headline": f"IFO380 均价 {_num(ifo, '$', '/吨')} · VLSFO {_num(vlsfo, '$')} · LSMGO {_num(lsmgo, '$')}",
+        "headline": {"zh": f"IFO380 均价 {_num(ifo, '$', '/吨')} · VLSFO {_num(vlsfo, '$')} · LSMGO {_num(lsmgo, '$')}",
+                     "en": f"IFO380 avg {_num(ifo, '$', '/t')} · VLSFO {_num(vlsfo, '$')} · LSMGO {_num(lsmgo, '$')}"},
         "keywords": "船用燃油,燃油价格,IFO380,VLSFO,LSMGO,加油港,bunker price,marine fuel,scrubber spread",
         "summary_zh": f"{date} 全球船用燃油均价：IFO380 {_num(ifo,'$')}/吨、VLSFO {_num(vlsfo,'$')}、LSMGO {_num(lsmgo,'$')};"
                       f"VLSFO−IFO380 脱硫塔价差约 {_num(spread,'$')}/吨。下表为关键港口价格。",
@@ -397,11 +465,11 @@ def emit_fuel_json(fuel_data: dict, date: str) -> str:
                       f"LSMGO {_num(lsmgo,'$')}/t, scrubber spread ~{_num(spread,'$')}/t. Key-port prices below.",
         "sections": [
             {"kind": "cards", "title_zh": "全球均价概览", "title_en": "Global Averages (USD/t)", "items": [
-                {"label": "IFO380 均价", "value": _num(ifo, "$"), "sub": "全球", "direction": "neu"},
-                {"label": "VLSFO 均价", "value": _num(vlsfo, "$"), "sub": "全球", "direction": "neu"},
-                {"label": "LSMGO 均价", "value": _num(lsmgo, "$"), "sub": "全球", "direction": "neu"},
-                {"label": "脱硫塔价差", "value": _num(spread, "$"), "sub": "VLSFO−IFO380", "direction": "up"},
-                {"label": "有效港口", "value": str(fuel_data.get("fresh_count") or "—"), "sub": "近30天", "direction": "neu"},
+                {"label": {"zh": "IFO380 均价", "en": "IFO380 avg"}, "value": _num(ifo, "$"), "sub": {"zh": "全球", "en": "Global"}, "direction": "neu"},
+                {"label": {"zh": "VLSFO 均价", "en": "VLSFO avg"}, "value": _num(vlsfo, "$"), "sub": {"zh": "全球", "en": "Global"}, "direction": "neu"},
+                {"label": {"zh": "LSMGO 均价", "en": "LSMGO avg"}, "value": _num(lsmgo, "$"), "sub": {"zh": "全球", "en": "Global"}, "direction": "neu"},
+                {"label": {"zh": "脱硫塔价差", "en": "Scrubber spread"}, "value": _num(spread, "$"), "sub": {"zh": "VLSFO−IFO380", "en": "VLSFO−IFO380"}, "direction": "up"},
+                {"label": {"zh": "有效港口", "en": "Active ports"}, "value": str(fuel_data.get("fresh_count") or "—"), "sub": {"zh": "近30天", "en": "30-day"}, "direction": "neu"},
             ]},
             {"kind": "table", "title_zh": "关键港口价格", "title_en": "Key Ports", "columns": [
                 {"zh": "港口", "en": "Port"}, {"zh": "区域", "en": "District"},
