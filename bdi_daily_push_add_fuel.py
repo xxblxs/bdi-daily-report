@@ -2125,6 +2125,14 @@ def run_once() -> bool:
     except Exception as e:
         log.warning(f"SEO JSON 生成失败（不影响推送）: {e}")
 
+    # 燃油日报 SEO JSON（独立报告类型 bunker-fuel）
+    try:
+        if fuel_data:
+            from seo_pages.emit_json import emit_fuel_json
+            log.info(f"✅ SEO 燃油 JSON: {emit_fuel_json(fuel_data, data['date'])}")
+    except Exception as e:
+        log.warning(f"SEO 燃油 JSON 生成失败（不影响推送）: {e}")
+
     # ── 5. 生成燃油 HTML 并保存（如有数据）───────────────────────────────────
     fuel_filepath = None
     if fuel_data:
