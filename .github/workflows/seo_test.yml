@@ -1,7 +1,10 @@
 name: SEO 报告页 · OSS 直传测试
 
-# 手动触发的隔离测试：只生成样例页并上传 OSS（不跑日报脚本、不发企微）。
+# 隔离测试：只生成样例页并上传 OSS（不跑日报脚本、不发企微）。
+# push 到本分支即自动运行（workflow_dispatch 需文件先进默认分支，故用 push 触发）。
 on:
+  push:
+    branches: [feat/seo-report-pages]
   workflow_dispatch:
 
 jobs:
