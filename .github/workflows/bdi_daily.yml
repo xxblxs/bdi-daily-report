@@ -8,6 +8,8 @@ on:
 jobs:
   send-report:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write          # 允许把 SEO JSON 快照回提交，积累历史归档
 
     steps:
       - name: Checkout 代码
@@ -39,9 +41,36 @@ jobs:
           EMAIL_TO:         ${{ secrets.EMAIL_TO }}
         run: python bdi_daily_push_add_fuel.py
 
+      # ── SEO：生成可收录网页 → 上传 OSS → 推送搜索引擎 ────────────────────────
+      # 主脚本已把当日数据写入 seo_pages/data/bdi-market/<date>.json。
+      # 下面据此(以及历史归档)重建每日页 + hub + sitemap，上传 OSS 并推送收录。
+      # 缺少 OSS_/BAIDU_/INDEXNOW_ secret 时各步骤自动安全跳过（不报错）。
+      - name: 生成 SEO 报告页并发布
+        env:
+          OSS_ENDPOINT:     ${{ secrets.OSS_ENDPOINT }}
+          OSS_BUCKET:       ${{ secrets.OSS_BUCKET }}
+          OSS_AK_ID:        ${{ secrets.OSS_AK_ID }}
+          OSS_AK_SECRET:    ${{ secrets.OSS_AK_SECRET }}
+          BAIDU_PUSH_TOKEN: ${{ secrets.BAIDU_PUSH_TOKEN }}
+          INDEXNOW_KEY:     ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          python seo_pages/build_index.py out --site https://www.navgreen.cn
+          TODAY=$(ls -1 seo_pages/data/bdi-market/*.json 2>/dev/null | sort | tail -1 | xargs -n1 basename | sed 's/.json//')
+          if [ -n "$TODAY" ]; then
+            python seo_pages/publish.py out --urls "https://www.navgreen.cn/reports/bdi-market/$TODAY/"
+          fi
+
+      - name: 归档 SEO JSON 快照（回提交，供历史 hub/归档）
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(seo): archive report json [skip ci]"
+          file_pattern: seo_pages/data/**/*.json
+
       - name: 保存 HTML 报告为 Artifact
         uses: actions/upload-artifact@v4
         with:
           name: navgreen-reports-${{ github.run_id }}
-          path: reports/
+          path: |
+            reports/
+            out/reports/
           retention-days: 30

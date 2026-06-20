@@ -1,0 +1,61 @@
+{
+  "report_type": "bdi-market",
+  "date": "2026-06-17",
+  "headline": "BDI ↓0.6% · C16 远东→大陆回程 -8.1%",
+  "indices": {
+    "BDI":  {"val": 2653, "prev": 2670, "diff": -17, "pct": -0.6, "pct_str": "-0.6%", "direction": "dn", "label": "BDI 综合"},
+    "BCI":  {"val": 3877, "prev": 3911, "diff": -34, "pct": -0.9, "pct_str": "-0.9%", "direction": "dn", "label": "BCI 海岬型"},
+    "BPI":  {"val": 2223, "prev": 2266, "diff": -43, "pct": -1.9, "pct_str": "-1.9%", "direction": "dn", "label": "BPI 巴拿马型"},
+    "BSI":  {"val": 1705, "prev": 1685, "diff": 20, "pct": 1.2, "pct_str": "+1.2%", "direction": "up", "label": "BSI 灵便型"},
+    "BHSI": {"val": 917, "prev": 910, "diff": 7, "pct": 0.8, "pct_str": "+0.8%", "direction": "up", "label": "BHSI 小灵便"}
+  },
+  "routes": {
+    "C5TC":   {"label": "5TC 平均 (Cape综合)", "sublabel": "海岬型综合期租", "unit": "day", "val": 35162, "pct": -0.9, "pct_str": "-0.9%", "direction": "dn"},
+    "C8":     {"label": "C8 跨大西洋往返", "sublabel": "鹿特丹/直布罗陀 round", "unit": "day", "val": 41075, "pct": -1.6, "pct_str": "-1.6%", "direction": "dn"},
+    "C9":     {"label": "C9 大陆→远东", "sublabel": "单程至中国/日本", "unit": "day", "val": 69500, "pct": -1.0, "pct_str": "-1.0%", "direction": "dn"},
+    "C10":    {"label": "C10 太平洋往返", "sublabel": "中国/日本 round", "unit": "day", "val": 27232, "pct": 2.6, "pct_str": "+2.6%", "direction": "up"},
+    "C14":    {"label": "C14 中国→巴西往返", "sublabel": "China-Brazil round", "unit": "day", "val": 36186, "pct": -2.2, "pct_str": "-2.2%", "direction": "dn"},
+    "C16":    {"label": "C16 远东→大陆回程", "sublabel": "backhaul", "unit": "day", "val": 13883, "pct": -8.1, "pct_str": "-8.1%", "direction": "dn"},
+    "P5_82":  {"label": "P5 航线 (82K)", "sublabel": "", "unit": "day", "val": 18589, "pct": -3.4, "pct_str": "-3.4%", "direction": "dn"},
+    "S3TC_63":{"label": "S3TC 63K综合", "sublabel": "灵便型综合期租", "unit": "day", "val": 20136, "pct": 0.0, "pct_str": "-0.0%", "direction": "dn"},
+    "S8":     {"label": "S8 航线", "sublabel": "", "unit": "day", "val": 24564, "pct": -0.1, "pct_str": "-0.1%", "direction": "dn"},
+    "S10":    {"label": "S10 航线", "sublabel": "", "unit": "day", "val": 16500, "pct": 0.0, "pct_str": "+0.0%", "direction": "up"},
+    "C2":     {"label": "C2 图巴朗→鹿特丹", "sublabel": "铁矿石 大西洋线", "unit": "ton", "val": 16.4, "pct": -2.3, "pct_str": "-2.3%", "direction": "dn"},
+    "C3":     {"label": "C3 图巴朗→青岛", "sublabel": "铁矿石 巴西→中国", "unit": "ton", "val": 31.8, "pct": -2.6, "pct_str": "-2.6%", "direction": "dn"},
+    "C5":     {"label": "C5 西澳→青岛", "sublabel": "铁矿石 太平洋线", "unit": "ton", "val": 10.7, "pct": 0.2, "pct_str": "+0.2%", "direction": "up"},
+    "C7":     {"label": "C7 玻利瓦尔→鹿特丹", "sublabel": "煤炭航线", "unit": "ton", "val": 17.9, "pct": -1.1, "pct_str": "-1.1%", "direction": "dn"},
+    "C17":    {"label": "C17 萨尔达尼亚→青岛", "sublabel": "铁矿石 南非→中国", "unit": "ton", "val": 23.1, "pct": -1.4, "pct_str": "-1.4%", "direction": "dn"}
+  },
+  "trend": [
+    {"date": "2026-06-17", "BDI": 2653, "BCI": 3877, "BPI": 2223},
+    {"date": "2026-06-16", "BDI": 2670, "BCI": 3911, "BPI": 2266},
+    {"date": "2026-06-15", "BDI": 2720, "BCI": 4053, "BPI": 2278},
+    {"date": "2026-06-12", "BDI": 2729, "BCI": 4107, "BPI": 2250},
+    {"date": "2026-06-11", "BDI": 2729, "BCI": 4140, "BPI": 2250}
+  ],
+  "week_chg": {
+    "BDI":  {"pct": -2.8, "pct_str": "-2.8%"},
+    "BCI":  {"pct": -6.4, "pct_str": "-6.4%"},
+    "BPI":  {"pct": -1.2, "pct_str": "-1.2%"},
+    "BSI":  {"pct": 4.4, "pct_str": "+4.4%"},
+    "BHSI": {"pct": 3.0, "pct_str": "+3.0%"}
+  },
+  "market_analysis": [
+    {"type": "bear", "tag": "利空 · Capesize", "text": "<strong>C3 图巴朗→青岛 今日 -2.6%</strong>，海岬型市场走弱（BCI -0.9%，收于 3877 点）。大西洋与太平洋航线走势较为一致（C3 -2.6%，C5 +0.2%）。BCI 近 5 日累计 -6.4%，短期弱势持续。"},
+    {"type": "neu", "tag": "分歧 · 大小船分化", "text": "<strong>小船强、大船弱——船型走势出现分化。</strong>Capesize -0.9%，Supramax +1.2% / Handysize +0.8%。次要散货需求回暖带动小型船运费上行，大宗货物需求相对平稳。"},
+    {"type": "bear", "tag": "利空 · Panamax", "text": "<strong>BPI 今日 -1.9%，近 5 日 -1.2%。</strong>2026 年新船交付压力显著高于往年（约 1,500–1,600 万 DWT，较往年翻近 50%），供给端持续偏松；需求侧重点关注煤炭与粮食贸易量变化，以及太平洋地区租家询盘动向。"},
+    {"type": "neu", "tag": "市场资讯", "text": "<strong>印度动力煤进口量因当地产量下降至四年来最低点。</strong>印度 1–5 月动力煤进口量降至四年来最低水平，因该国增加国内产量和扩大可再生能源规模，进口量降至 6500 万吨。"}
+  ],
+  "views": [
+    {"shiptype": "海岬型 CAPESIZE", "title": "短期偏弱", "text": "BCI 今日 -0.9%，近 5 日 -6.4%。关注中国铁矿石到港量及钢厂开工率变化。"},
+    {"shiptype": "巴拿马型 PANAMAX", "title": "承压下行", "text": "BPI 今日 -1.9%，近 5 日 -1.2%。2026 年新船交付压力高于往年，供给端偏松；关注煤炭和粮食贸易量变化。"},
+    {"shiptype": "灵便型 SUPRAMAX / HANDYSIZE", "title": "小幅回暖", "text": "BSI +1.2%，BHSI +0.8%。次要散货需求受贸易政策不确定性压制，转机在 Q2 南半球粮食出口旺季启动。"}
+  ],
+  "fuel": {
+    "ifo380_avg": 412.5,
+    "vlsfo_avg": 548.0,
+    "mgo_avg": 712.0,
+    "fresh_count": 18
+  },
+  "sources": ["Baltic Exchange", "Hellenic Shipping News", "Splash247"]
+}
