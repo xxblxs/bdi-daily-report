@@ -22,6 +22,12 @@
 | `publish.py` | OSS 上传 + 百度链接提交 + Bing IndexNow（全部读环境变量；缺凭据自动跳过） |
 | `data/` | JSON 归档（入库，历史 hub 的数据源；CI 每日回提交） |
 
+## 数据真实性
+
+- `sample_data/` 只用于本地/CI 样例测试，不代表当天真实市场数据。
+- `data/` 下的生产 JSON 应由各日报脚本在 GitHub Actions 中写入，并由 auto-commit 回提交；不要手动把 `sample_data` 复制到 `data/` 当作正式日报发布。
+- 如果某个分类 hub 显示 `0 期`，通常表示该分类还没有真实 JSON 归档被提交并上传到 OSS，而不是前端列表页故障。
+
 ## 本地试跑
 
 ```bash
