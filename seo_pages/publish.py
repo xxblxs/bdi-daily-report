@@ -51,7 +51,9 @@ def ping_baidu(urls: list[str]):
     if not token:
         print("  ! BAIDU_PUSH_TOKEN not set — skipping 百度 push")
         return
-    api = f"http://data.zz.baidu.com/urls?site=navgreen.cn&token={token}"
+    # `site` must match the verified property on 百度搜索资源平台 exactly,
+    # which for navgreen is the full https form (verified: https://www.navgreen.cn).
+    api = f"http://data.zz.baidu.com/urls?site={SITE}&token={token}"
     payload = "\n".join(urls).encode()
     try:
         req = urllib.request.Request(api, data=payload,
