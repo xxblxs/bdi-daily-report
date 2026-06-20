@@ -27,3 +27,6 @@ img2pdf>=0.4.0
 
 # 图片处理（处理 Playwright 截图 RGBA 透明通道）
 Pillow>=10.0.0
+
+# SEO 报告页发布到阿里云 OSS（seo_pages/publish.py）
+oss2>=2.18.0

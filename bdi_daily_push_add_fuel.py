@@ -2116,6 +2116,15 @@ def run_once() -> bool:
     bdi_filepath.write_text(html, encoding="utf-8")
     log.info(f"✅ BDI HTML 报告: {bdi_filepath}")
 
+    # ── SEO：把当日数据快照写成 JSON（供 seo_pages 生成可收录网页）──────────────
+    # 仅落 JSON，绝不影响既有推送；HTML 生成 + OSS 发布在 workflow 的独立步骤完成。
+    try:
+        from seo_pages.emit_json import emit_bdi_json
+        seo_json = emit_bdi_json(data, news, market_analysis, views, fuel_data)
+        log.info(f"✅ SEO JSON 快照: {seo_json}")
+    except Exception as e:
+        log.warning(f"SEO JSON 生成失败（不影响推送）: {e}")
+
     # ── 5. 生成燃油 HTML 并保存（如有数据）───────────────────────────────────
     fuel_filepath = None
     if fuel_data:
