@@ -1,0 +1,208 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-06-20",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "2 个活跃热带系统",
+    "en": "2 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-06-20 全球活跃热带系统 2 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-06-20, 2 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "2",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "44",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · Mekkhala",
+            "en": "Tropical system · Mekkhala"
+          },
+          "text": {
+            "zh": "<strong>中心 14.1°N, 136.8°E，中心风速约 43.5 节。</strong>移动方向/速度：W / 10 kn。最近航线：菲律宾海（约 399 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 14.1°N, 136.8°E, max wind ~43.5 kn.</strong> Movement: W / 10 kn. Nearest route: 菲律宾海 (~399 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · ARTHUR",
+            "en": "Tropical system · ARTHUR"
+          },
+          "text": {
+            "zh": "<strong>中心 29.4°N, -94.8°E，中心风速约 35.0 节（热带风暴），气压 999.0 hPa。</strong>移动方向/速度：ENE / 6 kn。最近航线：墨西哥湾（约 414 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 29.4°N, -94.8°E, max wind ~35.0 kn (热带风暴), pressure 999.0 hPa.</strong> Movement: ENE / 6 kn. Nearest route: 墨西哥湾 (~414 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Mekkhala",
+          {
+            "v": "1"
+          },
+          "2026-06-20T18:00:00+00:00",
+          "15.0 / 134.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Mekkhala",
+          {
+            "v": "2"
+          },
+          "2026-06-21T00:00:00+00:00",
+          "15.7 / 133.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Mekkhala",
+          {
+            "v": "3"
+          },
+          "2026-06-21T06:00:00+00:00",
+          "16.3 / 132.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Mekkhala",
+          {
+            "v": "4"
+          },
+          "2026-06-21T12:00:00+00:00",
+          "16.9 / 131.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Mekkhala",
+          {
+            "v": "5"
+          },
+          "2026-06-21T18:00:00+00:00",
+          "17.6 / 130.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Mekkhala",
+          {
+            "v": "6"
+          },
+          "2026-06-22T00:00:00+00:00",
+          "18.2 / 129.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
