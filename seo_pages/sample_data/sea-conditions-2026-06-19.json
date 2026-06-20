@@ -1,0 +1,151 @@
+{
+  "report_type": "sea-conditions",
+  "slug": "sea-conditions",
+  "date": "2026-06-19",
+  "type_zh": "全球主要航线海况日报",
+  "type_en": "Global Sea Conditions Report",
+  "headline": {
+    "zh": "全球航线海况 · 最高评级 需注意",
+    "en": "Global sea state · peak risk Caution"
+  },
+  "keywords": "航线海况,浪高,风速,涌浪,适航,天气路由,weather routing,sea state,wave height",
+  "summary_zh": "2026-06-19 主要航线海况：各航区浪高/涌高/风速与分区观点见下，供天气路由与 ETA 决策参考。",
+  "summary_en": "On 2026-06-19, per-route wave height, swell and wind across the main shipping legs, plus a regional outlook, are listed below to support weather routing and ETA decisions.",
+  "sections": [
+    {
+      "kind": "table",
+      "title_zh": "各航区海况",
+      "title_en": "Route Sea State",
+      "columns": [
+        {
+          "zh": "航区",
+          "en": "Route"
+        },
+        {
+          "zh": "风速(节)",
+          "en": "Wind",
+          "num": true
+        },
+        {
+          "zh": "风向",
+          "en": "Dir",
+          "num": true
+        },
+        {
+          "zh": "最大浪高(米)",
+          "en": "Wave",
+          "num": true
+        },
+        {
+          "zh": "涌高(米)",
+          "en": "Swell",
+          "num": true
+        },
+        {
+          "zh": "评级",
+          "en": "Risk",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "南海 South China Sea",
+          {
+            "v": "27",
+            "cls": "dn"
+          },
+          {
+            "v": "SW"
+          },
+          {
+            "v": "3.2",
+            "cls": "dn"
+          },
+          {
+            "v": "2.1"
+          },
+          {
+            "zh": "需注意",
+            "en": "Caution",
+            "cls": "dn"
+          }
+        ],
+        [
+          "北印度洋 N. Indian Ocean",
+          {
+            "v": "11",
+            "cls": ""
+          },
+          {
+            "v": "SW"
+          },
+          {
+            "v": "1.3",
+            "cls": "up"
+          },
+          {
+            "v": "1.0"
+          },
+          {
+            "zh": "适航",
+            "en": "Workable",
+            "cls": "up"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "views",
+      "title_zh": "分区海况观点",
+      "title_en": "Regional Outlook",
+      "items": [
+        {
+          "label": {
+            "zh": "西太/亚太",
+            "en": "W.Pacific"
+          },
+          "title": {
+            "zh": "需关注局部",
+            "en": "Watch locally"
+          },
+          "text": {
+            "zh": "亚太航区平均波高偏高。",
+            "en": "W.Pacific: Watch locally. See the sea-state table above for wave height, swell and wind by leg."
+          }
+        },
+        {
+          "label": {
+            "zh": "印度洋",
+            "en": "Indian Ocean"
+          },
+          "title": {
+            "zh": "总体平稳",
+            "en": "Broadly calm"
+          },
+          "text": {
+            "zh": "北印度洋适航。",
+            "en": "Indian Ocean: Broadly calm. See the sea-state table above for wave height, swell and wind by leg."
+          }
+        },
+        {
+          "label": {
+            "zh": "大西洋",
+            "en": "Atlantic"
+          },
+          "title": {
+            "zh": "好望角需关注",
+            "en": "Cape of Good Hope — watch"
+          },
+          "text": {
+            "zh": "好望角海域波高升高。",
+            "en": "Atlantic: Cape of Good Hope — watch. See the sea-state table above for wave height, swell and wind by leg."
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "Open-Meteo Marine",
+    "NAVGreen 气象"
+  ]
+}

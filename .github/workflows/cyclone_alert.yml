@@ -73,6 +73,27 @@ jobs:
           path: reports/.cyclone_state.json
           key: cyclone-state-${{ github.run_id }}
 
+      - name: 生成 SEO 报告页并发布（仅有活跃系统时）
+        env:
+          OSS_ENDPOINT:     ${{ secrets.OSS_ENDPOINT }}
+          OSS_BUCKET:       ${{ secrets.OSS_BUCKET }}
+          OSS_AK_ID:        ${{ secrets.OSS_AK_ID }}
+          OSS_AK_SECRET:    ${{ secrets.OSS_AK_SECRET }}
+          BAIDU_PUSH_TOKEN: ${{ secrets.BAIDU_PUSH_TOKEN }}
+          INDEXNOW_KEY:     ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          python seo_pages/build_index.py out --site https://www.navgreen.cn
+          LATEST=$(ls -1 seo_pages/data/cyclone/*.json 2>/dev/null | sort | tail -1 | xargs -n1 basename | sed 's/.json//')
+          if [ -n "$LATEST" ]; then
+            python seo_pages/publish.py out --urls "https://www.navgreen.cn/reports/cyclone/$LATEST/"
+          fi
+
+      - name: 归档 SEO JSON 快照
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(seo): archive cyclone json [skip ci]"
+          file_pattern: seo_pages/data/**/*.json
+
       - name: 上传 HTML 预警报告
         if: always()
         uses: actions/upload-artifact@v4

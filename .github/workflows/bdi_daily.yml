@@ -55,10 +55,12 @@ jobs:
           INDEXNOW_KEY:     ${{ secrets.INDEXNOW_KEY }}
         run: |
           python seo_pages/build_index.py out --site https://www.navgreen.cn
-          TODAY=$(ls -1 seo_pages/data/bdi-market/*.json 2>/dev/null | sort | tail -1 | xargs -n1 basename | sed 's/.json//')
-          if [ -n "$TODAY" ]; then
-            python seo_pages/publish.py out --urls "https://www.navgreen.cn/reports/bdi-market/$TODAY/"
-          fi
+          URLS=""
+          for SLUG in bdi-market bunker-fuel; do
+            LATEST=$(ls -1 seo_pages/data/$SLUG/*.json 2>/dev/null | sort | tail -1 | xargs -n1 basename | sed 's/.json//')
+            [ -n "$LATEST" ] && URLS="$URLS https://www.navgreen.cn/reports/$SLUG/$LATEST/"
+          done
+          [ -n "$URLS" ] && python seo_pages/publish.py out --urls $URLS || true
 
       - name: 归档 SEO JSON 快照（回提交，供历史 hub/归档）
         uses: stefanzweifel/git-auto-commit-action@v5

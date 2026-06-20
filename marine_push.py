@@ -1765,6 +1765,13 @@ def run_once() -> bool:
     html_file.write_text(html, encoding="utf-8")
     log.info(f"✅ HTML 已保存: {html_file}")
 
+    # SEO：写当日数据 JSON（供 seo_pages 生成可收录网页）。绝不影响既有推送。
+    try:
+        from seo_pages.emit_json import emit_marine_json
+        log.info(f"✅ SEO JSON: {emit_marine_json(routes, views, today)}")
+    except Exception as e:
+        log.warning(f"SEO JSON 生成失败（不影响推送）: {e}")
+
     # 5. 推送企业微信（截图 + 文字）
     ok = push_marine_wecom(routes, views, html_path=str(html_file.resolve()))
     log.info(f"推送结果: {'✅ 成功' if ok else '❌ 失败'}")

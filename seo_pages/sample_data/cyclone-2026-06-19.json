@@ -1,0 +1,70 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-06-19",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "1 个活跃热带系统 · 1 个达台风/飓风级",
+    "en": "1 active tropical system(s) · 1 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-06-19 全球活跃热带系统 1 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-06-19, 1 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · MUIFA",
+            "en": "Typhoon/Hurricane · MUIFA"
+          },
+          "text": {
+            "zh": "<strong>中心 22.4°N, 128.6°E，中心风速约 85 节（2级台风），气压 958 hPa。</strong>最近航线：东海航线（约 120 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.4°N, 128.6°E, max wind ~85 kn (2级台风), pressure 958 hPa.</strong> Nearest route: 东海航线 (~120 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}

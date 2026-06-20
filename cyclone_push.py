@@ -2040,6 +2040,15 @@ def run_once(force: bool = False, check_only: bool = False) -> bool:
     html_file.write_text(html, encoding="utf-8")
     log.info(f"✅ HTML 已保存: {html_file}")
 
+    # SEO：仅当有活跃系统时写当日数据 JSON（事件驱动，避免无台风日发空页）。
+    try:
+        from seo_pages.emit_json import emit_cyclone_json
+        sj = emit_cyclone_json(storms, today)
+        if sj:
+            log.info(f"✅ SEO JSON: {sj}")
+    except Exception as e:
+        log.warning(f"SEO JSON 生成失败（不影响推送）: {e}")
+
     # 6. 推送企业微信
     ok = push_wecom(storms, str(html_file.resolve()), now_utc)
 

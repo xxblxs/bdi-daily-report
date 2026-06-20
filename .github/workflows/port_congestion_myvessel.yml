@@ -11,7 +11,7 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write   # 回提交 SEO JSON 归档
 
 jobs:
   port-congestion:
@@ -55,6 +55,27 @@ jobs:
         with:
           path: reports/.port_state.json
           key: port-state-${{ github.run_id }}
+
+      - name: 生成 SEO 报告页并发布
+        env:
+          OSS_ENDPOINT:     ${{ secrets.OSS_ENDPOINT }}
+          OSS_BUCKET:       ${{ secrets.OSS_BUCKET }}
+          OSS_AK_ID:        ${{ secrets.OSS_AK_ID }}
+          OSS_AK_SECRET:    ${{ secrets.OSS_AK_SECRET }}
+          BAIDU_PUSH_TOKEN: ${{ secrets.BAIDU_PUSH_TOKEN }}
+          INDEXNOW_KEY:     ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          python seo_pages/build_index.py out --site https://www.navgreen.cn
+          LATEST=$(ls -1 seo_pages/data/port-congestion/*.json 2>/dev/null | sort | tail -1 | xargs -n1 basename | sed 's/.json//')
+          if [ -n "$LATEST" ]; then
+            python seo_pages/publish.py out --urls "https://www.navgreen.cn/reports/port-congestion/$LATEST/"
+          fi
+
+      - name: 归档 SEO JSON 快照
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(seo): archive port-congestion json [skip ci]"
+          file_pattern: seo_pages/data/**/*.json
 
       - uses: actions/upload-artifact@v4
         if: always()
