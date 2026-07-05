@@ -1,0 +1,335 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-07-05",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "7 个活跃热带系统 · 2 个达台风/飓风级",
+    "en": "7 active tropical system(s) · 2 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-07-05 全球活跃热带系统 7 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-07-05, 7 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "7",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "2",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "135",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "12",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · HIGOS",
+            "en": "Typhoon/Hurricane · HIGOS"
+          },
+          "text": {
+            "zh": "<strong>中心 36.4°N, 142.9°E，中心风速约 45.0 节（热带风暴），气压 989.0 hPa。</strong>移动方向/速度：ENE / 28 kn。最近航线：东日本海域（约 98 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 36.4°N, 142.9°E, max wind ~45.0 kn (热带风暴), pressure 989.0 hPa.</strong> Movement: ENE / 28 kn. Nearest route: 东日本海域 (~98 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · MEKKHALA",
+            "en": "Typhoon/Hurricane · MEKKHALA"
+          },
+          "text": {
+            "zh": "<strong>中心 35.5°N, 141.4°E，中心风速约 39.0 节（热带风暴），气压 993.0 hPa。</strong>移动方向/速度：ENE / 30 kn。最近航线：东日本海域（约 92 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 35.5°N, 141.4°E, max wind ~39.0 kn (热带风暴), pressure 993.0 hPa.</strong> Movement: ENE / 30 kn. Nearest route: 东日本海域 (~92 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 17.6°N, 113.1°E，中心风速约 29.0 节（亚热带风暴），气压 1003.0 hPa。</strong>移动方向/速度：W / 10 kn。最近航线：南海中部（约 191 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 17.6°N, 113.1°E, max wind ~29.0 kn (亚热带风暴), pressure 1003.0 hPa.</strong> Movement: W / 10 kn. Nearest route: 南海中部 (~191 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Maysak",
+            "en": "Tropical system · Maysak"
+          },
+          "text": {
+            "zh": "<strong>中心 21.6°N, 107.9°E，中心风速约 52.1 节。</strong>移动方向/速度：NNE / 3 kn。最近航线：南海中部（约 566 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 21.6°N, 107.9°E, max wind ~52.1 kn.</strong> Movement: NNE / 3 kn. Nearest route: 南海中部 (~566 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Bavi",
+            "en": "Tropical system · Bavi"
+          },
+          "text": {
+            "zh": "<strong>中心 12.9°N, 148.9°E，中心风速约 134.7 节。</strong>移动方向/速度：WNW / 7 kn。最近航线：西太平洋（约 1081 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.9°N, 148.9°E, max wind ~134.7 kn.</strong> Movement: WNW / 7 kn. Nearest route: 西太平洋 (~1081 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 10.9°N, 160.2°E，中心风速约 51.0 节（热带风暴），气压 996.0 hPa。</strong>移动方向/速度：WNW / 6 kn。最近航线：西太平洋（约 1183 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 10.9°N, 160.2°E, max wind ~51.0 kn (热带风暴), pressure 996.0 hPa.</strong> Movement: WNW / 6 kn. Nearest route: 西太平洋 (~1183 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · DOUGLAS",
+            "en": "Tropical system · DOUGLAS"
+          },
+          "text": {
+            "zh": "<strong>中心 16.2°N, -127.0°E，中心风速约 35.0 节（热带风暴），气压 1003.0 hPa。</strong>移动方向/速度：N / 3 kn。最近航线：墨西哥湾（约 2132 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 16.2°N, -127.0°E, max wind ~35.0 kn (热带风暴), pressure 1003.0 hPa.</strong> Movement: N / 3 kn. Nearest route: 墨西哥湾 (~2132 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Maysak",
+          {
+            "v": "1"
+          },
+          "2026-07-05T12:00:00+00:00",
+          "24.0 / 108.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Maysak",
+          {
+            "v": "2"
+          },
+          "2026-07-05T18:00:00+00:00",
+          "25.2 / 109.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Maysak",
+          {
+            "v": "3"
+          },
+          "2026-07-06T00:00:00+00:00",
+          "26.3 / 109.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Maysak",
+          {
+            "v": "4"
+          },
+          "2026-07-06T06:00:00+00:00",
+          "27.8 / 110.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Maysak",
+          {
+            "v": "5"
+          },
+          "2026-07-06T12:00:00+00:00",
+          "28.9 / 111.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Maysak",
+          {
+            "v": "6"
+          },
+          "2026-07-06T18:00:00+00:00",
+          "30.4 / 112.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "1"
+          },
+          "2026-07-05T12:00:00+00:00",
+          "13.6 / 147.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "2"
+          },
+          "2026-07-05T18:00:00+00:00",
+          "14.0 / 146.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "3"
+          },
+          "2026-07-06T00:00:00+00:00",
+          "14.5 / 144.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "4"
+          },
+          "2026-07-06T06:00:00+00:00",
+          "15.0 / 143.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "5"
+          },
+          "2026-07-06T12:00:00+00:00",
+          "15.0 / 142.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "6"
+          },
+          "2026-07-06T18:00:00+00:00",
+          "15.6 / 140.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
