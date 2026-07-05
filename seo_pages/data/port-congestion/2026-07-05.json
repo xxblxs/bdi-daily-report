@@ -1,0 +1,1117 @@
+{
+  "report_type": "port-congestion",
+  "slug": "port-congestion",
+  "date": "2026-07-05",
+  "type_zh": "干散货全球港口拥堵日报",
+  "type_en": "Global Port Congestion Report",
+  "headline": {
+    "zh": "严重拥堵 3 港 · 总锚泊 738 艘 · 预抵 2286 艘",
+    "en": "3 severe · 738 at anchor · 2286 inbound"
+  },
+  "keywords": "港口拥堵,干散货,锚泊,靠泊,滞期风险,铁矿石港口,port congestion,dry bulk demurrage",
+  "summary_zh": "2026-07-05 全球干散货港口监测：严重拥堵 3 港、中度 3 港、正常 17 港，总锚泊 738 艘、预抵 2286 艘。下方按装港/卸港分区汇总，并附各港明细。",
+  "summary_en": "On 2026-07-05, 3 ports show severe congestion and 3 moderate across the monitored dry-bulk network, with 738 vessels at anchor and 2286 inbound. A loading/discharge regional summary plus port-by-port detail are tabulated below.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "全球港口概览",
+      "title_en": "Overview",
+      "items": [
+        {
+          "label": {
+            "zh": "严重拥堵",
+            "en": "Severe"
+          },
+          "value": "3",
+          "sub": {
+            "zh": "港",
+            "en": "ports"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "中度拥堵",
+            "en": "Moderate"
+          },
+          "value": "3",
+          "sub": {
+            "zh": "港",
+            "en": "ports"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "正常运营",
+            "en": "Normal"
+          },
+          "value": "17",
+          "sub": {
+            "zh": "港",
+            "en": "ports"
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "总锚泊",
+            "en": "At anchor"
+          },
+          "value": "738",
+          "sub": {
+            "zh": "艘",
+            "en": "vessels"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预抵",
+            "en": "Inbound"
+          },
+          "value": "2286",
+          "sub": {
+            "zh": "艘",
+            "en": "vessels"
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "按装港/卸港分区汇总",
+      "title_en": "Regional Loading/Discharge Summary",
+      "columns": [
+        {
+          "zh": "分区",
+          "en": "Group"
+        },
+        {
+          "zh": "港口",
+          "en": "Ports",
+          "num": true
+        },
+        {
+          "zh": "锚泊",
+          "en": "Anchored",
+          "num": true
+        },
+        {
+          "zh": "靠泊",
+          "en": "Berthed",
+          "num": true
+        },
+        {
+          "zh": "预抵",
+          "en": "Inbound",
+          "num": true
+        },
+        {
+          "zh": "最长估等",
+          "en": "Max wait",
+          "num": true
+        },
+        {
+          "zh": "严重/中度",
+          "en": "High/Mod",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          {
+            "v": "6"
+          },
+          {
+            "v": "510",
+            "cls": "up"
+          },
+          {
+            "v": "443"
+          },
+          {
+            "v": "1463"
+          },
+          {
+            "v": "2.2",
+            "cls": ""
+          },
+          {
+            "v": "0/0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·澳大利亚",
+            "en": "Load · Australia"
+          },
+          {
+            "v": "5"
+          },
+          {
+            "v": "93",
+            "cls": "neu"
+          },
+          {
+            "v": "40"
+          },
+          {
+            "v": "329"
+          },
+          {
+            "v": "9.5",
+            "cls": "dn"
+          },
+          {
+            "v": "0/3",
+            "cls": "neu"
+          }
+        ],
+        [
+          {
+            "zh": "装港·巴西",
+            "en": "Load · Brazil"
+          },
+          {
+            "v": "2"
+          },
+          {
+            "v": "36",
+            "cls": "up"
+          },
+          {
+            "v": "16"
+          },
+          {
+            "v": "166"
+          },
+          {
+            "v": "4.1",
+            "cls": "dn"
+          },
+          {
+            "v": "0/0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·印尼",
+            "en": "Load · Indonesia"
+          },
+          {
+            "v": "5"
+          },
+          {
+            "v": "34",
+            "cls": "dn"
+          },
+          {
+            "v": "81"
+          },
+          {
+            "v": "152"
+          },
+          {
+            "v": "1.1",
+            "cls": ""
+          },
+          {
+            "v": "2/0",
+            "cls": "dn"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·印度",
+            "en": "Discharge · India"
+          },
+          {
+            "v": "2"
+          },
+          {
+            "v": "28",
+            "cls": "up"
+          },
+          {
+            "v": "39"
+          },
+          {
+            "v": "106"
+          },
+          {
+            "v": "1.4",
+            "cls": ""
+          },
+          {
+            "v": "0/0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·西非",
+            "en": "Load · West Africa"
+          },
+          {
+            "v": "2"
+          },
+          {
+            "v": "25",
+            "cls": "up"
+          },
+          {
+            "v": "13"
+          },
+          {
+            "v": "25"
+          },
+          {
+            "v": "4.2",
+            "cls": "dn"
+          },
+          {
+            "v": "0/0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·南非",
+            "en": "Load · South Africa"
+          },
+          {
+            "v": "1"
+          },
+          {
+            "v": "12",
+            "cls": "dn"
+          },
+          {
+            "v": "6"
+          },
+          {
+            "v": "45"
+          },
+          {
+            "v": "3.0",
+            "cls": "dn"
+          },
+          {
+            "v": "1/0",
+            "cls": "dn"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "Demurrage 风险提示",
+      "title_en": "Demurrage Risk",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "高风险 · Richards Bay 理查兹湾",
+            "en": "High risk · Richards Bay"
+          },
+          "text": {
+            "zh": "<strong>锚泊 12 艘，估等约 3.0 天。</strong>动力煤泊位，建议提前计算 Laytime。",
+            "en": "<strong>12 vessels at anchor, est. ~3.0 days wait.</strong> Thermal coal berth — calculate laytime in advance."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "高风险 · Tanjung Bara 丹戒巴拉",
+            "en": "High risk · Tanjung Bara"
+          },
+          "text": {
+            "zh": "<strong>锚泊 3 艘，估等约 1.1 天。</strong>动力煤泊位，建议提前计算 Laytime。",
+            "en": "<strong>3 vessels at anchor, est. ~1.1 days wait.</strong> Thermal coal berth — calculate laytime in advance."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "高风险 · Bontang 邦坦港",
+            "en": "High risk · Bontang"
+          },
+          "text": {
+            "zh": "<strong>锚泊 4 艘，估等约 0.3 天。</strong>动力煤泊位，建议提前计算 Laytime。",
+            "en": "<strong>4 vessels at anchor, est. ~0.3 days wait.</strong> Thermal coal berth — calculate laytime in advance."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "关注 · Port Hedland 黑德兰港",
+            "en": "Watch · Port Hedland"
+          },
+          "text": {
+            "zh": "<strong>锚泊 39 艘，估等约 4.5 天。</strong>铁矿石泊位，建议提前计算 Laytime。",
+            "en": "<strong>39 vessels at anchor, est. ~4.5 days wait.</strong> Iron ore berth — calculate laytime in advance."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "关注 · Gladstone 格拉德斯通",
+            "en": "Watch · Gladstone"
+          },
+          "text": {
+            "zh": "<strong>锚泊 21 艘，估等约 3.9 天。</strong>煤炭/铝土泊位，建议提前计算 Laytime。",
+            "en": "<strong>21 vessels at anchor, est. ~3.9 days wait.</strong> Coal/Bauxite berth — calculate laytime in advance."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "各港口拥堵明细",
+      "title_en": "Port-by-Port",
+      "columns": [
+        {
+          "zh": "分区",
+          "en": "Group"
+        },
+        {
+          "zh": "港口",
+          "en": "Port"
+        },
+        {
+          "zh": "货种",
+          "en": "Cargo"
+        },
+        {
+          "zh": "锚泊",
+          "en": "Anchored",
+          "num": true
+        },
+        {
+          "zh": "靠泊",
+          "en": "Berth",
+          "num": true
+        },
+        {
+          "zh": "预抵",
+          "en": "Inbound",
+          "num": true
+        },
+        {
+          "zh": "估等(天)",
+          "en": "Wait",
+          "num": true
+        },
+        {
+          "zh": "评级",
+          "en": "Level",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          {
+            "zh": "装港·南非",
+            "en": "Load · South Africa"
+          },
+          "Richards Bay 理查兹湾",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "12",
+            "cls": "dn"
+          },
+          {
+            "v": "6"
+          },
+          {
+            "v": "45"
+          },
+          {
+            "v": "3.0",
+            "cls": "dn"
+          },
+          {
+            "zh": "严重",
+            "en": "Severe",
+            "cls": "dn"
+          }
+        ],
+        [
+          {
+            "zh": "装港·印尼",
+            "en": "Load · Indonesia"
+          },
+          "Bontang 邦坦港",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "4",
+            "cls": "dn"
+          },
+          {
+            "v": "19"
+          },
+          {
+            "v": "20"
+          },
+          {
+            "v": "0.3",
+            "cls": ""
+          },
+          {
+            "zh": "严重",
+            "en": "Severe",
+            "cls": "dn"
+          }
+        ],
+        [
+          {
+            "zh": "装港·印尼",
+            "en": "Load · Indonesia"
+          },
+          "Tanjung Bara 丹戒巴拉",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "3",
+            "cls": "dn"
+          },
+          {
+            "v": "4"
+          },
+          {
+            "v": "9"
+          },
+          {
+            "v": "1.1",
+            "cls": ""
+          },
+          {
+            "zh": "严重",
+            "en": "Severe",
+            "cls": "dn"
+          }
+        ],
+        [
+          {
+            "zh": "装港·澳大利亚",
+            "en": "Load · Australia"
+          },
+          "Port Hedland 黑德兰港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "39",
+            "cls": ""
+          },
+          {
+            "v": "13"
+          },
+          {
+            "v": "103"
+          },
+          {
+            "v": "4.5",
+            "cls": "dn"
+          },
+          {
+            "zh": "中度",
+            "en": "Moderate",
+            "cls": "neu"
+          }
+        ],
+        [
+          {
+            "zh": "装港·澳大利亚",
+            "en": "Load · Australia"
+          },
+          "Gladstone 格拉德斯通",
+          {
+            "zh": "煤炭/铝土",
+            "en": "Coal/Bauxite"
+          },
+          {
+            "v": "21",
+            "cls": ""
+          },
+          {
+            "v": "8"
+          },
+          {
+            "v": "53"
+          },
+          {
+            "v": "3.9",
+            "cls": "dn"
+          },
+          {
+            "zh": "中度",
+            "en": "Moderate",
+            "cls": "neu"
+          }
+        ],
+        [
+          {
+            "zh": "装港·澳大利亚",
+            "en": "Load · Australia"
+          },
+          "Dampier 丹皮尔港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "14",
+            "cls": ""
+          },
+          {
+            "v": "8"
+          },
+          {
+            "v": "37"
+          },
+          {
+            "v": "2.6",
+            "cls": ""
+          },
+          {
+            "zh": "中度",
+            "en": "Moderate",
+            "cls": "neu"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          "Lianyungang 连云港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "147",
+            "cls": ""
+          },
+          {
+            "v": "119"
+          },
+          {
+            "v": "416"
+          },
+          {
+            "v": "1.9",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          "Tianjin 天津港",
+          {
+            "zh": "铁矿石/煤炭",
+            "en": "Iron ore/Coal"
+          },
+          {
+            "v": "118",
+            "cls": ""
+          },
+          {
+            "v": "105"
+          },
+          {
+            "v": "259"
+          },
+          {
+            "v": "1.7",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          "Dalian 大连港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "86",
+            "cls": ""
+          },
+          {
+            "v": "58"
+          },
+          {
+            "v": "172"
+          },
+          {
+            "v": "2.2",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          "Caofeidian 曹妃甸港",
+          {
+            "zh": "铁矿石/煤炭",
+            "en": "Iron ore/Coal"
+          },
+          {
+            "v": "74",
+            "cls": ""
+          },
+          {
+            "v": "79"
+          },
+          {
+            "v": "176"
+          },
+          {
+            "v": "1.4",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          "Qingdao 青岛港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "61",
+            "cls": ""
+          },
+          {
+            "v": "56"
+          },
+          {
+            "v": "353"
+          },
+          {
+            "v": "1.6",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·巴西",
+            "en": "Load · Brazil"
+          },
+          "Ponta da Madeira 马德拉角港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "25",
+            "cls": ""
+          },
+          {
+            "v": "12"
+          },
+          {
+            "v": "94"
+          },
+          {
+            "v": "3.1",
+            "cls": "dn"
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·西非",
+            "en": "Load · West Africa"
+          },
+          "Conakry 科纳克里",
+          {
+            "zh": "铝矾土",
+            "en": "铝矾土"
+          },
+          {
+            "v": "25",
+            "cls": ""
+          },
+          {
+            "v": "9"
+          },
+          {
+            "v": "19"
+          },
+          {
+            "v": "4.2",
+            "cls": "dn"
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·中国",
+            "en": "Discharge · China"
+          },
+          "Rizhao 日照港",
+          {
+            "zh": "铁矿石/煤炭",
+            "en": "Iron ore/Coal"
+          },
+          {
+            "v": "24",
+            "cls": ""
+          },
+          {
+            "v": "26"
+          },
+          {
+            "v": "87"
+          },
+          {
+            "v": "1.4",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·印尼",
+            "en": "Load · Indonesia"
+          },
+          "Balikpapan 巴厘巴板",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "22",
+            "cls": ""
+          },
+          {
+            "v": "30"
+          },
+          {
+            "v": "79"
+          },
+          {
+            "v": "1.1",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·澳大利亚",
+            "en": "Load · Australia"
+          },
+          "Hay Point/DBCT 黑点港",
+          {
+            "zh": "焦煤",
+            "en": "Coking coal"
+          },
+          {
+            "v": "19",
+            "cls": ""
+          },
+          {
+            "v": "3"
+          },
+          {
+            "v": "33"
+          },
+          {
+            "v": "9.5",
+            "cls": "dn"
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·巴西",
+            "en": "Load · Brazil"
+          },
+          "Tubarao 图巴朗港",
+          {
+            "zh": "铁矿石",
+            "en": "Iron ore"
+          },
+          {
+            "v": "11",
+            "cls": ""
+          },
+          {
+            "v": "4"
+          },
+          {
+            "v": "72"
+          },
+          {
+            "v": "4.1",
+            "cls": "dn"
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·印尼",
+            "en": "Load · Indonesia"
+          },
+          "Muara Satui 麻拉沙堆",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "0",
+            "cls": ""
+          },
+          {
+            "v": "0"
+          },
+          {
+            "v": "0"
+          },
+          {
+            "v": "0",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·西非",
+            "en": "Load · West Africa"
+          },
+          "Kamsar 卡姆萨尔",
+          {
+            "zh": "铝矾土",
+            "en": "铝矾土"
+          },
+          {
+            "v": "0",
+            "cls": ""
+          },
+          {
+            "v": "4"
+          },
+          {
+            "v": "6"
+          },
+          {
+            "v": "0",
+            "cls": ""
+          },
+          {
+            "zh": "正常",
+            "en": "Normal",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·印度",
+            "en": "Discharge · India"
+          },
+          "Paradip 巴拉迪布港",
+          {
+            "zh": "铁矿石/煤炭",
+            "en": "Iron ore/Coal"
+          },
+          {
+            "v": "17",
+            "cls": ""
+          },
+          {
+            "v": "18"
+          },
+          {
+            "v": "58"
+          },
+          {
+            "v": "1.4",
+            "cls": ""
+          },
+          {
+            "zh": "轻度",
+            "en": "Light",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "卸港·印度",
+            "en": "Discharge · India"
+          },
+          "Visakhapatnam 维沙卡帕特南",
+          {
+            "zh": "铁矿石/煤炭",
+            "en": "Iron ore/Coal"
+          },
+          {
+            "v": "11",
+            "cls": ""
+          },
+          {
+            "v": "21"
+          },
+          {
+            "v": "48"
+          },
+          {
+            "v": "0.8",
+            "cls": ""
+          },
+          {
+            "zh": "轻度",
+            "en": "Light",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·印尼",
+            "en": "Load · Indonesia"
+          },
+          "Samarinda 三马林达",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "5",
+            "cls": ""
+          },
+          {
+            "v": "28"
+          },
+          {
+            "v": "44"
+          },
+          {
+            "v": "0.3",
+            "cls": ""
+          },
+          {
+            "zh": "轻度",
+            "en": "Light",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "zh": "装港·澳大利亚",
+            "en": "Load · Australia"
+          },
+          "Newcastle 纽卡斯尔",
+          {
+            "zh": "动力煤",
+            "en": "Thermal coal"
+          },
+          {
+            "v": "0",
+            "cls": ""
+          },
+          {
+            "v": "8"
+          },
+          {
+            "v": "103"
+          },
+          {
+            "v": "0",
+            "cls": ""
+          },
+          {
+            "zh": "轻度",
+            "en": "Light",
+            "cls": "up"
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "MyVessel 港口实时数据",
+    "ISOWAY"
+  ]
+}
