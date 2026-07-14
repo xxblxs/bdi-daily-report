@@ -1,0 +1,263 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-07-14",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "7 个活跃热带系统",
+    "en": "7 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-07-14 全球活跃热带系统 7 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-07-14, 7 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "7",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "32",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · 97W",
+            "en": "Tropical system · 97W"
+          },
+          "text": {
+            "zh": "<strong>中心 13.9°N, 133.9°E，中心风速约 25.0 节。</strong>移动方向/速度：NW / 17 kn。最近航线：菲律宾海（约 236 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 13.9°N, 133.9°E, max wind ~25.0 kn.</strong> Movement: NW / 17 kn. Nearest route: 菲律宾海 (~236 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Bavi",
+            "en": "Tropical system · Bavi"
+          },
+          "text": {
+            "zh": "<strong>中心 39.1°N, 124.5°E，中心风速约 32.1 节（热带风暴），气压 974.0 hPa。</strong>移动方向/速度：NW / 16 kn。最近航线：东日本海域（约 789 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 39.1°N, 124.5°E, max wind ~32.1 kn (热带风暴), pressure 974.0 hPa.</strong> Movement: NW / 16 kn. Nearest route: 东日本海域 (~789 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 96E",
+            "en": "Tropical system · 96E"
+          },
+          "text": {
+            "zh": "<strong>中心 13.7°N, -102.2°E，中心风速约 30.3 节。</strong>移动方向/速度：WNW / 22 kn。最近航线：墨西哥湾（约 928 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 13.7°N, -102.2°E, max wind ~30.3 kn.</strong> Movement: WNW / 22 kn. Nearest route: 墨西哥湾 (~928 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 91L",
+            "en": "Tropical system · 91L"
+          },
+          "text": {
+            "zh": "<strong>中心 8.4°N, -155.3°E，中心风速约 30.3 节。</strong>移动方向/速度：N / 10 kn。最近航线：西太平洋（约 3072 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 8.4°N, -155.3°E, max wind ~30.3 kn.</strong> Movement: N / 10 kn. Nearest route: 西太平洋 (~3072 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Haishen",
+            "en": "Tropical system · Haishen"
+          },
+          "text": {
+            "zh": "<strong>中心 13.1°N, 136.4°E，中心风速约 22.9 节。</strong>移动方向/速度：— / —。最近航线：菲律宾海（约 390 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 13.1°N, 136.4°E, max wind ~22.9 kn.</strong> Movement: — / —. Nearest route: 菲律宾海 (~390 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 99W",
+            "en": "Tropical system · 99W"
+          },
+          "text": {
+            "zh": "<strong>中心 22.4°N, 113.5°E，中心风速约 20.0 节。</strong>移动方向/速度：NW / 6 kn。最近航线：南海中部（约 452 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.4°N, 113.5°E, max wind ~20.0 kn.</strong> Movement: NW / 6 kn. Nearest route: 南海中部 (~452 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 90L",
+            "en": "Tropical system · 90L"
+          },
+          "text": {
+            "zh": "<strong>中心 9.8°N, -167.0°E，中心风速约 13.0 节。</strong>移动方向/速度：NE / 8 kn。最近航线：西太平洋（约 2447 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 9.8°N, -167.0°E, max wind ~13.0 kn.</strong> Movement: NE / 8 kn. Nearest route: 西太平洋 (~2447 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Bavi",
+          {
+            "v": "1"
+          },
+          "2026-07-14T12:00:00+00:00",
+          "39.1 / 124.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "2"
+          },
+          "2026-07-14T18:00:00+00:00",
+          "40.0 / 129.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "3"
+          },
+          "2026-07-15T00:00:00+00:00",
+          "42.2 / 132.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bavi",
+          {
+            "v": "4"
+          },
+          "2026-07-15T06:00:00+00:00",
+          "42.7 / 134.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Haishen",
+          {
+            "v": "1"
+          },
+          "2026-07-14T12:00:00+00:00",
+          "13.1 / 136.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Haishen",
+          {
+            "v": "2"
+          },
+          "2026-07-15T00:00:00+00:00",
+          "14.8 / 138.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
