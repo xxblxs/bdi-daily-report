@@ -1,0 +1,230 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-07-16",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "4 个活跃热带系统",
+    "en": "4 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-07-16 全球活跃热带系统 4 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-07-16, 4 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "4",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "52",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Elida",
+            "en": "Tropical system · Elida"
+          },
+          "text": {
+            "zh": "<strong>中心 15.4°N, -115.2°E，中心风速约 52.1 节。</strong>移动方向/速度：WSW / 6 kn。最近航线：墨西哥湾（约 1512 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 15.4°N, -115.2°E, max wind ~52.1 kn.</strong> Movement: WSW / 6 kn. Nearest route: 墨西哥湾 (~1512 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · BAVI",
+            "en": "Tropical system · BAVI"
+          },
+          "text": {
+            "zh": "<strong>中心 36.6°N, 121.2°E，中心风速约 29.0 节（亚热带风暴），气压 992.0 hPa。</strong>移动方向/速度：ENE / 6 kn。最近航线：东日本海域（约 950 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 36.6°N, 121.2°E, max wind ~29.0 kn (亚热带风暴), pressure 992.0 hPa.</strong> Movement: ENE / 6 kn. Nearest route: 东日本海域 (~950 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 91L",
+            "en": "Tropical system · 91L"
+          },
+          "text": {
+            "zh": "<strong>中心 8.7°N, -153.2°E，中心风速约 21.8 节。</strong>移动方向/速度：SE / 1 kn。最近航线：西太平洋（约 3168 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 8.7°N, -153.2°E, max wind ~21.8 kn.</strong> Movement: SE / 1 kn. Nearest route: 西太平洋 (~3168 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 90L",
+            "en": "Tropical system · 90L"
+          },
+          "text": {
+            "zh": "<strong>中心 10.7°N, -165.8°E，中心风速约 17.3 节。</strong>移动方向/速度：ESE / 3 kn。最近航线：西太平洋（约 2474 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 10.7°N, -165.8°E, max wind ~17.3 kn.</strong> Movement: ESE / 3 kn. Nearest route: 西太平洋 (~2474 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Elida",
+          {
+            "v": "1"
+          },
+          "2026-07-16T12:00:00+00:00",
+          "15.9 / -117.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "2"
+          },
+          "2026-07-16T18:00:00+00:00",
+          "15.6 / -118.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "3"
+          },
+          "2026-07-17T00:00:00+00:00",
+          "15.9 / -119.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "4"
+          },
+          "2026-07-17T06:00:00+00:00",
+          "16.1 / -119.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "5"
+          },
+          "2026-07-17T12:00:00+00:00",
+          "16.6 / -120.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "6"
+          },
+          "2026-07-17T18:00:00+00:00",
+          "17.3 / -121.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
