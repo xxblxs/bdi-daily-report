@@ -1,0 +1,667 @@
+{
+  "report_type": "bunker-fuel",
+  "slug": "bunker-fuel",
+  "date": "2026-07-16",
+  "type_zh": "全球船用燃油日报",
+  "type_en": "Global Bunker Fuel Report",
+  "headline": {
+    "zh": "IFO380 均价 $635.9/吨 · VLSFO $822.3 · LSMGO $1288.5",
+    "en": "IFO380 avg $635.9/t · VLSFO $822.3 · LSMGO $1288.5"
+  },
+  "keywords": "船用燃油,燃油价格,IFO380,VLSFO,LSMGO,加油港,bunker price,marine fuel,scrubber spread",
+  "summary_zh": "2026-07-16 全球船用燃油均价：IFO380 $635.9/吨、VLSFO $822.3、LSMGO $1288.5;VLSFO−IFO380 脱硫塔价差约 $167.9/吨。下表为关键港口价格。",
+  "summary_en": "On 2026-07-16, global bunker averages: IFO380 $635.9/t, VLSFO $822.3/t, LSMGO $1288.5/t, scrubber spread ~$167.9/t. Key-port prices below.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "全球均价概览",
+      "title_en": "Global Averages (USD/t)",
+      "items": [
+        {
+          "label": {
+            "zh": "IFO380 均价",
+            "en": "IFO380 avg"
+          },
+          "value": "$635.9",
+          "sub": {
+            "zh": "全球",
+            "en": "Global"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "VLSFO 均价",
+            "en": "VLSFO avg"
+          },
+          "value": "$822.3",
+          "sub": {
+            "zh": "全球",
+            "en": "Global"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "LSMGO 均价",
+            "en": "LSMGO avg"
+          },
+          "value": "$1288.5",
+          "sub": {
+            "zh": "全球",
+            "en": "Global"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "脱硫塔价差",
+            "en": "Scrubber spread"
+          },
+          "value": "$167.9",
+          "sub": {
+            "zh": "VLSFO−IFO380",
+            "en": "VLSFO−IFO380"
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "有效港口",
+            "en": "Active ports"
+          },
+          "value": "193",
+          "sub": {
+            "zh": "近30天",
+            "en": "30-day"
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "关键港口价格",
+      "title_en": "Key Ports",
+      "columns": [
+        {
+          "zh": "港口",
+          "en": "Port"
+        },
+        {
+          "zh": "区域",
+          "en": "District"
+        },
+        {
+          "zh": "IFO380",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "VLSFO",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "LSMGO",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "价差",
+          "en": "Spread",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "SINGAPORE",
+          "SG",
+          {
+            "v": "$560.5"
+          },
+          {
+            "v": "$780.5"
+          },
+          {
+            "v": "$1144.0"
+          },
+          {
+            "v": "$220.0"
+          }
+        ],
+        [
+          "SHANGHAI",
+          "CHINA",
+          {
+            "v": "$573.5"
+          },
+          {
+            "v": "$762.0"
+          },
+          {
+            "v": "$1163.0"
+          },
+          {
+            "v": "$188.5"
+          }
+        ],
+        [
+          "TIANJIN",
+          "CHINA",
+          {
+            "v": "$610.0"
+          },
+          {
+            "v": "$785.0"
+          },
+          {
+            "v": "$1205.0"
+          },
+          {
+            "v": "$175.0"
+          }
+        ],
+        [
+          "QINGDAO",
+          "CHINA",
+          {
+            "v": "$623.0"
+          },
+          {
+            "v": "$825.5"
+          },
+          {
+            "v": "$1217.0"
+          },
+          {
+            "v": "$202.5"
+          }
+        ],
+        [
+          "HONG KONG",
+          "CHINA",
+          {
+            "v": "$578.5"
+          },
+          {
+            "v": "$777.5"
+          },
+          {
+            "v": "$1102.5"
+          },
+          {
+            "v": "$199.0"
+          }
+        ],
+        [
+          "BUSAN",
+          "KR",
+          {
+            "v": "$704.0"
+          },
+          {
+            "v": "$814.0"
+          },
+          {
+            "v": "$1112.5"
+          },
+          {
+            "v": "$110.0"
+          }
+        ],
+        [
+          "TOKYO",
+          "JP",
+          {
+            "v": "$581.5"
+          },
+          {
+            "v": "$769.5"
+          },
+          {
+            "v": "$1050.0"
+          },
+          {
+            "v": "$188.0"
+          }
+        ],
+        [
+          "KAOHSIUNG",
+          "TW",
+          {
+            "v": "$743.0"
+          },
+          {
+            "v": "$815.0"
+          },
+          {
+            "v": "$1240.0"
+          },
+          {
+            "v": "$72.0"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "中国港口专区",
+      "title_en": "China Ports",
+      "columns": [
+        {
+          "zh": "港口",
+          "en": "Port"
+        },
+        {
+          "zh": "区域",
+          "en": "District"
+        },
+        {
+          "zh": "IFO380",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "VLSFO",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "LSMGO",
+          "en": "",
+          "num": true
+        },
+        {
+          "zh": "价差",
+          "en": "Spread",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "BEILUN",
+          "CHINA",
+          {
+            "v": "$570.0"
+          },
+          {
+            "v": "$755.0"
+          },
+          {
+            "v": "$1180.0"
+          },
+          {
+            "v": "$185.0"
+          }
+        ],
+        [
+          "CAOFEIDIAN",
+          "CHINA",
+          {
+            "v": "$633.0"
+          },
+          {
+            "v": "$820.0"
+          },
+          {
+            "v": "$1240.0"
+          },
+          {
+            "v": "$187.0"
+          }
+        ],
+        [
+          "CHANGSHU",
+          "CHINA",
+          {
+            "v": "$623.0"
+          },
+          {
+            "v": "$815.0"
+          },
+          {
+            "v": "—"
+          },
+          {
+            "v": "$192.0"
+          }
+        ],
+        [
+          "DALIAN",
+          "CHINA",
+          {
+            "v": "$615.0"
+          },
+          {
+            "v": "$790.0"
+          },
+          {
+            "v": "$1200.0"
+          },
+          {
+            "v": "$175.0"
+          }
+        ],
+        [
+          "HONG KONG",
+          "CHINA",
+          {
+            "v": "$578.5"
+          },
+          {
+            "v": "$777.5"
+          },
+          {
+            "v": "$1102.5"
+          },
+          {
+            "v": "$199.0"
+          }
+        ],
+        [
+          "JIANGYIN",
+          "CHINA",
+          {
+            "v": "$623.0"
+          },
+          {
+            "v": "$815.0"
+          },
+          {
+            "v": "$1220.0"
+          },
+          {
+            "v": "$192.0"
+          }
+        ],
+        [
+          "JINGTANG",
+          "CHINA",
+          {
+            "v": "$633.0"
+          },
+          {
+            "v": "$820.0"
+          },
+          {
+            "v": "$1240.0"
+          },
+          {
+            "v": "$187.0"
+          }
+        ],
+        [
+          "LANSHAN (LANQIAO)",
+          "CHINA",
+          {
+            "v": "$633.0"
+          },
+          {
+            "v": "$825.0"
+          },
+          {
+            "v": "$1250.0"
+          },
+          {
+            "v": "$192.0"
+          }
+        ],
+        [
+          "LIANYUNGANG",
+          "CHINA",
+          {
+            "v": "$628.0"
+          },
+          {
+            "v": "$820.0"
+          },
+          {
+            "v": "$1230.0"
+          },
+          {
+            "v": "$192.0"
+          }
+        ],
+        [
+          "NANJING",
+          "CHINA",
+          {
+            "v": "$623.0"
+          },
+          {
+            "v": "$815.0"
+          },
+          {
+            "v": "$1220.0"
+          },
+          {
+            "v": "$192.0"
+          }
+        ],
+        [
+          "NANTONG",
+          "CHINA",
+          {
+            "v": "$623.0"
+          },
+          {
+            "v": "$815.0"
+          },
+          {
+            "v": "$1220.0"
+          },
+          {
+            "v": "$192.0"
+          }
+        ],
+        [
+          "NINGBO",
+          "CHINA",
+          {
+            "v": "$570.0"
+          },
+          {
+            "v": "$755.0"
+          },
+          {
+            "v": "$1180.0"
+          },
+          {
+            "v": "$185.0"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "Scrubber 价差排行",
+      "title_en": "Scrubber Spread Ranking",
+      "columns": [
+        {
+          "zh": "排名",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "港口",
+          "en": "Port"
+        },
+        {
+          "zh": "区域",
+          "en": "District"
+        },
+        {
+          "zh": "VLSFO−IFO380",
+          "en": "Spread",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          {
+            "v": "1"
+          },
+          "ST PETERSBURG",
+          "RU",
+          {
+            "v": "$592.5",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "2"
+          },
+          "BASRA",
+          "IQ",
+          {
+            "v": "$420.0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "3"
+          },
+          "MONTREAL",
+          "CA",
+          {
+            "v": "$400.0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "4"
+          },
+          "VANINO",
+          "RU",
+          {
+            "v": "$381.5",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "5"
+          },
+          "NAKHODKA",
+          "RU",
+          {
+            "v": "$368.5",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "6"
+          },
+          "VLADIVOSTOK",
+          "RU",
+          {
+            "v": "$368.5",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "7"
+          },
+          "VOSTOCHNY PORT",
+          "RU",
+          {
+            "v": "$368.5",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "8"
+          },
+          "JEDDAH",
+          "SA",
+          {
+            "v": "$233.0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "9"
+          },
+          "VANCOUVER",
+          "CA",
+          {
+            "v": "$232.0",
+            "cls": "up"
+          }
+        ],
+        [
+          {
+            "v": "10"
+          },
+          "SANTOS",
+          "BR",
+          {
+            "v": "$225.5",
+            "cls": "up"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "views",
+      "title_zh": "价格观点",
+      "title_en": "Market Views",
+      "items": [
+        {
+          "label": {
+            "zh": "价格水平",
+            "en": "Price level"
+          },
+          "title": {
+            "zh": "全球均价偏低",
+            "en": "Price level"
+          },
+          "text": {
+            "zh": "IFO380 全球均价 $635.9/吨，VLSFO $822.3/吨，LSMGO $1288.5/吨。新加坡 IFO380 $560.5，鹿特丹 $532.0，富查伊拉 $579.5。",
+            "en": "Global averages: IFO380 $635.9, VLSFO $822.3, LSMGO $1288.5/t."
+          }
+        },
+        {
+          "label": {
+            "zh": "脱硫塔价差",
+            "en": "Scrubber spread"
+          },
+          "title": {
+            "zh": "经济性较好",
+            "en": "Scrubber spread"
+          },
+          "text": {
+            "zh": "全球 VLSFO−IFO380 平均价差 $167.9/吨（盈亏平衡参考约 $150/吨）。价差最大：ST PETERSBURG $592.5，BASRA $420.0。价差最小：PORT LOUIS $-4.0。",
+            "en": "Average VLSFO−IFO380 spread ~$167.9/t (scrubber breakeven ≈ $150/t)."
+          }
+        },
+        {
+          "label": {
+            "zh": "区域价差",
+            "en": "Regional spread"
+          },
+          "title": {
+            "zh": "亚太价格整体高于欧洲",
+            "en": "Regional spread"
+          },
+          "text": {
+            "zh": "富查伊拉（$579.5）溢价最高，欧洲港口偏低（鹿特丹 $532.0，安特卫普 $522.0）。印度/巴西港口通常是全球价格洼地，适合途经时补油。",
+            "en": "Asia-Pacific prices generally run above Europe; see the key-port and China tables above."
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "Ship & Bunker",
+    "NAVGreen"
+  ]
+}
