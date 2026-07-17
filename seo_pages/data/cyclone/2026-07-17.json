@@ -1,0 +1,313 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-07-17",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "5 个活跃热带系统",
+    "en": "5 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-07-17 全球活跃热带系统 5 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-07-17, 5 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "5",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "57",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "12",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · 91W",
+            "en": "Tropical system · 91W"
+          },
+          "text": {
+            "zh": "<strong>中心 32.2°N, 155.5°E，中心风速约 30.0 节。</strong>移动方向/速度：WSW / 9 kn。最近航线：西太平洋（约 135 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 32.2°N, 155.5°E, max wind ~30.0 kn.</strong> Movement: WSW / 9 kn. Nearest route: 西太平洋 (~135 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · BAVI",
+            "en": "Tropical system · BAVI"
+          },
+          "text": {
+            "zh": "<strong>中心 39.7°N, 128.1°E，中心风速约 29.0 节（亚热带风暴），气压 991.0 hPa。</strong>移动方向/速度：ENE / 15 kn。最近航线：东日本海域（约 628 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 39.7°N, 128.1°E, max wind ~29.0 kn (亚热带风暴), pressure 991.0 hPa.</strong> Movement: ENE / 15 kn. Nearest route: 东日本海域 (~628 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Elida",
+            "en": "Tropical system · Elida"
+          },
+          "text": {
+            "zh": "<strong>中心 15.9°N, -119.1°E，中心风速约 56.6 节（热带风暴），气压 999.0 hPa。</strong>移动方向/速度：W / 8 kn。最近航线：墨西哥湾（约 1709 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 15.9°N, -119.1°E, max wind ~56.6 kn (热带风暴), pressure 999.0 hPa.</strong> Movement: W / 8 kn. Nearest route: 墨西哥湾 (~1709 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 13W",
+            "en": "Tropical system · 13W"
+          },
+          "text": {
+            "zh": "<strong>中心 7.5°N, 153.7°E，中心风速约 26.0 节。</strong>移动方向/速度：— / —。最近航线：西太平洋（约 1353 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 7.5°N, 153.7°E, max wind ~26.0 kn.</strong> Movement: — / —. Nearest route: 西太平洋 (~1353 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 90L",
+            "en": "Tropical system · 90L"
+          },
+          "text": {
+            "zh": "<strong>中心 12.7°N, -164.4°E，中心风速约 26.0 节。</strong>移动方向/速度：E / 6 kn。最近航线：西太平洋（约 2479 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.7°N, -164.4°E, max wind ~26.0 kn.</strong> Movement: E / 6 kn. Nearest route: 西太平洋 (~2479 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Elida",
+          {
+            "v": "1"
+          },
+          "2026-07-17T12:00:00+00:00",
+          "16.2 / -121.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "2"
+          },
+          "2026-07-17T18:00:00+00:00",
+          "16.5 / -122.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "3"
+          },
+          "2026-07-18T00:00:00+00:00",
+          "17.1 / -122.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "4"
+          },
+          "2026-07-18T06:00:00+00:00",
+          "17.6 / -123.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "5"
+          },
+          "2026-07-18T12:00:00+00:00",
+          "18.3 / -124.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Elida",
+          {
+            "v": "6"
+          },
+          "2026-07-18T18:00:00+00:00",
+          "18.7 / -125.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "13W",
+          {
+            "v": "1"
+          },
+          "2026-07-17T12:00:00+00:00",
+          "7.5 / 153.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "13W",
+          {
+            "v": "2"
+          },
+          "2026-07-17T18:00:00+00:00",
+          "7.8 / 153.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "13W",
+          {
+            "v": "3"
+          },
+          "2026-07-18T00:00:00+00:00",
+          "8.4 / 153.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "13W",
+          {
+            "v": "4"
+          },
+          "2026-07-18T06:00:00+00:00",
+          "8.8 / 154.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "13W",
+          {
+            "v": "5"
+          },
+          "2026-07-18T12:00:00+00:00",
+          "9.5 / 154.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "13W",
+          {
+            "v": "6"
+          },
+          "2026-07-18T18:00:00+00:00",
+          "11.0 / 154.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
