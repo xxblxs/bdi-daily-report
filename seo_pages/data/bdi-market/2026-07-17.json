@@ -326,9 +326,9 @@
   ],
   "fuel": {
     "ifo380_avg": 632.4,
-    "vlsfo_avg": 824.3,
+    "vlsfo_avg": 822.8,
     "mgo_avg": null,
-    "fresh_count": 193
+    "fresh_count": 190
   },
   "sources": [
     "Baltic Exchange",
