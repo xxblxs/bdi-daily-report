@@ -1,0 +1,407 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-07-22",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "7 个活跃热带系统",
+    "en": "7 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-07-22 全球活跃热带系统 7 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-07-22, 7 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "7",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "70",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "18",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · Bertha",
+            "en": "Tropical system · Bertha"
+          },
+          "text": {
+            "zh": "<strong>中心 29.3°N, -87.9°E，中心风速约 43.5 节（热带风暴），气压 1003.0 hPa。</strong>移动方向/速度：WSW / 2 kn。最近航线：墨西哥湾（约 338 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 29.3°N, -87.9°E, max wind ~43.5 kn (热带风暴), pressure 1003.0 hPa.</strong> Movement: WSW / 2 kn. Nearest route: 墨西哥湾 (~338 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · BAVI",
+            "en": "Tropical system · BAVI"
+          },
+          "text": {
+            "zh": "<strong>中心 39.7°N, 128.1°E，中心风速约 29.0 节（亚热带风暴），气压 991.0 hPa。</strong>移动方向/速度：ENE / 15 kn。最近航线：东日本海域（约 628 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 39.7°N, 128.1°E, max wind ~29.0 kn (亚热带风暴), pressure 991.0 hPa.</strong> Movement: ENE / 15 kn. Nearest route: 东日本海域 (~628 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Fausto",
+            "en": "Tropical system · Fausto"
+          },
+          "text": {
+            "zh": "<strong>中心 16.6°N, -120.3°E，中心风速约 69.6 节（一级飓风/台风），气压 988.0 hPa。</strong>移动方向/速度：W / 4 kn。最近航线：墨西哥湾（约 1759 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 16.6°N, -120.3°E, max wind ~69.6 kn (一级飓风/台风), pressure 988.0 hPa.</strong> Movement: W / 4 kn. Nearest route: 墨西哥湾 (~1759 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ELIDA",
+            "en": "Tropical system · ELIDA"
+          },
+          "text": {
+            "zh": "<strong>中心 25.7°N, -127.1°E，中心风速约 40.0 节（热带风暴），气压 998.0 hPa。</strong>移动方向/速度：N / 5 kn。最近航线：墨西哥湾（约 2017 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 25.7°N, -127.1°E, max wind ~40.0 kn (热带风暴), pressure 998.0 hPa.</strong> Movement: N / 5 kn. Nearest route: 墨西哥湾 (~2017 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 92W",
+            "en": "Tropical system · 92W"
+          },
+          "text": {
+            "zh": "<strong>中心 15.2°N, 132.3°E，中心风速约 22.0 节。</strong>移动方向/速度：— / —。最近航线：菲律宾海（约 134 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 15.2°N, 132.3°E, max wind ~22.0 kn.</strong> Movement: — / —. Nearest route: 菲律宾海 (~134 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 93W",
+            "en": "Tropical system · 93W"
+          },
+          "text": {
+            "zh": "<strong>中心 12.9°N, 173.9°E，中心风速约 15.0 节。</strong>移动方向/速度：NW / 10 kn。最近航线：西太平洋（约 1468 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.9°N, 173.9°E, max wind ~15.0 kn.</strong> Movement: NW / 10 kn. Nearest route: 西太平洋 (~1468 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 98P",
+            "en": "Tropical system · 98P"
+          },
+          "text": {
+            "zh": "<strong>中心 -10.4°N, 169.7°E，中心风速约 15.0 节。</strong>移动方向/速度：SE / 15 kn。最近航线：西太平洋（约 2570 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -10.4°N, 169.7°E, max wind ~15.0 kn.</strong> Movement: SE / 15 kn. Nearest route: 西太平洋 (~2570 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Bertha",
+          {
+            "v": "1"
+          },
+          "2026-07-22T18:00:00+00:00",
+          "29.5 / -88.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bertha",
+          {
+            "v": "2"
+          },
+          "2026-07-23T00:00:00+00:00",
+          "29.6 / -89.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bertha",
+          {
+            "v": "3"
+          },
+          "2026-07-23T06:00:00+00:00",
+          "29.6 / -90.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bertha",
+          {
+            "v": "4"
+          },
+          "2026-07-23T12:00:00+00:00",
+          "29.8 / -91.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bertha",
+          {
+            "v": "5"
+          },
+          "2026-07-23T18:00:00+00:00",
+          "29.7 / -92.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bertha",
+          {
+            "v": "6"
+          },
+          "2026-07-24T06:00:00+00:00",
+          "31.6 / -95.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "1"
+          },
+          "2026-07-22T12:00:00+00:00",
+          "17.2 / -121.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "2"
+          },
+          "2026-07-22T18:00:00+00:00",
+          "17.3 / -122.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "3"
+          },
+          "2026-07-23T00:00:00+00:00",
+          "17.6 / -123.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "4"
+          },
+          "2026-07-23T06:00:00+00:00",
+          "17.6 / -124.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "5"
+          },
+          "2026-07-23T12:00:00+00:00",
+          "17.8 / -125.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "6"
+          },
+          "2026-07-23T18:00:00+00:00",
+          "17.8 / -127.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "92W",
+          {
+            "v": "1"
+          },
+          "2026-07-22T12:00:00+00:00",
+          "15.2 / 132.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "92W",
+          {
+            "v": "2"
+          },
+          "2026-07-22T18:00:00+00:00",
+          "16.0 / 131.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "92W",
+          {
+            "v": "3"
+          },
+          "2026-07-23T00:00:00+00:00",
+          "16.8 / 130.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "92W",
+          {
+            "v": "4"
+          },
+          "2026-07-23T06:00:00+00:00",
+          "17.6 / 129.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "92W",
+          {
+            "v": "5"
+          },
+          "2026-07-23T12:00:00+00:00",
+          "18.1 / 127.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "92W",
+          {
+            "v": "6"
+          },
+          "2026-07-23T18:00:00+00:00",
+          "18.6 / 125.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
