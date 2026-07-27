@@ -1,0 +1,634 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-07-27",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "8 个活跃热带系统",
+    "en": "8 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-07-27 全球活跃热带系统 8 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-07-27, 8 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "8",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "135",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "36",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · BERTHA",
+            "en": "Tropical system · BERTHA"
+          },
+          "text": {
+            "zh": "<strong>中心 30.0°N, -95.2°E，中心风速约 30.0 节（亚热带低压），气压 1008.0 hPa。</strong>移动方向/速度：W / 6 kn。最近航线：墨西哥湾（约 455 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 30.0°N, -95.2°E, max wind ~30.0 kn (亚热带低压), pressure 1008.0 hPa.</strong> Movement: W / 6 kn. Nearest route: 墨西哥湾 (~455 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · 93B",
+            "en": "Tropical system · 93B"
+          },
+          "text": {
+            "zh": "<strong>中心 21.5°N, 88.7°E，中心风速约 29.0 节。</strong>移动方向/速度：— / —。最近航线：孟加拉湾（约 392 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 21.5°N, 88.7°E, max wind ~29.0 kn.</strong> Movement: — / —. Nearest route: 孟加拉湾 (~392 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Genevieve",
+            "en": "Tropical system · Genevieve"
+          },
+          "text": {
+            "zh": "<strong>中心 14.7°N, -111.2°E，中心风速约 134.7 节（一级飓风/台风），气压 991.0 hPa。</strong>移动方向/速度：NW / 12 kn。最近航线：墨西哥湾（约 1322 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 14.7°N, -111.2°E, max wind ~134.7 kn (一级飓风/台风), pressure 991.0 hPa.</strong> Movement: NW / 12 kn. Nearest route: 墨西哥湾 (~1322 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Fausto",
+            "en": "Tropical system · Fausto"
+          },
+          "text": {
+            "zh": "<strong>中心 20.1°N, -143.7°E，中心风速约 73.9 节（二级飓风/台风），气压 971.0 hPa。</strong>移动方向/速度：W / 12 kn。最近航线：墨西哥湾（约 2980 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 20.1°N, -143.7°E, max wind ~73.9 kn (二级飓风/台风), pressure 971.0 hPa.</strong> Movement: W / 12 kn. Nearest route: 墨西哥湾 (~2980 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ELIDA",
+            "en": "Tropical system · ELIDA"
+          },
+          "text": {
+            "zh": "<strong>中心 25.7°N, -127.1°E，中心风速约 40.0 节（热带风暴），气压 998.0 hPa。</strong>移动方向/速度：N / 5 kn。最近航线：墨西哥湾（约 2017 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 25.7°N, -127.1°E, max wind ~40.0 kn (热带风暴), pressure 998.0 hPa.</strong> Movement: N / 5 kn. Nearest route: 墨西哥湾 (~2017 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Dolphin",
+            "en": "Tropical system · Dolphin"
+          },
+          "text": {
+            "zh": "<strong>中心 12.8°N, 178.3°E，中心风速约 30.3 节。</strong>移动方向/速度：E / 40 kn。最近航线：西太平洋（约 1656 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.8°N, 178.3°E, max wind ~30.3 kn.</strong> Movement: E / 40 kn. Nearest route: 西太平洋 (~1656 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 12W",
+            "en": "Tropical system · 12W"
+          },
+          "text": {
+            "zh": "<strong>中心 12.8°N, 178.3°E，中心风速约 30.0 节。</strong>移动方向/速度：W / 14 kn。最近航线：西太平洋（约 1656 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.8°N, 178.3°E, max wind ~30.0 kn.</strong> Movement: W / 14 kn. Nearest route: 西太平洋 (~1656 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Noul",
+            "en": "Tropical system · Noul"
+          },
+          "text": {
+            "zh": "<strong>中心 26.2°N, 111.5°E，中心风速约 15.9 节（一级飓风/台风），气压 976.0 hPa。</strong>移动方向/速度：NW / 8 kn。最近航线：南海中部（约 701 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 26.2°N, 111.5°E, max wind ~15.9 kn (一级飓风/台风), pressure 976.0 hPa.</strong> Movement: NW / 8 kn. Nearest route: 南海中部 (~701 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "93B",
+          {
+            "v": "1"
+          },
+          "2026-07-27T12:00:00+00:00",
+          "21.5 / 88.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "93B",
+          {
+            "v": "2"
+          },
+          "2026-07-27T18:00:00+00:00",
+          "21.7 / 88.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "93B",
+          {
+            "v": "3"
+          },
+          "2026-07-28T00:00:00+00:00",
+          "22.1 / 88.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "93B",
+          {
+            "v": "4"
+          },
+          "2026-07-28T06:00:00+00:00",
+          "21.6 / 86.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "93B",
+          {
+            "v": "5"
+          },
+          "2026-07-28T12:00:00+00:00",
+          "21.7 / 86.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "93B",
+          {
+            "v": "6"
+          },
+          "2026-07-28T18:00:00+00:00",
+          "22.2 / 85.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Genevieve",
+          {
+            "v": "1"
+          },
+          "2026-07-27T12:00:00+00:00",
+          "15.8 / -112.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Genevieve",
+          {
+            "v": "2"
+          },
+          "2026-07-27T18:00:00+00:00",
+          "16.4 / -113.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Genevieve",
+          {
+            "v": "3"
+          },
+          "2026-07-28T00:00:00+00:00",
+          "17.0 / -114.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Genevieve",
+          {
+            "v": "4"
+          },
+          "2026-07-28T06:00:00+00:00",
+          "17.3 / -115.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Genevieve",
+          {
+            "v": "5"
+          },
+          "2026-07-28T12:00:00+00:00",
+          "17.6 / -115.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Genevieve",
+          {
+            "v": "6"
+          },
+          "2026-07-28T18:00:00+00:00",
+          "17.8 / -116.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "1"
+          },
+          "2026-07-27T12:00:00+00:00",
+          "20.7 / -145.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "2"
+          },
+          "2026-07-27T18:00:00+00:00",
+          "21.0 / -147.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "3"
+          },
+          "2026-07-28T00:00:00+00:00",
+          "21.1 / -148.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "4"
+          },
+          "2026-07-28T06:00:00+00:00",
+          "21.4 / -149.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "5"
+          },
+          "2026-07-28T12:00:00+00:00",
+          "21.6 / -150.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Fausto",
+          {
+            "v": "6"
+          },
+          "2026-07-28T18:00:00+00:00",
+          "22.0 / -152.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "1"
+          },
+          "2026-07-27T12:00:00+00:00",
+          "13.1 / 175.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "2"
+          },
+          "2026-07-27T18:00:00+00:00",
+          "13.1 / 173.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "3"
+          },
+          "2026-07-28T00:00:00+00:00",
+          "13.2 / 172.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "4"
+          },
+          "2026-07-28T06:00:00+00:00",
+          "13.5 / 171.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "5"
+          },
+          "2026-07-28T12:00:00+00:00",
+          "13.7 / 170.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "6"
+          },
+          "2026-07-28T18:00:00+00:00",
+          "13.9 / 169.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "12W",
+          {
+            "v": "1"
+          },
+          "2026-08-01T00:00:00Z",
+          "21.2 / 159.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "12W",
+          {
+            "v": "2"
+          },
+          "2026-07-31T00:00:00Z",
+          "18.8 / 163.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "12W",
+          {
+            "v": "3"
+          },
+          "2026-07-30T00:00:00Z",
+          "16.6 / 166.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "12W",
+          {
+            "v": "4"
+          },
+          "2026-07-29T12:00:00Z",
+          "15.5 / 168.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "12W",
+          {
+            "v": "5"
+          },
+          "2026-07-29T00:00:00Z",
+          "14.4 / 169.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "12W",
+          {
+            "v": "6"
+          },
+          "2026-07-28T12:00:00Z",
+          "13.6 / 171.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Noul",
+          {
+            "v": "1"
+          },
+          "2026-07-27T12:00:00+00:00",
+          "26.2 / 111.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Noul",
+          {
+            "v": "2"
+          },
+          "2026-07-27T18:00:00+00:00",
+          "28.5 / 111.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Noul",
+          {
+            "v": "3"
+          },
+          "2026-07-28T00:00:00+00:00",
+          "28.7 / 111.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Noul",
+          {
+            "v": "4"
+          },
+          "2026-07-28T06:00:00+00:00",
+          "28.9 / 111.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Noul",
+          {
+            "v": "5"
+          },
+          "2026-07-28T12:00:00+00:00",
+          "29.1 / 111.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Noul",
+          {
+            "v": "6"
+          },
+          "2026-07-28T18:00:00+00:00",
+          "30.6 / 112.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
