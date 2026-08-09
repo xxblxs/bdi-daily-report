@@ -1,0 +1,468 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-08-09",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "6 个活跃热带系统 · 1 个达台风/飓风级",
+    "en": "6 active tropical system(s) · 1 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-08-09 全球活跃热带系统 6 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-08-09, 6 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "70",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "24",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · Chan Hom",
+            "en": "Typhoon/Hurricane · Chan Hom"
+          },
+          "text": {
+            "zh": "<strong>中心 32.4°N, 151.0°E，中心风速约 43.5 节。</strong>移动方向/速度：WSW / 7 kn。最近航线：西太平洋（约 251 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 32.4°N, 151.0°E, max wind ~43.5 kn.</strong> Movement: WSW / 7 kn. Nearest route: 西太平洋 (~251 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Kujira",
+            "en": "Tropical system · Kujira"
+          },
+          "text": {
+            "zh": "<strong>中心 22.1°N, 141.5°E，中心风速约 26.0 节（亚热带风暴），气压 997.0 hPa。</strong>移动方向/速度：ENE / 184 kn。最近航线：菲律宾海（约 781 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.1°N, 141.5°E, max wind ~26.0 kn (亚热带风暴), pressure 997.0 hPa.</strong> Movement: ENE / 184 kn. Nearest route: 菲律宾海 (~781 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Dolphin",
+            "en": "Tropical system · Dolphin"
+          },
+          "text": {
+            "zh": "<strong>中心 27.8°N, 123.2°E，中心风速约 69.6 节（一级飓风/台风），气压 956.0 hPa。</strong>移动方向/速度：NW / 9 kn。最近航线：菲律宾海（约 857 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 27.8°N, 123.2°E, max wind ~69.6 kn (一级飓风/台风), pressure 956.0 hPa.</strong> Movement: NW / 9 kn. Nearest route: 菲律宾海 (~857 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · GENEVIEVE",
+            "en": "Tropical system · GENEVIEVE"
+          },
+          "text": {
+            "zh": "<strong>中心 24.6°N, -138.9°E，中心风速约 35.0 节（亚热带低压），气压 1009.0 hPa。</strong>移动方向/速度：WNW / 5 kn。最近航线：墨西哥湾（约 2661 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 24.6°N, -138.9°E, max wind ~35.0 kn (亚热带低压), pressure 1009.0 hPa.</strong> Movement: WNW / 5 kn. Nearest route: 墨西哥湾 (~2661 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 98W",
+            "en": "Tropical system · 98W"
+          },
+          "text": {
+            "zh": "<strong>中心 22.7°N, 157.5°E，中心风速约 22.0 节。</strong>移动方向/速度：— / —。最近航线：西太平洋（约 458 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.7°N, 157.5°E, max wind ~22.0 kn.</strong> Movement: — / —. Nearest route: 西太平洋 (~458 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 99W",
+            "en": "Tropical system · 99W"
+          },
+          "text": {
+            "zh": "<strong>中心 22.7°N, 166.5°E，中心风速约 20.0 节。</strong>移动方向/速度：NE / 7 kn。最近航线：西太平洋（约 757 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.7°N, 166.5°E, max wind ~20.0 kn.</strong> Movement: NE / 7 kn. Nearest route: 西太平洋 (~757 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Chan Hom",
+          {
+            "v": "1"
+          },
+          "2026-08-09T06:00:00+00:00",
+          "32.5 / 151.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Chan Hom",
+          {
+            "v": "2"
+          },
+          "2026-08-09T12:00:00+00:00",
+          "33.0 / 150.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Chan Hom",
+          {
+            "v": "3"
+          },
+          "2026-08-09T18:00:00+00:00",
+          "33.5 / 150.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Chan Hom",
+          {
+            "v": "4"
+          },
+          "2026-08-10T00:00:00+00:00",
+          "34.4 / 149.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Chan Hom",
+          {
+            "v": "5"
+          },
+          "2026-08-10T06:00:00+00:00",
+          "35.2 / 148.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Chan Hom",
+          {
+            "v": "6"
+          },
+          "2026-08-10T12:00:00+00:00",
+          "36.3 / 147.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Kujira",
+          {
+            "v": "1"
+          },
+          "2026-08-09T06:00:00+00:00",
+          "22.1 / 142.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Kujira",
+          {
+            "v": "2"
+          },
+          "2026-08-09T12:00:00+00:00",
+          "21.5 / 143.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Kujira",
+          {
+            "v": "3"
+          },
+          "2026-08-09T18:00:00+00:00",
+          "20.4 / 146.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Kujira",
+          {
+            "v": "4"
+          },
+          "2026-08-10T00:00:00+00:00",
+          "19.8 / 147.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Kujira",
+          {
+            "v": "5"
+          },
+          "2026-08-10T06:00:00+00:00",
+          "19.7 / 150.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Kujira",
+          {
+            "v": "6"
+          },
+          "2026-08-10T12:00:00+00:00",
+          "20.0 / 152.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "1"
+          },
+          "2026-08-09T06:00:00+00:00",
+          "27.8 / 121.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "2"
+          },
+          "2026-08-09T12:00:00+00:00",
+          "27.8 / 120.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "3"
+          },
+          "2026-08-09T18:00:00+00:00",
+          "27.6 / 119.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "4"
+          },
+          "2026-08-10T00:00:00+00:00",
+          "28.6 / 118.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "5"
+          },
+          "2026-08-10T06:00:00+00:00",
+          "29.0 / 117.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolphin",
+          {
+            "v": "6"
+          },
+          "2026-08-10T12:00:00+00:00",
+          "29.4 / 116.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "98W",
+          {
+            "v": "1"
+          },
+          "2026-08-09T06:00:00+00:00",
+          "22.7 / 157.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "98W",
+          {
+            "v": "2"
+          },
+          "2026-08-09T12:00:00+00:00",
+          "23.3 / 158.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "98W",
+          {
+            "v": "3"
+          },
+          "2026-08-09T18:00:00+00:00",
+          "24.2 / 159.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "98W",
+          {
+            "v": "4"
+          },
+          "2026-08-10T00:00:00+00:00",
+          "24.8 / 160.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "98W",
+          {
+            "v": "5"
+          },
+          "2026-08-10T06:00:00+00:00",
+          "25.5 / 160.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "98W",
+          {
+            "v": "6"
+          },
+          "2026-08-10T12:00:00+00:00",
+          "26.2 / 160.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
