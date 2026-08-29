@@ -1,0 +1,567 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-08-29",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "15 个活跃热带系统",
+    "en": "15 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-08-29 全球活跃热带系统 15 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-08-29, 15 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "15",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "75",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "24",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · NARRA",
+            "en": "Tropical system · NARRA"
+          },
+          "text": {
+            "zh": "<strong>中心 21.7°N, 111.4°E，中心风速约 25.0 节（亚热带风暴），气压 999.0 hPa。</strong>移动方向/速度：NNE / 4 kn。最近航线：南海中部（约 451 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 21.7°N, 111.4°E, max wind ~25.0 kn (亚热带风暴), pressure 999.0 hPa.</strong> Movement: NNE / 4 kn. Nearest route: 南海中部 (~451 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Bang-lang",
+            "en": "Tropical system · Bang-lang"
+          },
+          "text": {
+            "zh": "<strong>中心 23.9°N, 168.2°E，中心风速约 75.0 节。</strong>移动方向/速度：NNE / 16 kn。最近航线：西太平洋（约 795 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 23.9°N, 168.2°E, max wind ~75.0 kn.</strong> Movement: NNE / 16 kn. Nearest route: 西太平洋 (~795 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Etau",
+            "en": "Tropical system · Etau"
+          },
+          "text": {
+            "zh": "<strong>中心 28.2°N, 165.7°E，中心风速约 40.0 节。</strong>移动方向/速度：N / 18 kn。最近航线：西太平洋（约 571 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 28.2°N, 165.7°E, max wind ~40.0 kn.</strong> Movement: N / 18 kn. Nearest route: 西太平洋 (~571 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · SAUDEL",
+            "en": "Tropical system · SAUDEL"
+          },
+          "text": {
+            "zh": "<strong>中心 28.5°N, 124.9°E，中心风速约 74.0 节（一级飓风/台风），气压 966.0 hPa。</strong>移动方向/速度：WSW / 2 kn。最近航线：菲律宾海（约 859 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 28.5°N, 124.9°E, max wind ~74.0 kn (一级飓风/台风), pressure 966.0 hPa.</strong> Movement: WSW / 2 kn. Nearest route: 菲律宾海 (~859 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Karina",
+            "en": "Tropical system · Karina"
+          },
+          "text": {
+            "zh": "<strong>中心 14.4°N, -116.6°E，中心风速约 55.0 节。</strong>移动方向/速度：WNW / 4 kn。最近航线：墨西哥湾（约 1611 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 14.4°N, -116.6°E, max wind ~55.0 kn.</strong> Movement: WNW / 4 kn. Nearest route: 墨西哥湾 (~1611 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Lowell",
+            "en": "Tropical system · Lowell"
+          },
+          "text": {
+            "zh": "<strong>中心 12.6°N, -134.5°E，中心风速约 40.0 节。</strong>移动方向/速度：WNW / 3 kn。最近航线：墨西哥湾（约 2616 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.6°N, -134.5°E, max wind ~40.0 kn.</strong> Movement: WNW / 3 kn. Nearest route: 墨西哥湾 (~2616 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · LALA",
+            "en": "Tropical system · LALA"
+          },
+          "text": {
+            "zh": "<strong>中心 36.2°N, -178.4°E，中心风速约 40.0 节（热带风暴），气压 999.0 hPa。</strong>移动方向/速度：NW / 1 kn。最近航线：西太平洋（约 1384 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 36.2°N, -178.4°E, max wind ~40.0 kn (热带风暴), pressure 999.0 hPa.</strong> Movement: NW / 1 kn. Nearest route: 西太平洋 (~1384 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · JULIO",
+            "en": "Tropical system · JULIO"
+          },
+          "text": {
+            "zh": "<strong>中心 19.5°N, -118.8°E，中心风速约 40.0 节（亚热带低压），气压 1003.0 hPa。</strong>移动方向/速度：N / 13 kn。最近航线：墨西哥湾（约 1626 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 19.5°N, -118.8°E, max wind ~40.0 kn (亚热带低压), pressure 1003.0 hPa.</strong> Movement: N / 13 kn. Nearest route: 墨西哥湾 (~1626 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Dolly",
+            "en": "Tropical system · Dolly"
+          },
+          "text": {
+            "zh": "<strong>中心 14.8°N, -45.8°E，中心风速约 35.0 节。</strong>移动方向/速度：WNW / 10 kn。最近航线：加勒比海（约 1403 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 14.8°N, -45.8°E, max wind ~35.0 kn.</strong> Movement: WNW / 10 kn. Nearest route: 加勒比海 (~1403 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · MOKE",
+            "en": "Tropical system · MOKE"
+          },
+          "text": {
+            "zh": "<strong>中心 16.2°N, -163.5°E，中心风速约 30.0 节（亚热带风暴），气压 1006.0 hPa。</strong>移动方向/速度：WNW / 5 kn。最近航线：西太平洋（约 2421 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 16.2°N, -163.5°E, max wind ~30.0 kn (亚热带风暴), pressure 1006.0 hPa.</strong> Movement: WNW / 5 kn. Nearest route: 西太平洋 (~2421 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ISELLE",
+            "en": "Tropical system · ISELLE"
+          },
+          "text": {
+            "zh": "<strong>中心 22.8°N, -125.5°E，中心风速约 30.0 节（亚热带风暴），气压 1002.0 hPa。</strong>移动方向/速度：WNW / 5 kn。最近航线：墨西哥湾（约 1952 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.8°N, -125.5°E, max wind ~30.0 kn (亚热带风暴), pressure 1002.0 hPa.</strong> Movement: WNW / 5 kn. Nearest route: 墨西哥湾 (~1952 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 16.7°N, 161.4°E，中心风速约 29.0 节（亚热带风暴），气压 1002.0 hPa。</strong>移动方向/速度：SSE / 4 kn。最近航线：西太平洋（约 872 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 16.7°N, 161.4°E, max wind ~29.0 kn (亚热带风暴), pressure 1002.0 hPa.</strong> Movement: SSE / 4 kn. Nearest route: 西太平洋 (~872 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ATSANI",
+            "en": "Tropical system · ATSANI"
+          },
+          "text": {
+            "zh": "<strong>中心 22.8°N, 135.5°E，中心风速约 19.0 节（亚热带风暴），气压 1007.0 hPa。</strong>移动方向/速度：NNW / 11 kn。最近航线：菲律宾海（约 563 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.8°N, 135.5°E, max wind ~19.0 kn (亚热带风暴), pressure 1007.0 hPa.</strong> Movement: NNW / 11 kn. Nearest route: 菲律宾海 (~563 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 92W",
+            "en": "Tropical system · 92W"
+          },
+          "text": {
+            "zh": "<strong>中心 25.2°N, 123.9°E，中心风速约 15.0 节。</strong>移动方向/速度：W / 2 kn。最近航线：菲律宾海（约 702 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 25.2°N, 123.9°E, max wind ~15.0 kn.</strong> Movement: W / 2 kn. Nearest route: 菲律宾海 (~702 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 94W",
+            "en": "Tropical system · 94W"
+          },
+          "text": {
+            "zh": "<strong>中心 20.0°N, 134.3°E，中心风速约 15.0 节。</strong>移动方向/速度：— / —。最近航线：菲律宾海（约 388 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 20.0°N, 134.3°E, max wind ~15.0 kn.</strong> Movement: — / —. Nearest route: 菲律宾海 (~388 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Bang-lang",
+          {
+            "v": "1"
+          },
+          "2026-08-31T18:00:00Z",
+          "39.1 / 167.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bang-lang",
+          {
+            "v": "2"
+          },
+          "2026-08-31T06:00:00Z",
+          "36.5 / 166.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bang-lang",
+          {
+            "v": "3"
+          },
+          "2026-08-30T18:00:00Z",
+          "34.1 / 167.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bang-lang",
+          {
+            "v": "4"
+          },
+          "2026-08-30T06:00:00Z",
+          "31.3 / 168",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Bang-lang",
+          {
+            "v": "5"
+          },
+          "2026-08-29T18:00:00Z",
+          "27.5 / 168.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Etau",
+          {
+            "v": "1"
+          },
+          "2026-08-31T06:00:00Z",
+          "33.7 / 167.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Etau",
+          {
+            "v": "2"
+          },
+          "2026-08-30T18:00:00Z",
+          "32.3 / 166.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Etau",
+          {
+            "v": "3"
+          },
+          "2026-08-30T06:00:00Z",
+          "31.3 / 165.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Etau",
+          {
+            "v": "4"
+          },
+          "2026-08-29T18:00:00Z",
+          "30.1 / 165.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Karina",
+          {
+            "v": "1"
+          },
+          "2026-09-03T06:00:00Z",
+          "20.8 / -132.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Karina",
+          {
+            "v": "2"
+          },
+          "2026-09-02T06:00:00Z",
+          "19.3 / -129.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Karina",
+          {
+            "v": "3"
+          },
+          "2026-09-01T06:00:00Z",
+          "18.1 / -127",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Karina",
+          {
+            "v": "4"
+          },
+          "2026-08-31T18:00:00Z",
+          "17.6 / -125.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Karina",
+          {
+            "v": "5"
+          },
+          "2026-08-31T06:00:00Z",
+          "17.3 / -123.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Karina",
+          {
+            "v": "6"
+          },
+          "2026-08-30T18:00:00Z",
+          "16.9 / -122",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "1"
+          },
+          "2026-09-03T06:00:00Z",
+          "13.9 / -151.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "2"
+          },
+          "2026-09-02T06:00:00Z",
+          "13.6 / -149",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "3"
+          },
+          "2026-09-01T06:00:00Z",
+          "13.3 / -146.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "4"
+          },
+          "2026-08-31T18:00:00Z",
+          "13.1 / -145",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "5"
+          },
+          "2026-08-31T06:00:00Z",
+          "13 / -143.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "6"
+          },
+          "2026-08-30T18:00:00Z",
+          "13 / -141.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolly",
+          {
+            "v": "1"
+          },
+          "2026-08-29T12:00:00Z",
+          "16.4 / -54.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolly",
+          {
+            "v": "2"
+          },
+          "2026-08-29T00:00:00Z",
+          "15.6 / -50.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dolly",
+          {
+            "v": "3"
+          },
+          "2026-08-28T15:00:00Z",
+          "15 / -46.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
