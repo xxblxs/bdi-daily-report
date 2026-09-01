@@ -36,12 +36,12 @@
       "direction": "up"
     },
     "BHSI": {
-      "val": null,
+      "val": 881.0,
       "prev": 881.0,
-      "diff": null,
-      "pct": null,
-      "pct_str": "n/a",
-      "direction": "neu"
+      "diff": 0.0,
+      "pct": 0.0,
+      "pct_str": "+0.0%",
+      "direction": "up"
     }
   },
   "routes": {
@@ -103,19 +103,19 @@
       "label": "P5TC Panamax综合",
       "sublabel": "巴拿马型综合期租",
       "unit": "day",
-      "val": null,
-      "pct": null,
-      "pct_str": "n/a",
-      "direction": "neu"
+      "val": 20834.0,
+      "pct": 0.9790616518030244,
+      "pct_str": "+1.0%",
+      "direction": "up"
     },
     "P4TC": {
       "label": "P4TC Panamax综合",
       "sublabel": "",
       "unit": "day",
-      "val": null,
-      "pct": null,
-      "pct_str": "n/a",
-      "direction": "neu"
+      "val": 20834.0,
+      "pct": 0.9790616518030244,
+      "pct_str": "+1.0%",
+      "direction": "up"
     },
     "P5_82": {
       "label": "P5 航线 (82K)",
@@ -139,10 +139,10 @@
       "label": "S10TC Supramax综合",
       "sublabel": "",
       "unit": "day",
-      "val": null,
-      "pct": null,
-      "pct_str": "n/a",
-      "direction": "neu"
+      "val": 18785.0,
+      "pct": 0.15995734470807785,
+      "pct_str": "+0.2%",
+      "direction": "up"
     },
     "S2": {
       "label": "S2 航线",
@@ -175,10 +175,10 @@
       "label": "HS7TC Handysize综合",
       "sublabel": "小灵便型综合期租",
       "unit": "day",
-      "val": null,
-      "pct": null,
-      "pct_str": "n/a",
-      "direction": "neu"
+      "val": 15855.0,
+      "pct": 0.03785727806170736,
+      "pct_str": "+0.0%",
+      "direction": "up"
     },
     "C2": {
       "label": "C2 图巴朗→鹿特丹",
@@ -276,8 +276,8 @@
       "pct_str": "+0.4%"
     },
     "BHSI": {
-      "pct": null,
-      "pct_str": "n/a"
+      "pct": 0.6857142857142857,
+      "pct_str": "+0.7%"
     }
   },
   "market_analysis": [
@@ -325,10 +325,10 @@
     }
   ],
   "fuel": {
-    "ifo380_avg": 644.5,
-    "vlsfo_avg": 846.2,
+    "ifo380_avg": 652.1,
+    "vlsfo_avg": 854.5,
     "mgo_avg": null,
-    "fresh_count": 195
+    "fresh_count": 196
   },
   "sources": [
     "Baltic Exchange",
