@@ -1,0 +1,226 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-09-03",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "13 个活跃热带系统 · 1 个达台风/飓风级",
+    "en": "13 active tropical system(s) · 1 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-09-03 全球活跃热带系统 13 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-09-03, 13 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "13",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "115",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · EDOUARD",
+            "en": "Typhoon/Hurricane · EDOUARD"
+          },
+          "text": {
+            "zh": "<strong>中心 28.4°N, -91.6°E，中心风速约 35.0 节（热带风暴），气压 1010.0 hPa。</strong>移动方向/速度：WNW / 3 kn。最近航线：墨西哥湾（约 278 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 28.4°N, -91.6°E, max wind ~35.0 kn (热带风暴), pressure 1010.0 hPa.</strong> Movement: WNW / 3 kn. Nearest route: 墨西哥湾 (~278 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · DOLLY",
+            "en": "Tropical system · DOLLY"
+          },
+          "text": {
+            "zh": "<strong>中心 20.0°N, -70.6°E，中心风速约 30.0 节（亚热带低压），气压 1013.0 hPa。</strong>移动方向/速度：WNW / 6 kn。最近航线：加勒比海（约 302 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 20.0°N, -70.6°E, max wind ~30.0 kn (亚热带低压), pressure 1013.0 hPa.</strong> Movement: WNW / 6 kn. Nearest route: 加勒比海 (~302 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · NARRA",
+            "en": "Tropical system · NARRA"
+          },
+          "text": {
+            "zh": "<strong>中心 21.7°N, 111.4°E，中心风速约 25.0 节（亚热带风暴），气压 999.0 hPa。</strong>移动方向/速度：NNE / 4 kn。最近航线：南海中部（约 451 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 21.7°N, 111.4°E, max wind ~25.0 kn (亚热带风暴), pressure 999.0 hPa.</strong> Movement: NNE / 4 kn. Nearest route: 南海中部 (~451 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · SAUDEL",
+            "en": "Tropical system · SAUDEL"
+          },
+          "text": {
+            "zh": "<strong>中心 19.5°N, 112.9°E，中心风速约 25.0 节（亚热带风暴），气压 994.0 hPa。</strong>移动方向/速度：ENE / 5 kn。最近航线：南海中部（约 296 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 19.5°N, 112.9°E, max wind ~25.0 kn (亚热带风暴), pressure 994.0 hPa.</strong> Movement: ENE / 5 kn. Nearest route: 南海中部 (~296 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · BANG-LANG",
+            "en": "Tropical system · BANG-LANG"
+          },
+          "text": {
+            "zh": "<strong>中心 36.7°N, 165.3°E，中心风速约 29.0 节（亚热带风暴），气压 993.0 hPa。</strong>移动方向/速度：N / 6 kn。最近航线：西太平洋（约 654 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 36.7°N, 165.3°E, max wind ~29.0 kn (亚热带风暴), pressure 993.0 hPa.</strong> Movement: N / 6 kn. Nearest route: 西太平洋 (~654 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ETAU",
+            "en": "Tropical system · ETAU"
+          },
+          "text": {
+            "zh": "<strong>中心 32.6°N, 167.8°E，中心风速约 29.0 节（亚热带风暴），气压 991.0 hPa。</strong>移动方向/速度：NE / 6 kn。最近航线：西太平洋（约 674 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 32.6°N, 167.8°E, max wind ~29.0 kn (亚热带风暴), pressure 991.0 hPa.</strong> Movement: NE / 6 kn. Nearest route: 西太平洋 (~674 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · KARINA",
+            "en": "Tropical system · KARINA"
+          },
+          "text": {
+            "zh": "<strong>中心 17.7°N, -126.3°E，中心风速约 115.0 节（四级飓风/台风（主要）），气压 950.0 hPa。</strong>移动方向/速度：WNW / 5 kn。最近航线：墨西哥湾（约 2066 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 17.7°N, -126.3°E, max wind ~115.0 kn (四级飓风/台风（主要）), pressure 950.0 hPa.</strong> Movement: WNW / 5 kn. Nearest route: 墨西哥湾 (~2066 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · LOWELL",
+            "en": "Tropical system · LOWELL"
+          },
+          "text": {
+            "zh": "<strong>中心 12.9°N, -147.0°E，中心风速约 55.0 节（热带风暴），气压 995.0 hPa。</strong>移动方向/速度：WNW / 5 kn。最近航线：墨西哥湾（约 3293 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.9°N, -147.0°E, max wind ~55.0 kn (热带风暴), pressure 995.0 hPa.</strong> Movement: WNW / 5 kn. Nearest route: 墨西哥湾 (~3293 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · SAUDEL",
+            "en": "Tropical system · SAUDEL"
+          },
+          "text": {
+            "zh": "<strong>中心 28.1°N, 121.0°E，中心风速约 51.0 节（热带风暴），气压 982.0 hPa。</strong>移动方向/速度：W / 8 kn。最近航线：南海中部（约 854 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 28.1°N, 121.0°E, max wind ~51.0 kn (热带风暴), pressure 982.0 hPa.</strong> Movement: W / 8 kn. Nearest route: 南海中部 (~854 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · JULIO",
+            "en": "Tropical system · JULIO"
+          },
+          "text": {
+            "zh": "<strong>中心 19.5°N, -118.8°E，中心风速约 40.0 节（亚热带低压），气压 1003.0 hPa。</strong>移动方向/速度：N / 13 kn。最近航线：墨西哥湾（约 1626 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 19.5°N, -118.8°E, max wind ~40.0 kn (亚热带低压), pressure 1003.0 hPa.</strong> Movement: N / 13 kn. Nearest route: 墨西哥湾 (~1626 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · LALA",
+            "en": "Tropical system · LALA"
+          },
+          "text": {
+            "zh": "<strong>中心 38.1°N, -179.1°E，中心风速约 35.0 节（亚热带低压），气压 1003.0 hPa。</strong>移动方向/速度：N / 2 kn。最近航线：西太平洋（约 1372 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 38.1°N, -179.1°E, max wind ~35.0 kn (亚热带低压), pressure 1003.0 hPa.</strong> Movement: N / 2 kn. Nearest route: 西太平洋 (~1372 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ISELLE",
+            "en": "Tropical system · ISELLE"
+          },
+          "text": {
+            "zh": "<strong>中心 22.8°N, -125.5°E，中心风速约 30.0 节（亚热带风暴），气压 1002.0 hPa。</strong>移动方向/速度：WNW / 5 kn。最近航线：墨西哥湾（约 1952 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.8°N, -125.5°E, max wind ~30.0 kn (亚热带风暴), pressure 1002.0 hPa.</strong> Movement: WNW / 5 kn. Nearest route: 墨西哥湾 (~1952 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · ATSANI",
+            "en": "Tropical system · ATSANI"
+          },
+          "text": {
+            "zh": "<strong>中心 22.8°N, 135.5°E，中心风速约 19.0 节（亚热带风暴），气压 1007.0 hPa。</strong>移动方向/速度：NNW / 11 kn。最近航线：菲律宾海（约 563 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.8°N, 135.5°E, max wind ~19.0 kn (亚热带风暴), pressure 1007.0 hPa.</strong> Movement: NNW / 11 kn. Nearest route: 菲律宾海 (~563 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
