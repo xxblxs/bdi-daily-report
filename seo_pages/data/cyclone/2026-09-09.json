@@ -1,0 +1,322 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-09-09",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "8 个活跃热带系统",
+    "en": "8 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-09-09 全球活跃热带系统 8 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-09-09, 8 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "8",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "61",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "10",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · Krovanh",
+            "en": "Tropical system · Krovanh"
+          },
+          "text": {
+            "zh": "<strong>中心 34.3°N, 135.9°E，中心风速约 26.0 节（亚热带风暴），气压 993.0 hPa。</strong>移动方向/速度：ENE / 14 kn。最近航线：东日本海域（约 297 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 34.3°N, 135.9°E, max wind ~26.0 kn (亚热带风暴), pressure 993.0 hPa.</strong> Movement: ENE / 14 kn. Nearest route: 东日本海域 (~297 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · SAUDEL",
+            "en": "Tropical system · SAUDEL"
+          },
+          "text": {
+            "zh": "<strong>中心 23.8°N, 117.4°E，中心风速约 39.0 节（热带风暴），气压 989.0 hPa。</strong>移动方向/速度：WNW / 7 kn。最近航线：南海中部（约 546 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 23.8°N, 117.4°E, max wind ~39.0 kn (热带风暴), pressure 989.0 hPa.</strong> Movement: WNW / 7 kn. Nearest route: 南海中部 (~546 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 28.5°N, 133.8°E，中心风速约 25.0 节（亚热带风暴），气压 998.0 hPa。</strong>移动方向/速度：WNW / 7 kn。最近航线：东日本海域（约 626 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 28.5°N, 133.8°E, max wind ~25.0 kn (亚热带风暴), pressure 998.0 hPa.</strong> Movement: WNW / 7 kn. Nearest route: 东日本海域 (~626 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Lowell",
+            "en": "Tropical system · Lowell"
+          },
+          "text": {
+            "zh": "<strong>中心 26.2°N, -161.1°E，中心风速约 60.8 节（二级飓风/台风），气压 958.0 hPa。</strong>移动方向/速度：NNW / 11 kn。最近航线：西太平洋（约 2322 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 26.2°N, -161.1°E, max wind ~60.8 kn (二级飓风/台风), pressure 958.0 hPa.</strong> Movement: NNW / 11 kn. Nearest route: 西太平洋 (~2322 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · KARINA",
+            "en": "Tropical system · KARINA"
+          },
+          "text": {
+            "zh": "<strong>中心 23.0°N, -145.7°E，中心风速约 40.0 节（热带风暴），气压 998.0 hPa。</strong>移动方向/速度：WNW / 3 kn。最近航线：墨西哥湾（约 3047 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 23.0°N, -145.7°E, max wind ~40.0 kn (热带风暴), pressure 998.0 hPa.</strong> Movement: WNW / 3 kn. Nearest route: 墨西哥湾 (~3047 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Marie",
+            "en": "Tropical system · Marie"
+          },
+          "text": {
+            "zh": "<strong>中心 25.8°N, -127.4°E，中心风速约 34.8 节（热带风暴），气压 994.0 hPa。</strong>移动方向/速度：WNW / 8 kn。最近航线：墨西哥湾（约 2033 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 25.8°N, -127.4°E, max wind ~34.8 kn (热带风暴), pressure 994.0 hPa.</strong> Movement: WNW / 8 kn. Nearest route: 墨西哥湾 (~2033 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 96E",
+            "en": "Tropical system · 96E"
+          },
+          "text": {
+            "zh": "<strong>中心 14.5°N, -113.0°E，中心风速约 26.0 节。</strong>移动方向/速度：W / 11 kn。最近航线：墨西哥湾（约 1420 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 14.5°N, -113.0°E, max wind ~26.0 kn.</strong> Movement: W / 11 kn. Nearest route: 墨西哥湾 (~1420 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · EDOUARD",
+            "en": "Tropical system · EDOUARD"
+          },
+          "text": {
+            "zh": "<strong>中心 32.4°N, -96.3°E，中心风速约 20.0 节（亚热带低压），气压 1012.0 hPa。</strong>移动方向/速度：WNW / 4 kn。最近航线：墨西哥湾（约 604 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 32.4°N, -96.3°E, max wind ~20.0 kn (亚热带低压), pressure 1012.0 hPa.</strong> Movement: WNW / 4 kn. Nearest route: 墨西哥湾 (~604 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Krovanh",
+          {
+            "v": "1"
+          },
+          "2026-09-09T12:00:00+00:00",
+          "34.6 / 137.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Krovanh",
+          {
+            "v": "2"
+          },
+          "2026-09-10T00:00:00+00:00",
+          "34.2 / 142.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "1"
+          },
+          "2026-09-09T12:00:00+00:00",
+          "28.0 / -161.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "2"
+          },
+          "2026-09-09T18:00:00+00:00",
+          "28.7 / -163.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "3"
+          },
+          "2026-09-10T00:00:00+00:00",
+          "29.0 / -164.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "4"
+          },
+          "2026-09-10T06:00:00+00:00",
+          "29.2 / -165.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "5"
+          },
+          "2026-09-10T12:00:00+00:00",
+          "29.4 / -167.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Lowell",
+          {
+            "v": "6"
+          },
+          "2026-09-10T18:00:00+00:00",
+          "29.5 / -168.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Marie",
+          {
+            "v": "1"
+          },
+          "2026-09-09T12:00:00+00:00",
+          "29.1 / -128.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Marie",
+          {
+            "v": "2"
+          },
+          "2026-09-09T18:00:00+00:00",
+          "30.3 / -129.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
