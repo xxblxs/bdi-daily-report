@@ -1,0 +1,333 @@
+{
+  "report_type": "bdi-market",
+  "date": "2026-09-11",
+  "headline": "BDI ↓0.4%",
+  "indices": {
+    "BDI": {
+      "val": 3507.0,
+      "prev": 3521.0,
+      "diff": -14.0,
+      "pct": -0.3976143141153081,
+      "pct_str": "-0.4%",
+      "direction": "dn"
+    },
+    "BCI": {
+      "val": 6080.0,
+      "prev": 6122.0,
+      "diff": -42.0,
+      "pct": -0.6860503103560928,
+      "pct_str": "-0.7%",
+      "direction": "dn"
+    },
+    "BPI": {
+      "val": 2407.0,
+      "prev": 2409.0,
+      "diff": -2.0,
+      "pct": -0.08302200083022,
+      "pct_str": "-0.1%",
+      "direction": "dn"
+    },
+    "BSI": {
+      "val": 1719.0,
+      "prev": 1713.0,
+      "diff": 6.0,
+      "pct": 0.3502626970227671,
+      "pct_str": "+0.4%",
+      "direction": "up"
+    },
+    "BHSI": {
+      "val": 940.0,
+      "prev": 931.0,
+      "diff": 9.0,
+      "pct": 0.966702470461869,
+      "pct_str": "+1.0%",
+      "direction": "up"
+    }
+  },
+  "routes": {
+    "C5TC": {
+      "label": "5TC 平均 (Cape综合)",
+      "sublabel": "海岬型综合期租",
+      "unit": "day",
+      "val": 55139.0,
+      "pct": -0.6844503683423693,
+      "pct_str": "-0.7%",
+      "direction": "dn"
+    },
+    "C8": {
+      "label": "C8 跨大西洋往返",
+      "sublabel": "鹿特丹/直布罗陀 round",
+      "unit": "day",
+      "val": 56313.0,
+      "pct": 0.6703850691837391,
+      "pct_str": "+0.7%",
+      "direction": "up"
+    },
+    "C9": {
+      "label": "C9 大陆→远东",
+      "sublabel": "单程至中国/日本",
+      "unit": "day",
+      "val": 87611.0,
+      "pct": -1.927619132907212,
+      "pct_str": "-1.9%",
+      "direction": "dn"
+    },
+    "C10": {
+      "label": "C10 太平洋往返",
+      "sublabel": "中国/日本 round",
+      "unit": "day",
+      "val": 57379.0,
+      "pct": -0.9477282143350366,
+      "pct_str": "-0.9%",
+      "direction": "dn"
+    },
+    "C14": {
+      "label": "C14 中国→巴西往返",
+      "sublabel": "China-Brazil round",
+      "unit": "day",
+      "val": 50773.0,
+      "pct": 0.5386031959763173,
+      "pct_str": "+0.5%",
+      "direction": "up"
+    },
+    "C16": {
+      "label": "C16 远东→大陆回程",
+      "sublabel": "backhaul",
+      "unit": "day",
+      "val": 23722.0,
+      "pct": -3.151792275659345,
+      "pct_str": "-3.2%",
+      "direction": "dn"
+    },
+    "P5TC": {
+      "label": "P5TC Panamax综合",
+      "sublabel": "巴拿马型综合期租",
+      "unit": "day",
+      "val": 21662.0,
+      "pct": -0.10145729570190001,
+      "pct_str": "-0.1%",
+      "direction": "dn"
+    },
+    "P4TC": {
+      "label": "P4TC Panamax综合",
+      "sublabel": "",
+      "unit": "day",
+      "val": 21662.0,
+      "pct": -0.10145729570190001,
+      "pct_str": "-0.1%",
+      "direction": "dn"
+    },
+    "P5_82": {
+      "label": "P5 航线 (82K)",
+      "sublabel": "",
+      "unit": "day",
+      "val": 20244.0,
+      "pct": 0.7164179104477612,
+      "pct_str": "+0.7%",
+      "direction": "up"
+    },
+    "S3TC_63": {
+      "label": "S3TC 63K综合",
+      "sublabel": "灵便型综合期租",
+      "unit": "day",
+      "val": 19861.0,
+      "pct": 0.1058467741935484,
+      "pct_str": "+0.1%",
+      "direction": "up"
+    },
+    "S10TC": {
+      "label": "S10TC Supramax综合",
+      "sublabel": "",
+      "unit": "day",
+      "val": null,
+      "pct": null,
+      "pct_str": "n/a",
+      "direction": "neu"
+    },
+    "S2": {
+      "label": "S2 航线",
+      "sublabel": "",
+      "unit": "day",
+      "val": 19988.0,
+      "pct": 0.12523167860542003,
+      "pct_str": "+0.1%",
+      "direction": "up"
+    },
+    "S8": {
+      "label": "S8 航线",
+      "sublabel": "",
+      "unit": "day",
+      "val": 23669.0,
+      "pct": 0.021129141311697092,
+      "pct_str": "+0.0%",
+      "direction": "up"
+    },
+    "S10": {
+      "label": "S10 航线",
+      "sublabel": "",
+      "unit": "day",
+      "val": 15869.0,
+      "pct": 0.19573178431620156,
+      "pct_str": "+0.2%",
+      "direction": "up"
+    },
+    "HS7TC": {
+      "label": "HS7TC Handysize综合",
+      "sublabel": "小灵便型综合期租",
+      "unit": "day",
+      "val": 16925.0,
+      "pct": 1.038743955584741,
+      "pct_str": "+1.0%",
+      "direction": "up"
+    },
+    "C2": {
+      "label": "C2 图巴朗→鹿特丹",
+      "sublabel": "铁矿石 大西洋线",
+      "unit": "ton",
+      "val": 19.694,
+      "pct": -0.7858942065491302,
+      "pct_str": "-0.8%",
+      "direction": "dn"
+    },
+    "C3": {
+      "label": "C3 图巴朗→青岛",
+      "sublabel": "铁矿石 巴西→中国",
+      "unit": "ton",
+      "val": 42.123,
+      "pct": 0.9490258106262152,
+      "pct_str": "+0.9%",
+      "direction": "up"
+    },
+    "C5": {
+      "label": "C5 西澳→青岛",
+      "sublabel": "铁矿石 太平洋线",
+      "unit": "ton",
+      "val": 17.845,
+      "pct": -0.22365110427734247,
+      "pct_str": "-0.2%",
+      "direction": "dn"
+    },
+    "C7": {
+      "label": "C7 玻利瓦尔→鹿特丹",
+      "sublabel": "煤炭航线",
+      "unit": "ton",
+      "val": 23.463,
+      "pct": 0.3206772703950713,
+      "pct_str": "+0.3%",
+      "direction": "up"
+    },
+    "C17": {
+      "label": "C17 萨尔达尼亚→青岛",
+      "sublabel": "铁矿石 南非→中国",
+      "unit": "ton",
+      "val": 31.47,
+      "pct": 0.31877590054191224,
+      "pct_str": "+0.3%",
+      "direction": "up"
+    }
+  },
+  "trend": [
+    {
+      "date": "2026-09-11",
+      "BDI": 3507.0,
+      "BCI": 6080.0,
+      "BPI": 2407.0
+    },
+    {
+      "date": "2026-09-10",
+      "BDI": 3521.0,
+      "BCI": 6122.0,
+      "BPI": 2409.0
+    },
+    {
+      "date": "2026-09-09",
+      "BDI": 3620.0,
+      "BCI": 6400.0,
+      "BPI": 2414.0
+    },
+    {
+      "date": "2026-09-08",
+      "BDI": 3584.0,
+      "BCI": 6313.0,
+      "BPI": 2414.0
+    },
+    {
+      "date": "2026-09-07",
+      "BDI": 3575.0,
+      "BCI": 6286.0,
+      "BPI": 2431.0
+    }
+  ],
+  "week_chg": {
+    "BDI": {
+      "pct": -1.902097902097902,
+      "pct_str": "-1.9%"
+    },
+    "BCI": {
+      "pct": -3.277123767101495,
+      "pct_str": "-3.3%"
+    },
+    "BPI": {
+      "pct": -0.9872480460715755,
+      "pct_str": "-1.0%"
+    },
+    "BSI": {
+      "pct": 2.199762187871581,
+      "pct_str": "+2.2%"
+    },
+    "BHSI": {
+      "pct": 3.7527593818984544,
+      "pct_str": "+3.8%"
+    }
+  },
+  "market_analysis": [
+    {
+      "type": "bear",
+      "tag": "利空 · Capesize",
+      "text": "<strong>C3 图巴朗→青岛 今日 +0.9%</strong>，海岬型市场走弱（BCI -0.7%，收于 6080 点）。大西洋与太平洋航线走势较为一致（C3 +0.9%，C5 -0.2%）。 BCI 近 5 日累计 -3.3%，短期弱势持续。"
+    },
+    {
+      "type": "bear",
+      "tag": "利空 · Panamax",
+      "text": "<strong>BPI 今日 -0.1%，近 5 日 -1.0%。</strong>2026 年新船交付压力显著高于往年（约 1,500–1,600 万 DWT，较往年翻近 50%），供给端持续偏松；需求侧重点关注煤炭与粮食贸易量变化，以及太平洋地区租家询盘动向。"
+    },
+    {
+      "type": "neu",
+      "tag": "市场资讯",
+      "text": "<strong>Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</strong>。Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know."
+    },
+    {
+      "type": "neu",
+      "tag": "市场资讯",
+      "text": "<strong>Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</strong>。Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know."
+    }
+  ],
+  "views": [
+    {
+      "shiptype": "",
+      "title": "",
+      "text": "BCI 今日 -0.7%，近 5 日 -3.3%。关注中国铁矿石到港量及钢厂开工率变化。"
+    },
+    {
+      "shiptype": "",
+      "title": "",
+      "text": "BPI 今日 -0.1%，近 5 日 -1.0%。2026 年新船交付压力显著高于往年，供给端偏松；关注煤炭和粮食贸易量变化。"
+    },
+    {
+      "shiptype": "",
+      "title": "",
+      "text": "BSI +0.4%，BHSI +1.0%。次要散货需求受贸易政策不确定性压制，转机在于 Q2 南半球粮食出口旺季启动。"
+    }
+  ],
+  "fuel": {
+    "ifo380_avg": 721.0,
+    "vlsfo_avg": 903.1,
+    "mgo_avg": null,
+    "fresh_count": 193
+  },
+  "sources": [
+    "Baltic Exchange",
+    "Hellenic Shipping News",
+    "Splash247"
+  ]
+}
