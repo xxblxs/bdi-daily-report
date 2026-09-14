@@ -139,10 +139,10 @@
       "label": "S10TC Supramax综合",
       "sublabel": "",
       "unit": "day",
-      "val": null,
-      "pct": null,
-      "pct_str": "n/a",
-      "direction": "neu"
+      "val": 21728.0,
+      "pct": 0.3371045947818056,
+      "pct_str": "+0.3%",
+      "direction": "up"
     },
     "S2": {
       "label": "S2 航线",
@@ -294,12 +294,12 @@
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</strong>。Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know."
+      "text": "<strong>Dry Bulk Market: Capesize Steadying After Recent Gains</strong>。Capesize The market experienced a mixed week, with the Pacific providing the main source of volatility while the Atlantic remained comparatively steady, albeit lacking consistent momentum. The Pacific"
     },
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</strong>。Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know."
+      "text": "<strong>Baltic dry bulk freight index falls to lowest in over a week</strong>。The Baltic Exchange’s dry bulk freight index dropped on Friday, reaching its lowest point since September 3 as weaker rates for capesize and panamax vessels pulled down the benchmark. The main Baltic"
     }
   ],
   "views": [
