@@ -1,0 +1,252 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-09-18",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "6 个活跃热带系统",
+    "en": "6 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-09-18 全球活跃热带系统 6 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-09-18, 6 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "61",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Dujuan",
+            "en": "Tropical system · Dujuan"
+          },
+          "text": {
+            "zh": "<strong>中心 25.9°N, 142.9°E，中心风速约 60.8 节（热带风暴），气压 990.0 hPa。</strong>移动方向/速度：WNW / 16 kn。最近航线：东日本海域（约 673 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 25.9°N, 142.9°E, max wind ~60.8 kn (热带风暴), pressure 990.0 hPa.</strong> Movement: WNW / 16 kn. Nearest route: 东日本海域 (~673 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · LOWELL",
+            "en": "Tropical system · LOWELL"
+          },
+          "text": {
+            "zh": "<strong>中心 29.0°N, -169.5°E，中心风速约 45.0 节（亚热带低压），气压 997.0 hPa。</strong>移动方向/速度：W / 5 kn。最近航线：西太平洋（约 1849 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 29.0°N, -169.5°E, max wind ~45.0 kn (亚热带低压), pressure 997.0 hPa.</strong> Movement: W / 5 kn. Nearest route: 西太平洋 (~1849 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · NORBERT",
+            "en": "Tropical system · NORBERT"
+          },
+          "text": {
+            "zh": "<strong>中心 20.4°N, -142.4°E，中心风速约 30.0 节（亚热带风暴），气压 1007.0 hPa。</strong>移动方向/速度：W / 7 kn。最近航线：墨西哥湾（约 2905 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 20.4°N, -142.4°E, max wind ~30.0 kn (亚热带风暴), pressure 1007.0 hPa.</strong> Movement: W / 7 kn. Nearest route: 墨西哥湾 (~2905 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 15.6°N, -125.3°E，中心风速约 25.0 节（亚热带低压），气压 1006.0 hPa。</strong>移动方向/速度：WSW / 5 kn。最近航线：墨西哥湾（约 2051 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 15.6°N, -125.3°E, max wind ~25.0 kn (亚热带低压), pressure 1006.0 hPa.</strong> Movement: WSW / 5 kn. Nearest route: 墨西哥湾 (~2051 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 98E",
+            "en": "Tropical system · 98E"
+          },
+          "text": {
+            "zh": "<strong>中心 11.8°N, -116.3°E，中心风速约 17.3 节。</strong>移动方向/速度：WNW / 5 kn。最近航线：墨西哥湾（约 1667 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 11.8°N, -116.3°E, max wind ~17.3 kn.</strong> Movement: WNW / 5 kn. Nearest route: 墨西哥湾 (~1667 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 98L",
+            "en": "Tropical system · 98L"
+          },
+          "text": {
+            "zh": "<strong>中心 32.5°N, -60.1°E，中心风速约 17.3 节。</strong>移动方向/速度：WSW / 5 kn。最近航线：北大西洋西部（约 530 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 32.5°N, -60.1°E, max wind ~17.3 kn.</strong> Movement: WSW / 5 kn. Nearest route: 北大西洋西部 (~530 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Dujuan",
+          {
+            "v": "1"
+          },
+          "2026-09-18T12:00:00+00:00",
+          "25.4 / 141.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dujuan",
+          {
+            "v": "2"
+          },
+          "2026-09-18T18:00:00+00:00",
+          "25.4 / 140.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dujuan",
+          {
+            "v": "3"
+          },
+          "2026-09-19T00:00:00+00:00",
+          "26.3 / 140.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dujuan",
+          {
+            "v": "4"
+          },
+          "2026-09-19T06:00:00+00:00",
+          "27.3 / 139.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dujuan",
+          {
+            "v": "5"
+          },
+          "2026-09-19T12:00:00+00:00",
+          "28.0 / 138.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Dujuan",
+          {
+            "v": "6"
+          },
+          "2026-09-19T18:00:00+00:00",
+          "28.7 / 137.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
