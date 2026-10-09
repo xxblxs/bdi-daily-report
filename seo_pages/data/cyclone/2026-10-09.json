@@ -1,0 +1,550 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-10-09",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "8 个活跃热带系统 · 1 个达台风/飓风级",
+    "en": "8 active tropical system(s) · 1 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-10-09 全球活跃热带系统 8 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-10-09, 8 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "8",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "96",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "29",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · Isaias",
+            "en": "Typhoon/Hurricane · Isaias"
+          },
+          "text": {
+            "zh": "<strong>中心 26.4°N, -88.0°E，中心风速约 95.6 节（热带风暴），气压 988.0 hPa。</strong>移动方向/速度：NNE / 7 kn。最近航线：墨西哥湾（约 180 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 26.4°N, -88.0°E, max wind ~95.6 kn (热带风暴), pressure 988.0 hPa.</strong> Movement: NNE / 7 kn. Nearest route: 墨西哥湾 (~180 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · Nolo",
+            "en": "Tropical system · Nolo"
+          },
+          "text": {
+            "zh": "<strong>中心 28.8°N, 148.7°E，中心风速约 52.1 节（热带风暴），气压 990.0 hPa。</strong>移动方向/速度：WNW / 11 kn。最近航线：西太平洋（约 337 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 28.8°N, 148.7°E, max wind ~52.1 kn (热带风暴), pressure 990.0 hPa.</strong> Movement: WNW / 11 kn. Nearest route: 西太平洋 (~337 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Koguma",
+            "en": "Tropical system · Koguma"
+          },
+          "text": {
+            "zh": "<strong>中心 19.3°N, 155.5°E，中心风速约 95.6 节（热带风暴），气压 992.0 hPa。</strong>移动方向/速度：NW / 14 kn。最近航线：西太平洋（约 643 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 19.3°N, 155.5°E, max wind ~95.6 kn (热带风暴), pressure 992.0 hPa.</strong> Movement: NW / 14 kn. Nearest route: 西太平洋 (~643 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · CHOI-WAN",
+            "en": "Tropical system · CHOI-WAN"
+          },
+          "text": {
+            "zh": "<strong>中心 42.5°N, 156.7°E，中心风速约 70.0 节（一级飓风/台风），气压 964.0 hPa。</strong>移动方向/速度：NE / 22 kn。最近航线：西太平洋（约 755 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 42.5°N, 156.7°E, max wind ~70.0 kn (一级飓风/台风), pressure 964.0 hPa.</strong> Movement: NE / 22 kn. Nearest route: 西太平洋 (~755 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Simon",
+            "en": "Tropical system · Simon"
+          },
+          "text": {
+            "zh": "<strong>中心 15.8°N, -104.5°E，中心风速约 78.1 节（热带风暴），气压 1002.0 hPa。</strong>移动方向/速度：N / —。最近航线：墨西哥湾（约 954 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 15.8°N, -104.5°E, max wind ~78.1 kn (热带风暴), pressure 1002.0 hPa.</strong> Movement: N / —. Nearest route: 墨西哥湾 (~954 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Rachel",
+            "en": "Tropical system · Rachel"
+          },
+          "text": {
+            "zh": "<strong>中心 22.7°N, -124.9°E，中心风速约 43.5 节（一级飓风/台风），气压 982.0 hPa。</strong>移动方向/速度：E / 6 kn。最近航线：墨西哥湾（约 1921 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 22.7°N, -124.9°E, max wind ~43.5 kn (一级飓风/台风), pressure 982.0 hPa.</strong> Movement: E / 6 kn. Nearest route: 墨西哥湾 (~1921 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 14.8°N, -120.5°E，中心风速约 25.0 节（亚热带低压），气压 1007.0 hPa。</strong>移动方向/速度：E / 7 kn。最近航线：墨西哥湾（约 1809 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 14.8°N, -120.5°E, max wind ~25.0 kn (亚热带低压), pressure 1007.0 hPa.</strong> Movement: E / 7 kn. Nearest route: 墨西哥湾 (~1809 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 95W",
+            "en": "Tropical system · 95W"
+          },
+          "text": {
+            "zh": "<strong>中心 13.5°N, 144.5°E，中心风速约 15.0 节。</strong>移动方向/速度：NNE / 9 kn。最近航线：菲律宾海（约 848 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 13.5°N, 144.5°E, max wind ~15.0 kn.</strong> Movement: NNE / 9 kn. Nearest route: 菲律宾海 (~848 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Isaias",
+          {
+            "v": "1"
+          },
+          "2026-10-09T12:00:00+00:00",
+          "27.0 / -88.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Isaias",
+          {
+            "v": "2"
+          },
+          "2026-10-09T18:00:00+00:00",
+          "28.5 / -87.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Isaias",
+          {
+            "v": "3"
+          },
+          "2026-10-10T00:00:00+00:00",
+          "29.7 / -87.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Isaias",
+          {
+            "v": "4"
+          },
+          "2026-10-10T06:00:00+00:00",
+          "31.3 / -87.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Isaias",
+          {
+            "v": "5"
+          },
+          "2026-10-10T12:00:00+00:00",
+          "33.6 / -87.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Nolo",
+          {
+            "v": "1"
+          },
+          "2026-10-09T12:00:00+00:00",
+          "29.3 / 147.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Nolo",
+          {
+            "v": "2"
+          },
+          "2026-10-09T18:00:00+00:00",
+          "29.7 / 147.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Nolo",
+          {
+            "v": "3"
+          },
+          "2026-10-10T00:00:00+00:00",
+          "30.4 / 146.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Nolo",
+          {
+            "v": "4"
+          },
+          "2026-10-10T06:00:00+00:00",
+          "31.7 / 146.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Nolo",
+          {
+            "v": "5"
+          },
+          "2026-10-10T12:00:00+00:00",
+          "32.5 / 146.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Nolo",
+          {
+            "v": "6"
+          },
+          "2026-10-10T18:00:00+00:00",
+          "33.5 / 147.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Koguma",
+          {
+            "v": "1"
+          },
+          "2026-10-09T12:00:00+00:00",
+          "19.9 / 154.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Koguma",
+          {
+            "v": "2"
+          },
+          "2026-10-09T18:00:00+00:00",
+          "20.6 / 152.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Koguma",
+          {
+            "v": "3"
+          },
+          "2026-10-10T00:00:00+00:00",
+          "21.3 / 151.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Koguma",
+          {
+            "v": "4"
+          },
+          "2026-10-10T06:00:00+00:00",
+          "22.3 / 150.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Koguma",
+          {
+            "v": "5"
+          },
+          "2026-10-10T12:00:00+00:00",
+          "23.0 / 149.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Koguma",
+          {
+            "v": "6"
+          },
+          "2026-10-10T18:00:00+00:00",
+          "23.8 / 149.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Simon",
+          {
+            "v": "1"
+          },
+          "2026-10-09T12:00:00+00:00",
+          "15.9 / -104.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Simon",
+          {
+            "v": "2"
+          },
+          "2026-10-09T18:00:00+00:00",
+          "16.3 / -105.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Simon",
+          {
+            "v": "3"
+          },
+          "2026-10-10T00:00:00+00:00",
+          "16.5 / -105.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Simon",
+          {
+            "v": "4"
+          },
+          "2026-10-10T06:00:00+00:00",
+          "16.8 / -105.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Simon",
+          {
+            "v": "5"
+          },
+          "2026-10-10T12:00:00+00:00",
+          "17.2 / -105.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Simon",
+          {
+            "v": "6"
+          },
+          "2026-10-10T18:00:00+00:00",
+          "17.6 / -105.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Rachel",
+          {
+            "v": "1"
+          },
+          "2026-10-09T12:00:00+00:00",
+          "22.6 / -125.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Rachel",
+          {
+            "v": "2"
+          },
+          "2026-10-09T18:00:00+00:00",
+          "22.9 / -125.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Rachel",
+          {
+            "v": "3"
+          },
+          "2026-10-10T00:00:00+00:00",
+          "23.4 / -124.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Rachel",
+          {
+            "v": "4"
+          },
+          "2026-10-10T06:00:00+00:00",
+          "23.9 / -123.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Rachel",
+          {
+            "v": "5"
+          },
+          "2026-10-10T12:00:00+00:00",
+          "24.9 / -121.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Rachel",
+          {
+            "v": "6"
+          },
+          "2026-10-10T18:00:00+00:00",
+          "26.5 / -120.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
