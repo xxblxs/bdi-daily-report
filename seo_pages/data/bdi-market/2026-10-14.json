@@ -299,12 +299,12 @@
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Black Sea Steel Flows Weaken as Shipping Risks Rise</strong>。Recorded Black Sea steel loadings declined sharply in Q3 2026. Volumes, including scrap, fell 65.6% y/y to 0.65 Mt across 51 voyages, compared with 129 in Q3 2025. The year-on-year decline deepened th"
+      "text": "<strong>Baltic Dry Index Extends Slide</strong>。The Baltic Exchange’s dry bulk freight index, which tracks rates for ships carrying dry bulk commodities, slumped about 4.6% to its lowest since june 30 at 2,545 points on Thursday, marking the ninth"
     },
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Port Hedland Iron Ore Exports Slightly Higher in September</strong>。Pilbara Ports delivered a total monthly throughput of 69.3 million tonnes (Mt) during September 2026. This was a one per cent increase compared to September 2025. The Port of Port Hedland achieved a m"
+      "text": "<strong>Iron Ore: Australian majors diverge as Vale faces growing guidance risks</strong>。September quarter performance is expected to diverge sharply across major iron ore miners. Rio Tinto’s Pilbara shipments rose y/y despite CMRG tensions, leaving annual guidance achievable, while BHP d"
     }
   ],
   "views": [
@@ -325,10 +325,10 @@
     }
   ],
   "fuel": {
-    "ifo380_avg": 773.4,
-    "vlsfo_avg": 940.9,
+    "ifo380_avg": 783.4,
+    "vlsfo_avg": 946.9,
     "mgo_avg": null,
-    "fresh_count": 194
+    "fresh_count": 193
   },
   "sources": [
     "Baltic Exchange",
