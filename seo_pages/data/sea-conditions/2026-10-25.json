@@ -1,0 +1,738 @@
+{
+  "report_type": "sea-conditions",
+  "slug": "sea-conditions",
+  "date": "2026-10-25",
+  "type_zh": "全球主要航线海况日报",
+  "type_en": "Global Sea Conditions Report",
+  "headline": {
+    "zh": "全球航线海况 · 最高评级 需注意",
+    "en": "Global sea state · peak risk Caution"
+  },
+  "keywords": "航线海况,浪高,风速,涌浪,适航,天气路由,weather routing,sea state,wave height",
+  "summary_zh": "2026-10-25 主要航线海况：各航区浪高/涌高/风速与分区观点见下，供天气路由与 ETA 决策参考。",
+  "summary_en": "On 2026-10-25, per-route wave height, swell and wind across the main shipping legs, plus a regional outlook, are listed below to support weather routing and ETA decisions.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "海况概览",
+      "title_en": "Sea-State Overview",
+      "items": [
+        {
+          "label": {
+            "zh": "需注意",
+            "en": "Caution"
+          },
+          "value": "3",
+          "sub": {
+            "zh": "航区",
+            "en": "routes"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "关注",
+            "en": "Watch"
+          },
+          "value": "4",
+          "sub": {
+            "zh": "航区",
+            "en": "routes"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "适航/平稳",
+            "en": "Workable"
+          },
+          "value": "4",
+          "sub": {
+            "zh": "航区",
+            "en": "routes"
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最高浪高",
+            "en": "Peak wave"
+          },
+          "value": "4.9m",
+          "sub": {
+            "zh": "5日预报",
+            "en": "5-day"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最大阵风",
+            "en": "Max gust"
+          },
+          "value": "33kn",
+          "sub": {
+            "zh": "当前",
+            "en": "now"
+          },
+          "direction": "dn"
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "各航区海况",
+      "title_en": "Route Sea State",
+      "columns": [
+        {
+          "zh": "航区",
+          "en": "Route"
+        },
+        {
+          "zh": "风速(节)",
+          "en": "Wind",
+          "num": true
+        },
+        {
+          "zh": "阵风(节)",
+          "en": "Gust",
+          "num": true
+        },
+        {
+          "zh": "风向",
+          "en": "Dir",
+          "num": true
+        },
+        {
+          "zh": "当前浪高",
+          "en": "Now",
+          "num": true
+        },
+        {
+          "zh": "5日峰值(米)",
+          "en": "5d peak",
+          "num": true
+        },
+        {
+          "zh": "周期(秒)",
+          "en": "Period",
+          "num": true
+        },
+        {
+          "zh": "涌高(米)",
+          "en": "Swell",
+          "num": true
+        },
+        {
+          "zh": "评级",
+          "en": "Risk",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "南海中部",
+          {
+            "v": "4",
+            "cls": ""
+          },
+          {
+            "v": "7",
+            "cls": ""
+          },
+          {
+            "v": "315"
+          },
+          {
+            "v": "1.2"
+          },
+          {
+            "v": "1.16",
+            "cls": "up"
+          },
+          {
+            "v": "8.8"
+          },
+          {
+            "v": "1.16"
+          },
+          {
+            "zh": "适航",
+            "en": "Workable",
+            "cls": "up"
+          }
+        ],
+        [
+          "南海南部",
+          {
+            "v": "13",
+            "cls": ""
+          },
+          {
+            "v": "16",
+            "cls": ""
+          },
+          {
+            "v": "299"
+          },
+          {
+            "v": "1.6"
+          },
+          {
+            "v": "1.6",
+            "cls": "neu"
+          },
+          {
+            "v": "11.2"
+          },
+          {
+            "v": "1.46"
+          },
+          {
+            "zh": "关注",
+            "en": "Watch",
+            "cls": "neu"
+          }
+        ],
+        [
+          "西太平洋",
+          {
+            "v": "15",
+            "cls": ""
+          },
+          {
+            "v": "19",
+            "cls": ""
+          },
+          {
+            "v": "88"
+          },
+          {
+            "v": "2.5"
+          },
+          {
+            "v": "2.5",
+            "cls": "dn"
+          },
+          {
+            "v": "9.9"
+          },
+          {
+            "v": "1.9"
+          },
+          {
+            "zh": "需注意",
+            "en": "Caution",
+            "cls": "dn"
+          }
+        ],
+        [
+          "澳大利亚西北",
+          {
+            "v": "24",
+            "cls": ""
+          },
+          {
+            "v": "33",
+            "cls": "dn"
+          },
+          {
+            "v": "168"
+          },
+          {
+            "v": "4.3"
+          },
+          {
+            "v": "4.28",
+            "cls": "dn"
+          },
+          {
+            "v": "9.8"
+          },
+          {
+            "v": "3.5"
+          },
+          {
+            "zh": "需注意",
+            "en": "Caution",
+            "cls": "dn"
+          }
+        ],
+        [
+          "北印度洋",
+          {
+            "v": "10",
+            "cls": ""
+          },
+          {
+            "v": "13",
+            "cls": ""
+          },
+          {
+            "v": "15"
+          },
+          {
+            "v": "1.1"
+          },
+          {
+            "v": "1.16",
+            "cls": "up"
+          },
+          {
+            "v": "10.6"
+          },
+          {
+            "v": "0.94"
+          },
+          {
+            "zh": "适航",
+            "en": "Workable",
+            "cls": "up"
+          }
+        ],
+        [
+          "亚丁湾",
+          {
+            "v": "7",
+            "cls": ""
+          },
+          {
+            "v": "10",
+            "cls": ""
+          },
+          {
+            "v": "69"
+          },
+          {
+            "v": "0.4"
+          },
+          {
+            "v": "0.54",
+            "cls": "up"
+          },
+          {
+            "v": "5.0"
+          },
+          {
+            "v": "0.38"
+          },
+          {
+            "zh": "平稳",
+            "en": "Calm",
+            "cls": "up"
+          }
+        ],
+        [
+          "红海南部",
+          {
+            "v": "17",
+            "cls": ""
+          },
+          {
+            "v": "22",
+            "cls": ""
+          },
+          {
+            "v": "155"
+          },
+          {
+            "v": "0.9"
+          },
+          {
+            "v": "1.2",
+            "cls": "neu"
+          },
+          {
+            "v": "4.1"
+          },
+          {
+            "v": "0.24"
+          },
+          {
+            "zh": "关注",
+            "en": "Watch",
+            "cls": "neu"
+          }
+        ],
+        [
+          "地中海西部",
+          {
+            "v": "7",
+            "cls": ""
+          },
+          {
+            "v": "10",
+            "cls": ""
+          },
+          {
+            "v": "272"
+          },
+          {
+            "v": "1.2"
+          },
+          {
+            "v": "1.2",
+            "cls": "up"
+          },
+          {
+            "v": "7.1"
+          },
+          {
+            "v": "1.16"
+          },
+          {
+            "zh": "适航",
+            "en": "Workable",
+            "cls": "up"
+          }
+        ],
+        [
+          "北大西洋中部",
+          {
+            "v": "17",
+            "cls": ""
+          },
+          {
+            "v": "26",
+            "cls": ""
+          },
+          {
+            "v": "229"
+          },
+          {
+            "v": "3.9"
+          },
+          {
+            "v": "4.94",
+            "cls": "dn"
+          },
+          {
+            "v": "9.9"
+          },
+          {
+            "v": "3.16"
+          },
+          {
+            "zh": "需注意",
+            "en": "Caution",
+            "cls": "dn"
+          }
+        ],
+        [
+          "好望角海域",
+          {
+            "v": "13",
+            "cls": ""
+          },
+          {
+            "v": "19",
+            "cls": ""
+          },
+          {
+            "v": "266"
+          },
+          {
+            "v": "1.8"
+          },
+          {
+            "v": "1.84",
+            "cls": "neu"
+          },
+          {
+            "v": "8.2"
+          },
+          {
+            "v": "1.64"
+          },
+          {
+            "zh": "关注",
+            "en": "Watch",
+            "cls": "neu"
+          }
+        ],
+        [
+          "巴西东海岸",
+          {
+            "v": "10",
+            "cls": ""
+          },
+          {
+            "v": "11",
+            "cls": ""
+          },
+          {
+            "v": "8"
+          },
+          {
+            "v": "1.5"
+          },
+          {
+            "v": "2.04",
+            "cls": "neu"
+          },
+          {
+            "v": "7.3"
+          },
+          {
+            "v": "1.8"
+          },
+          {
+            "zh": "关注",
+            "en": "Watch",
+            "cls": "neu"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "5日预报峰值",
+      "title_en": "5-Day Forecast Peaks",
+      "columns": [
+        {
+          "zh": "航区",
+          "en": "Route"
+        },
+        {
+          "zh": "峰值浪高",
+          "en": "Peak wave",
+          "num": true
+        },
+        {
+          "zh": "峰值日期",
+          "en": "Date"
+        },
+        {
+          "zh": "12h最大风",
+          "en": "Max wind",
+          "num": true
+        },
+        {
+          "zh": "风浪峰值",
+          "en": "Wind wave",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "南海中部",
+          {
+            "v": "2.4",
+            "cls": ""
+          },
+          "2026-10-28",
+          {
+            "v": "7",
+            "cls": ""
+          },
+          {
+            "v": "0.0"
+          }
+        ],
+        [
+          "南海南部",
+          {
+            "v": "1.6",
+            "cls": ""
+          },
+          "2026-10-25",
+          {
+            "v": "15",
+            "cls": ""
+          },
+          {
+            "v": "0.7"
+          }
+        ],
+        [
+          "西太平洋",
+          {
+            "v": "3.6",
+            "cls": "dn"
+          },
+          "2026-10-29",
+          {
+            "v": "16",
+            "cls": ""
+          },
+          {
+            "v": "0.8"
+          }
+        ],
+        [
+          "澳大利亚西北",
+          {
+            "v": "4.3",
+            "cls": "dn"
+          },
+          "2026-10-25",
+          {
+            "v": "24",
+            "cls": ""
+          },
+          {
+            "v": "2.6"
+          }
+        ],
+        [
+          "北印度洋",
+          {
+            "v": "1.2",
+            "cls": ""
+          },
+          "2026-10-25",
+          {
+            "v": "10",
+            "cls": ""
+          },
+          {
+            "v": "0.6"
+          }
+        ],
+        [
+          "亚丁湾",
+          {
+            "v": "0.8",
+            "cls": ""
+          },
+          "2026-10-27",
+          {
+            "v": "14",
+            "cls": ""
+          },
+          {
+            "v": "0.4"
+          }
+        ],
+        [
+          "红海南部",
+          {
+            "v": "1.4",
+            "cls": ""
+          },
+          "2026-10-27",
+          {
+            "v": "18",
+            "cls": ""
+          },
+          {
+            "v": "1.2"
+          }
+        ],
+        [
+          "地中海西部",
+          {
+            "v": "1.2",
+            "cls": ""
+          },
+          "2026-10-25",
+          {
+            "v": "10",
+            "cls": ""
+          },
+          {
+            "v": "0.3"
+          }
+        ],
+        [
+          "北大西洋中部",
+          {
+            "v": "5.6",
+            "cls": "dn"
+          },
+          "2026-10-28",
+          {
+            "v": "27",
+            "cls": "dn"
+          },
+          {
+            "v": "3.7"
+          }
+        ],
+        [
+          "好望角海域",
+          {
+            "v": "3.0",
+            "cls": "dn"
+          },
+          "2026-10-29",
+          {
+            "v": "14",
+            "cls": ""
+          },
+          {
+            "v": "0.7"
+          }
+        ],
+        [
+          "巴西东海岸",
+          {
+            "v": "2.8",
+            "cls": "dn"
+          },
+          "2026-10-27",
+          {
+            "v": "23",
+            "cls": ""
+          },
+          {
+            "v": "1.5"
+          }
+        ]
+      ]
+    },
+    {
+      "kind": "views",
+      "title_zh": "分区海况观点",
+      "title_en": "Regional Outlook",
+      "items": [
+        {
+          "label": {
+            "zh": "西太/亚太",
+            "en": "W.Pacific"
+          },
+          "title": {
+            "zh": "海况偏差",
+            "en": "Rough seas"
+          },
+          "text": {
+            "zh": "亚太航区平均波高 2.4m，最高点位于 澳大利亚西北（4.3m）。南海整体适航，西太平洋涌浪周期较长，注意船舶摇摆。澳大利亚西北（Port Hedland 附近）波高 4.3m，铁矿石装港海况正常。",
+            "en": "W.Pacific: Rough seas. See the sea-state table above for wave, swell and wind by leg."
+          }
+        },
+        {
+          "label": {
+            "zh": "印度洋",
+            "en": "Indian Ocean"
+          },
+          "title": {
+            "zh": "总体平稳",
+            "en": "Broadly calm"
+          },
+          "text": {
+            "zh": "北印度洋波高 1.2m，风速 10kn（4级）。亚丁湾波高 0.5m，风速 7kn。苏伊士走廊建议关注红海南部风况，受区域地缘局势影响船舶绕行好望角时需同步参考好望角数据。",
+            "en": "Indian Ocean: Broadly calm. See the sea-state table above for wave, swell and wind by leg."
+          }
+        },
+        {
+          "label": {
+            "zh": "大西洋",
+            "en": "Atlantic"
+          },
+          "title": {
+            "zh": "好望角需关注",
+            "en": "Cape of Good Hope — watch"
+          },
+          "text": {
+            "zh": "好望角海域今日最大波高 1.8m，涌浪 1.6m / 周期 8s，5日内峰值预计 3.0m。北大西洋波高 4.9m，阵风 26kn。建议过好望角船舶密切关注南大洋低压系统动向，择机过角。",
+            "en": "Atlantic: Cape of Good Hope — watch. See the sea-state table above for wave, swell and wind by leg."
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "Open-Meteo Marine",
+    "NAVGreen 气象"
+  ]
+}
