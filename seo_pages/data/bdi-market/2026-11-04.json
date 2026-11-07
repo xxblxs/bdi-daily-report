@@ -299,12 +299,12 @@
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Tubarão Gains, Ponta da Madeira Retreats: Brazil’s Iron Ore Freight Outlook</strong>。Brazilian iron ore exports have diverged across major loading systems in 2026. Tubarão has recorded stronger China-bound shipments, while Ponta da Madeira (PDM) has declined amid weaker output at Vale"
+      "text": "<strong>Ethanol-Fuelled Vessels Enter Dry Bulk Orderbook As Owners Seek Fuel Flexibility</strong>。Ethanol-fuelled vessels have entered the dry bulk orderbook for the first time, with 19 dual-fuel vessels now on order. However, the bigger story is whether greater fuel flexibility will change how dr"
     },
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>BIMCO: Coal shipments to India drop 7%, but limited recovery may lie ahead</strong>。&#8220;Between January and October, coal shipments to India dropped 7% y/y due to the increased cost of imports. Thermal coal demand has remained strong, particularly from the power sector, but domest"
+      "text": "<strong>Baltic Dry Index climbs to 2805 up 65 points</strong>。Today, Friday, November 6 2026, the Baltic Dry Index climbed 65 points, 2805 points. Baltic Dry Index is compiled by the London-based Baltic Exchange and covers prices for transported cargo such as co"
     }
   ],
   "views": [
@@ -325,8 +325,8 @@
     }
   ],
   "fuel": {
-    "ifo380_avg": 777.9,
-    "vlsfo_avg": 949.1,
+    "ifo380_avg": 744.9,
+    "vlsfo_avg": 936.7,
     "mgo_avg": null,
     "fresh_count": 190
   },
