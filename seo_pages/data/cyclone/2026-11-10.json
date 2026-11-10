@@ -1,0 +1,396 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-11-10",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "6 个活跃热带系统",
+    "en": "6 active tropical system(s)"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-11-10 全球活跃热带系统 6 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-11-10, 6 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "6",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "0",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "up"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "90",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "18",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · MURASU",
+            "en": "Tropical system · MURASU"
+          },
+          "text": {
+            "zh": "<strong>中心 15.8°N, 80.2°E，中心风速约 64.0 节（一级飓风/台风），气压 984.0 hPa。</strong>移动方向/速度：N / 1 kn。最近航线：孟加拉湾（约 454 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 15.8°N, 80.2°E, max wind ~64.0 kn (一级飓风/台风), pressure 984.0 hPa.</strong> Movement: N / 1 kn. Nearest route: 孟加拉湾 (~454 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · IN-FA",
+            "en": "Tropical system · IN-FA"
+          },
+          "text": {
+            "zh": "<strong>中心 29.4°N, 141.5°E，中心风速约 60.0 节（热带风暴），气压 983.0 hPa。</strong>移动方向/速度：NE / 9 kn。最近航线：东日本海域（约 457 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 29.4°N, 141.5°E, max wind ~60.0 kn (热带风暴), pressure 983.0 hPa.</strong> Movement: NE / 9 kn. Nearest route: 东日本海域 (~457 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Cempaka",
+            "en": "Tropical system · Cempaka"
+          },
+          "text": {
+            "zh": "<strong>中心 25.4°N, 139.9°E，中心风速约 90.0 节（一级飓风/台风），气压 992.0 hPa。</strong>移动方向/速度：ENE / 18 kn。最近航线：东日本海域（约 699 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 25.4°N, 139.9°E, max wind ~90.0 kn (一级飓风/台风), pressure 992.0 hPa.</strong> Movement: ENE / 18 kn. Nearest route: 东日本海域 (~699 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 -13.3°N, 51.9°E，中心风速约 39.0 节（热带风暴），气压 1006.0 hPa。</strong>移动方向/速度：WNW / 3 kn。最近航线：莫桑比克海峡（约 946 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -13.3°N, 51.9°E, max wind ~39.0 kn (热带风暴), pressure 1006.0 hPa.</strong> Movement: WNW / 3 kn. Nearest route: 莫桑比克海峡 (~946 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Pena",
+            "en": "Tropical system · Pena"
+          },
+          "text": {
+            "zh": "<strong>中心 11.7°N, -163.9°E，中心风速约 34.8 节（热带风暴），气压 993.0 hPa。</strong>移动方向/速度：W / 12 kn。最近航线：西太平洋（约 2536 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 11.7°N, -163.9°E, max wind ~34.8 kn (热带风暴), pressure 993.0 hPa.</strong> Movement: W / 12 kn. Nearest route: 西太平洋 (~2536 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 03S",
+            "en": "Tropical system · 03S"
+          },
+          "text": {
+            "zh": "<strong>中心 -7.8°N, 47.2°E，中心风速约 17.9 节。</strong>移动方向/速度：NNW / 18 kn。最近航线：莫桑比克海峡（约 943 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -7.8°N, 47.2°E, max wind ~17.9 kn.</strong> Movement: NNW / 18 kn. Nearest route: 莫桑比克海峡 (~943 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Cempaka",
+          {
+            "v": "1"
+          },
+          "2026-11-10T18:00:00+00:00",
+          "26.3 / 143.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cempaka",
+          {
+            "v": "2"
+          },
+          "2026-11-11T00:00:00+00:00",
+          "27.1 / 146.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cempaka",
+          {
+            "v": "3"
+          },
+          "2026-11-11T06:00:00+00:00",
+          "28.0 / 148.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cempaka",
+          {
+            "v": "4"
+          },
+          "2026-11-11T12:00:00+00:00",
+          "28.6 / 150.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cempaka",
+          {
+            "v": "5"
+          },
+          "2026-11-11T18:00:00+00:00",
+          "29.2 / 153.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cempaka",
+          {
+            "v": "6"
+          },
+          "2026-11-12T00:00:00+00:00",
+          "29.1 / 156.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Pena",
+          {
+            "v": "1"
+          },
+          "2026-11-10T18:00:00+00:00",
+          "11.4 / -165.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Pena",
+          {
+            "v": "2"
+          },
+          "2026-11-11T00:00:00+00:00",
+          "11.4 / -166.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Pena",
+          {
+            "v": "3"
+          },
+          "2026-11-11T06:00:00+00:00",
+          "11.2 / -167.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Pena",
+          {
+            "v": "4"
+          },
+          "2026-11-11T12:00:00+00:00",
+          "11.0 / -168.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Pena",
+          {
+            "v": "5"
+          },
+          "2026-11-11T18:00:00+00:00",
+          "11.0 / -170.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Pena",
+          {
+            "v": "6"
+          },
+          "2026-11-12T00:00:00+00:00",
+          "11.1 / -171.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "03S",
+          {
+            "v": "1"
+          },
+          "2026-11-10T18:00:00+00:00",
+          "-7.8 / 47.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "03S",
+          {
+            "v": "2"
+          },
+          "2026-11-11T00:00:00+00:00",
+          "-7.4 / 46.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "03S",
+          {
+            "v": "3"
+          },
+          "2026-11-11T06:00:00+00:00",
+          "-7.2 / 46.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "03S",
+          {
+            "v": "4"
+          },
+          "2026-11-11T12:00:00+00:00",
+          "-6.7 / 46.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "03S",
+          {
+            "v": "5"
+          },
+          "2026-11-11T18:00:00+00:00",
+          "-6.3 / 46.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "03S",
+          {
+            "v": "6"
+          },
+          "2026-11-12T00:00:00+00:00",
+          "-6.4 / 45.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
