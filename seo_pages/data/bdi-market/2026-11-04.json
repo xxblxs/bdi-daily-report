@@ -299,12 +299,12 @@
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Baltic routes, importer shifts and El Niño test grain markets</strong>。Black Sea flows remain minimal The Black Sea picture is stark. Vessels sit at anchor offshore, waiting to enter the Danube to load, and the backlog is large. Ukrainian shipments from Izmail and Reni a"
+      "text": "<strong>Baltic Dry Index Advances for 4th Day</strong>。The Baltic Exchange’s dry bulk freight index, which tracks rates for ships carrying dry bulk commodities, was up for a fourth session on Monday, rising by 1.8% to its highest since October 9 at 2,854"
     },
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>India’s coking coal import dependence on Australia falls to 54%</strong>。India&#8217;s dependence on Australia for coking coal imports fell to 54% in 2025 from 73% in 2019, according to a deposition by the steel ministry to a parliamentary standing committee. About 90% of"
+      "text": "<strong>China’s 2026 Thermal Coal Imports: 295 Mt Hinges on Winter Restocking</strong>。We retain a range of 285–310 million tonnes (Mt) for China’s 2026 seaborne thermal coal imports, with 295 Mt as our conditional central case. Extending October’s arrival pace gives 288.96 Mt. Winter r"
     }
   ],
   "views": [
@@ -325,8 +325,8 @@
     }
   ],
   "fuel": {
-    "ifo380_avg": 744.9,
-    "vlsfo_avg": 936.7,
+    "ifo380_avg": 742.1,
+    "vlsfo_avg": 934.9,
     "mgo_avg": null,
     "fresh_count": 190
   },
