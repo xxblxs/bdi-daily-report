@@ -299,12 +299,12 @@
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>Baltic Dry Index Advances for 4th Day</strong>。The Baltic Exchange’s dry bulk freight index, which tracks rates for ships carrying dry bulk commodities, was up for a fourth session on Monday, rising by 1.8% to its highest since October 9 at 2,854"
+      "text": "<strong>Baltic Dry Index Up for 5th Day</strong>。The Baltic Exchange’s dry bulk freight index, which tracks rates for ships carrying dry bulk commodities, advanced for a fifth straight session on Tuesday, up 0.3% to a fresh high since October 9 at 2"
     },
     {
       "type": "neu",
       "tag": "市场资讯",
-      "text": "<strong>China’s 2026 Thermal Coal Imports: 295 Mt Hinges on Winter Restocking</strong>。We retain a range of 285–310 million tonnes (Mt) for China’s 2026 seaborne thermal coal imports, with 295 Mt as our conditional central case. Extending October’s arrival pace gives 288.96 Mt. Winter r"
+      "text": "<strong>Baltic Dry Index climbs to 2862 up 8 points</strong>。Today, Tuesday, November 10 2026, the Baltic Dry Index climbed 8 points, 2862 points. Baltic Dry Index is compiled by the London-based Baltic Exchange and covers prices for transported cargo such as c"
     }
   ],
   "views": [
@@ -325,8 +325,8 @@
     }
   ],
   "fuel": {
-    "ifo380_avg": 742.1,
-    "vlsfo_avg": 934.9,
+    "ifo380_avg": 721.5,
+    "vlsfo_avg": 919.7,
     "mgo_avg": null,
     "fresh_count": 190
   },
