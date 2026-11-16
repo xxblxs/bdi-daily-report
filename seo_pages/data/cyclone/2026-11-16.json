@@ -1,0 +1,407 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-11-16",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "7 个活跃热带系统 · 2 个达台风/飓风级",
+    "en": "7 active tropical system(s) · 2 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-11-16 全球活跃热带系统 7 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-11-16, 7 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "7",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "2",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "64",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "18",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · CEMPAKA",
+            "en": "Typhoon/Hurricane · CEMPAKA"
+          },
+          "text": {
+            "zh": "<strong>中心 30.2°N, 154.1°E，中心风速约 64.0 节（一级飓风/台风），气压 983.0 hPa。</strong>移动方向/速度：ENE / 18 kn。最近航线：西太平洋（约 48 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 30.2°N, 154.1°E, max wind ~64.0 kn (一级飓风/台风), pressure 983.0 hPa.</strong> Movement: ENE / 18 kn. Nearest route: 西太平洋 (~48 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · Cs",
+            "en": "Typhoon/Hurricane · Cs"
+          },
+          "text": {
+            "zh": "<strong>中心 12.6°N, 85.4°E，中心风速约 40.0 节。</strong>移动方向/速度：— / —。最近航线：孟加拉湾（约 209 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 12.6°N, 85.4°E, max wind ~40.0 kn.</strong> Movement: — / —. Nearest route: 孟加拉湾 (~209 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "热带系统 · 92B",
+            "en": "Tropical system · 92B"
+          },
+          "text": {
+            "zh": "<strong>中心 11.6°N, 85.8°E，中心风速约 30.0 节。</strong>移动方向/速度：NNW / 7 kn。最近航线：孟加拉湾（约 241 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 11.6°N, 85.8°E, max wind ~30.0 kn.</strong> Movement: NNW / 7 kn. Nearest route: 孟加拉湾 (~241 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Xavier",
+            "en": "Tropical system · Xavier"
+          },
+          "text": {
+            "zh": "<strong>中心 -8.5°N, -161.0°E，中心风速约 55.0 节。</strong>移动方向/速度：WSW / 10 kn。最近航线：西太平洋（约 3432 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -8.5°N, -161.0°E, max wind ~55.0 kn.</strong> Movement: WSW / 10 kn. Nearest route: 西太平洋 (~3432 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · PENA",
+            "en": "Tropical system · PENA"
+          },
+          "text": {
+            "zh": "<strong>中心 9.8°N, -169.9°E，中心风速约 40.0 节（热带风暴），气压 1002.0 hPa。</strong>移动方向/速度：W / 6 kn。最近航线：西太平洋（约 2308 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 9.8°N, -169.9°E, max wind ~40.0 kn (热带风暴), pressure 1002.0 hPa.</strong> Movement: W / 6 kn. Nearest route: 西太平洋 (~2308 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 96S",
+            "en": "Tropical system · 96S"
+          },
+          "text": {
+            "zh": "<strong>中心 -2.4°N, 91.1°E，中心风速约 22.0 节。</strong>移动方向/速度：— / —。最近航线：新加坡/马六甲（约 809 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -2.4°N, 91.1°E, max wind ~22.0 kn.</strong> Movement: — / —. Nearest route: 新加坡/马六甲 (~809 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 未命名扰动",
+            "en": "Tropical system · 未命名扰动"
+          },
+          "text": {
+            "zh": "<strong>中心 -9.2°N, 47.8°E，中心风速约 19.0 节（亚热带风暴），气压 1012.0 hPa。</strong>移动方向/速度：NW / 8 kn。最近航线：莫桑比克海峡（约 902 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -9.2°N, 47.8°E, max wind ~19.0 kn (亚热带风暴), pressure 1012.0 hPa.</strong> Movement: NW / 8 kn. Nearest route: 莫桑比克海峡 (~902 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Cs",
+          {
+            "v": "1"
+          },
+          "2026-11-16T18:00:00+00:00",
+          "11.3 / 86.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cs",
+          {
+            "v": "2"
+          },
+          "2026-11-17T00:00:00+00:00",
+          "11.3 / 87.0",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cs",
+          {
+            "v": "3"
+          },
+          "2026-11-17T06:00:00+00:00",
+          "11.7 / 87.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cs",
+          {
+            "v": "4"
+          },
+          "2026-11-17T12:00:00+00:00",
+          "12.3 / 86.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cs",
+          {
+            "v": "5"
+          },
+          "2026-11-17T18:00:00+00:00",
+          "12.3 / 86.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Cs",
+          {
+            "v": "6"
+          },
+          "2026-11-18T00:00:00+00:00",
+          "12.3 / 86.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "1"
+          },
+          "2026-11-16T18:00:00+00:00",
+          "-9.1 / -162.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "2"
+          },
+          "2026-11-17T00:00:00+00:00",
+          "-9.3 / -162.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "3"
+          },
+          "2026-11-17T06:00:00+00:00",
+          "-9.4 / -162.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "4"
+          },
+          "2026-11-17T12:00:00+00:00",
+          "-10.0 / -162.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "5"
+          },
+          "2026-11-17T18:00:00+00:00",
+          "-10.3 / -162.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "6"
+          },
+          "2026-11-18T00:00:00+00:00",
+          "-10.7 / -162.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "1"
+          },
+          "2026-11-16T18:00:00+00:00",
+          "-2.4 / 91.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "2"
+          },
+          "2026-11-17T00:00:00+00:00",
+          "-3.1 / 91.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "3"
+          },
+          "2026-11-17T06:00:00+00:00",
+          "-3.6 / 91.3",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "4"
+          },
+          "2026-11-17T12:00:00+00:00",
+          "-3.8 / 91.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "5"
+          },
+          "2026-11-17T18:00:00+00:00",
+          "-4.7 / 90.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "6"
+          },
+          "2026-11-18T00:00:00+00:00",
+          "-5.7 / 90.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
