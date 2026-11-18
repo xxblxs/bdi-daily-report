@@ -1,0 +1,338 @@
+{
+  "report_type": "bdi-market",
+  "date": "2026-11-17",
+  "headline": "BDI ↓1.0%",
+  "indices": {
+    "BDI": {
+      "val": 2893.0,
+      "prev": 2921.0,
+      "diff": -28.0,
+      "pct": -0.9585758301951387,
+      "pct_str": "-1.0%",
+      "direction": "dn"
+    },
+    "BCI": {
+      "val": 4486.0,
+      "prev": 4558.0,
+      "diff": -72.0,
+      "pct": -1.5796401930671347,
+      "pct_str": "-1.6%",
+      "direction": "dn"
+    },
+    "BPI": {
+      "val": 2122.0,
+      "prev": 2113.0,
+      "diff": 9.0,
+      "pct": 0.4259346900141978,
+      "pct_str": "+0.4%",
+      "direction": "up"
+    },
+    "BSI": {
+      "val": 1827.0,
+      "prev": 1837.0,
+      "diff": -10.0,
+      "pct": -0.5443658138268916,
+      "pct_str": "-0.5%",
+      "direction": "dn"
+    },
+    "BHSI": {
+      "val": 1062.0,
+      "prev": 1054.0,
+      "diff": 8.0,
+      "pct": 0.7590132827324478,
+      "pct_str": "+0.8%",
+      "direction": "up"
+    }
+  },
+  "routes": {
+    "C5TC": {
+      "label": "5TC 平均 (Cape综合)",
+      "sublabel": "海岬型综合期租",
+      "unit": "day",
+      "val": 40687.0,
+      "pct": -1.5652973339139693,
+      "pct_str": "-1.6%",
+      "direction": "dn"
+    },
+    "C8": {
+      "label": "C8 跨大西洋往返",
+      "sublabel": "鹿特丹/直布罗陀 round",
+      "unit": "day",
+      "val": 47494.0,
+      "pct": -0.5361256544502617,
+      "pct_str": "-0.5%",
+      "direction": "dn"
+    },
+    "C9": {
+      "label": "C9 大陆→远东",
+      "sublabel": "单程至中国/日本",
+      "unit": "day",
+      "val": 73844.0,
+      "pct": -0.939042713028547,
+      "pct_str": "-0.9%",
+      "direction": "dn"
+    },
+    "C10": {
+      "label": "C10 太平洋往返",
+      "sublabel": "中国/日本 round",
+      "unit": "day",
+      "val": 37069.0,
+      "pct": -3.7393855981718556,
+      "pct_str": "-3.7%",
+      "direction": "dn"
+    },
+    "C14": {
+      "label": "C14 中国→巴西往返",
+      "sublabel": "China-Brazil round",
+      "unit": "day",
+      "val": 37985.0,
+      "pct": 0.4176910672271129,
+      "pct_str": "+0.4%",
+      "direction": "up"
+    },
+    "C16": {
+      "label": "C16 远东→大陆回程",
+      "sublabel": "backhaul",
+      "unit": "day",
+      "val": 14894.0,
+      "pct": -2.970684039087948,
+      "pct_str": "-3.0%",
+      "direction": "dn"
+    },
+    "P5TC": {
+      "label": "P5TC Panamax综合",
+      "sublabel": "巴拿马型综合期租",
+      "unit": "day",
+      "val": 19101.0,
+      "pct": 0.44171004890361254,
+      "pct_str": "+0.4%",
+      "direction": "up"
+    },
+    "P4TC": {
+      "label": "P4TC Panamax综合",
+      "sublabel": "",
+      "unit": "day",
+      "val": 19101.0,
+      "pct": 0.44171004890361254,
+      "pct_str": "+0.4%",
+      "direction": "up"
+    },
+    "P5_82": {
+      "label": "P5 航线 (82K)",
+      "sublabel": "",
+      "unit": "day",
+      "val": 18906.0,
+      "pct": -0.4370951603559956,
+      "pct_str": "-0.4%",
+      "direction": "dn"
+    },
+    "S3TC_63": {
+      "label": "S3TC 63K综合",
+      "sublabel": "灵便型综合期租",
+      "unit": "day",
+      "val": 21963.0,
+      "pct": -0.7546317216448261,
+      "pct_str": "-0.8%",
+      "direction": "dn"
+    },
+    "S10TC": {
+      "label": "S10TC Supramax综合",
+      "sublabel": "",
+      "unit": "day",
+      "val": 23096.0,
+      "pct": -0.5383058438482408,
+      "pct_str": "-0.5%",
+      "direction": "dn"
+    },
+    "S2": {
+      "label": "S2 航线",
+      "sublabel": "",
+      "unit": "day",
+      "val": 22750.0,
+      "pct": -0.7893244952248049,
+      "pct_str": "-0.8%",
+      "direction": "dn"
+    },
+    "S8": {
+      "label": "S8 航线",
+      "sublabel": "",
+      "unit": "day",
+      "val": 26214.0,
+      "pct": -0.5161290322580645,
+      "pct_str": "-0.5%",
+      "direction": "dn"
+    },
+    "S10": {
+      "label": "S10 航线",
+      "sublabel": "",
+      "unit": "day",
+      "val": 16571.0,
+      "pct": -1.0686567164179106,
+      "pct_str": "-1.1%",
+      "direction": "dn"
+    },
+    "HS7TC": {
+      "label": "HS7TC Handysize综合",
+      "sublabel": "小灵便型综合期租",
+      "unit": "day",
+      "val": 19114.0,
+      "pct": 0.7803437730675946,
+      "pct_str": "+0.8%",
+      "direction": "up"
+    },
+    "C2": {
+      "label": "C2 图巴朗→鹿特丹",
+      "sublabel": "铁矿石 大西洋线",
+      "unit": "ton",
+      "val": 18.506,
+      "pct": -0.5748670284209925,
+      "pct_str": "-0.6%",
+      "direction": "dn"
+    },
+    "C3": {
+      "label": "C3 图巴朗→青岛",
+      "sublabel": "铁矿石 巴西→中国",
+      "unit": "ton",
+      "val": 35.186,
+      "pct": 0.4138009759995524,
+      "pct_str": "+0.4%",
+      "direction": "up"
+    },
+    "C5": {
+      "label": "C5 西澳→青岛",
+      "sublabel": "铁矿石 太平洋线",
+      "unit": "ton",
+      "val": 13.495,
+      "pct": -2.2809558291093506,
+      "pct_str": "-2.3%",
+      "direction": "dn"
+    },
+    "C7": {
+      "label": "C7 玻利瓦尔→鹿特丹",
+      "sublabel": "煤炭航线",
+      "unit": "ton",
+      "val": 20.625,
+      "pct": 0.0,
+      "pct_str": "+0.0%",
+      "direction": "up"
+    },
+    "C17": {
+      "label": "C17 萨尔达尼亚→青岛",
+      "sublabel": "铁矿石 南非→中国",
+      "unit": "ton",
+      "val": 26.65,
+      "pct": -0.16857089342574155,
+      "pct_str": "-0.2%",
+      "direction": "dn"
+    }
+  },
+  "trend": [
+    {
+      "date": "2026-11-17",
+      "BDI": 2893.0,
+      "BCI": 4486.0,
+      "BPI": 2122.0
+    },
+    {
+      "date": "2026-11-16",
+      "BDI": 2921.0,
+      "BCI": 4558.0,
+      "BPI": 2113.0
+    },
+    {
+      "date": "2026-11-13",
+      "BDI": 2980.0,
+      "BCI": 4719.0,
+      "BPI": 2118.0
+    },
+    {
+      "date": "2026-11-12",
+      "BDI": 3020.0,
+      "BCI": 4836.0,
+      "BPI": 2117.0
+    },
+    {
+      "date": "2026-11-11",
+      "BDI": 2959.0,
+      "BCI": 4700.0,
+      "BPI": 2103.0
+    }
+  ],
+  "week_chg": {
+    "BDI": {
+      "pct": -2.2304832713754648,
+      "pct_str": "-2.2%"
+    },
+    "BCI": {
+      "pct": -4.553191489361702,
+      "pct_str": "-4.6%"
+    },
+    "BPI": {
+      "pct": 0.9034712315739419,
+      "pct_str": "+0.9%"
+    },
+    "BSI": {
+      "pct": 0.9392265193370166,
+      "pct_str": "+0.9%"
+    },
+    "BHSI": {
+      "pct": 2.5096525096525095,
+      "pct_str": "+2.5%"
+    }
+  },
+  "market_analysis": [
+    {
+      "type": "bear",
+      "tag": "利空 · Capesize",
+      "text": "<strong>C5 西澳→青岛 今日 -2.3%</strong>，海岬型市场走弱（BCI -1.6%，收于 4486 点）。大西洋与太平洋航线走势较为一致（C3 +0.4%，C5 -2.3%）。 BCI 近 5 日累计 -4.6%，短期弱势持续。"
+    },
+    {
+      "type": "neu",
+      "tag": "分歧 · 大小船分化",
+      "text": "<strong>小船强、大船弱——船型走势出现分化。</strong>Capesize -1.6%，Supramax -0.5% / Handysize +0.8%。次要散货需求回暖带动小型船运费上行，大宗货物需求相对平稳。"
+    },
+    {
+      "type": "bull",
+      "tag": "利多 · Panamax",
+      "text": "<strong>BPI 今日 +0.4%，近 5 日 +0.9%。</strong>2026 年新船交付压力显著高于往年（约 1,500–1,600 万 DWT，较往年翻近 50%），供给端持续偏松；需求侧重点关注煤炭与粮食贸易量变化，以及太平洋地区租家询盘动向。"
+    },
+    {
+      "type": "neu",
+      "tag": "市场资讯",
+      "text": "<strong>Black Sea Grain Trade Shifts to the Baltic</strong>。Ukraine and Russia are often called the breadbasket of the world because of their fertile soil and their key role in the global food supply chain. When the war in Ukraine broke out worries about Black"
+    },
+    {
+      "type": "neu",
+      "tag": "市场资讯",
+      "text": "<strong>Baltic Dry Index falls to 2893 down 28 points</strong>。Today, Tuesday, November 17 2026, the Baltic Dry Index decreased by 28 points, reaching 2893 points. Baltic Dry Index is compiled by the London-based Baltic Exchange and covers prices for transported"
+    }
+  ],
+  "views": [
+    {
+      "shiptype": "",
+      "title": "",
+      "text": "BCI 今日 -1.6%，近 5 日 -4.6%。关注中国铁矿石到港量及钢厂开工率变化。"
+    },
+    {
+      "shiptype": "",
+      "title": "",
+      "text": "BPI 今日 +0.4%，近 5 日 +0.9%。2026 年新船交付压力显著高于往年，供给端偏松；关注煤炭和粮食贸易量变化。"
+    },
+    {
+      "shiptype": "",
+      "title": "",
+      "text": "BSI -0.5%，BHSI +0.8%。次要散货需求受贸易政策不确定性压制，转机在于 Q2 南半球粮食出口旺季启动。"
+    }
+  ],
+  "fuel": {
+    "ifo380_avg": 697.9,
+    "vlsfo_avg": 901.4,
+    "mgo_avg": null,
+    "fresh_count": 189
+  },
+  "sources": [
+    "Baltic Exchange",
+    "Hellenic Shipping News",
+    "Splash247"
+  ]
+}
