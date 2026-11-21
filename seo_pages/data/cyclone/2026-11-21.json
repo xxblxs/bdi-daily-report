@@ -1,0 +1,313 @@
+{
+  "report_type": "cyclone",
+  "slug": "cyclone",
+  "date": "2026-11-21",
+  "type_zh": "全球热带气旋预警日报",
+  "type_en": "Global Tropical Cyclone Alert",
+  "headline": {
+    "zh": "5 个活跃热带系统 · 1 个达台风/飓风级",
+    "en": "5 active tropical system(s) · 1 at typhoon/hurricane strength"
+  },
+  "keywords": "台风,热带气旋,飓风,台风路径,航线避台,tropical cyclone,typhoon,hurricane,storm track",
+  "summary_zh": "2026-11-21 全球活跃热带系统 5 个。下方为各系统位置、强度、最近航线与航运影响,供避台航线规划。",
+  "summary_en": "On 2026-11-21, 5 active tropical system(s) are tracked. Position, intensity, the nearest shipping route and impact for each are summarized below for voyage avoidance.",
+  "sections": [
+    {
+      "kind": "cards",
+      "title_zh": "活跃系统概览",
+      "title_en": "Active Systems",
+      "items": [
+        {
+          "label": {
+            "zh": "活跃系统",
+            "en": "Active systems"
+          },
+          "value": "5",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "台风/飓风级",
+            "en": "Typhoon/Hurricane"
+          },
+          "value": "1",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "dn"
+        },
+        {
+          "label": {
+            "zh": "最强风速",
+            "en": "Peak wind"
+          },
+          "value": "40",
+          "sub": {
+            "zh": "kn",
+            "en": "kn"
+          },
+          "direction": "neu"
+        },
+        {
+          "label": {
+            "zh": "预报路径点",
+            "en": "Forecast pts"
+          },
+          "value": "12",
+          "sub": {
+            "zh": "个",
+            "en": ""
+          },
+          "direction": "neu"
+        }
+      ]
+    },
+    {
+      "kind": "notes",
+      "title_zh": "各系统详情与航运影响",
+      "title_en": "Storm Details & Shipping Impact",
+      "items": [
+        {
+          "type": "bear",
+          "tag": {
+            "zh": "台风/飓风 · AKVAN",
+            "en": "Typhoon/Hurricane · AKVAN"
+          },
+          "text": {
+            "zh": "<strong>中心 16.0°N, 85.3°E，中心风速约 35.0 节（热带风暴），气压 1002.0 hPa。</strong>移动方向/速度：N / 5 kn。最近航线：孟加拉湾（约 167 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre 16.0°N, 85.3°E, max wind ~35.0 kn (热带风暴), pressure 1002.0 hPa.</strong> Movement: N / 5 kn. Nearest route: 孟加拉湾 (~167 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · Xavier",
+            "en": "Tropical system · Xavier"
+          },
+          "text": {
+            "zh": "<strong>中心 -11.6°N, -164.7°E，中心风速约 40.0 节（三级飓风/台风（主要）），气压 952.0 hPa。</strong>移动方向/速度：WSW / 5 kn。最近航线：西太平洋（约 3415 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -11.6°N, -164.7°E, max wind ~40.0 kn (三级飓风/台风（主要）), pressure 952.0 hPa.</strong> Movement: WSW / 5 kn. Nearest route: 西太平洋 (~3415 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 96S",
+            "en": "Tropical system · 96S"
+          },
+          "text": {
+            "zh": "<strong>中心 -12.6°N, 90.8°E，中心风速约 29.5 节。</strong>移动方向/速度：— / —。最近航线：新加坡/马六甲（约 1156 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -12.6°N, 90.8°E, max wind ~29.5 kn.</strong> Movement: — / —. Nearest route: 新加坡/马六甲 (~1156 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 97S",
+            "en": "Tropical system · 97S"
+          },
+          "text": {
+            "zh": "<strong>中心 -6.3°N, 64.6°E，中心风速约 20.0 节。</strong>移动方向/速度：W / 11 kn。最近航线：阿拉伯海（约 1279 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -6.3°N, 64.6°E, max wind ~20.0 kn.</strong> Movement: W / 11 kn. Nearest route: 阿拉伯海 (~1279 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        },
+        {
+          "type": "neu",
+          "tag": {
+            "zh": "热带系统 · 98S",
+            "en": "Tropical system · 98S"
+          },
+          "text": {
+            "zh": "<strong>中心 -7.0°N, 74.7°E，中心风速约 20.0 节。</strong>移动方向/速度：NNW / 8 kn。最近航线：阿拉伯海（约 1442 海里）。建议受影响航线船舶提前绕避，留足安全余量。",
+            "en": "<strong>Centre -7.0°N, 74.7°E, max wind ~20.0 kn.</strong> Movement: NNW / 8 kn. Nearest route: 阿拉伯海 (~1442 nm). Vessels on affected routes should divert early and keep ample margin."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "title_zh": "预报路径",
+      "title_en": "Forecast Track",
+      "columns": [
+        {
+          "zh": "系统",
+          "en": "Storm"
+        },
+        {
+          "zh": "序号",
+          "en": "#",
+          "num": true
+        },
+        {
+          "zh": "时间",
+          "en": "Time"
+        },
+        {
+          "zh": "纬度/经度",
+          "en": "Lat/Lon"
+        },
+        {
+          "zh": "风速(kn)",
+          "en": "Wind",
+          "num": true
+        }
+      ],
+      "rows": [
+        [
+          "Xavier",
+          {
+            "v": "1"
+          },
+          "2026-11-21T18:00:00+00:00",
+          "-11.9 / -165.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "2"
+          },
+          "2026-11-22T00:00:00+00:00",
+          "-12.4 / -166.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "3"
+          },
+          "2026-11-22T06:00:00+00:00",
+          "-12.6 / -167.7",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "4"
+          },
+          "2026-11-22T12:00:00+00:00",
+          "-12.6 / -168.1",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "5"
+          },
+          "2026-11-22T18:00:00+00:00",
+          "-13.1 / -168.5",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "Xavier",
+          {
+            "v": "6"
+          },
+          "2026-11-23T00:00:00+00:00",
+          "-13.5 / -169.6",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "1"
+          },
+          "2026-11-21T18:00:00+00:00",
+          "-12.6 / 90.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "2"
+          },
+          "2026-11-22T00:00:00+00:00",
+          "-12.9 / 89.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "3"
+          },
+          "2026-11-22T06:00:00+00:00",
+          "-13.4 / 89.2",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "4"
+          },
+          "2026-11-22T12:00:00+00:00",
+          "-13.6 / 87.8",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "5"
+          },
+          "2026-11-22T18:00:00+00:00",
+          "-13.8 / 87.4",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ],
+        [
+          "96S",
+          {
+            "v": "6"
+          },
+          "2026-11-23T00:00:00+00:00",
+          "-14.2 / 86.9",
+          {
+            "v": "—",
+            "cls": ""
+          }
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    "NAVGreen 气象",
+    "NHC",
+    "IBTrACS"
+  ]
+}
